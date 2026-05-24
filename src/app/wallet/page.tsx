@@ -1,0 +1,208 @@
+import { ArrowRight, Coins, DatabaseZap, Gem, History, Wallet } from "lucide-react";
+
+import { resetLocalDemoState } from "@/app/local/actions";
+import { MockPaystackButton } from "@/components/payments/mock-paystack-button";
+import { MockStripeButton } from "@/components/payments/mock-stripe-button";
+import { PaystackCheckoutButton } from "@/components/payments/paystack-checkout-button";
+import { StripeCheckoutButton } from "@/components/payments/stripe-checkout-button";
+import { getAuthContext } from "@/lib/auth";
+import { isPaystackConfigured, isStripeConfigured } from "@/lib/env";
+import { getWalletPageData } from "@/lib/supabase/queries";
+
+export default async function WalletPage() {
+  const [{ user }, walletSummary] = await Promise.all([getAuthContext(), getWalletPageData()]);
+  const paystackReady = isPaystackConfigured();
+  const stripeReady = isStripeConfigured();
+
+  return (
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
+      <section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="vant-card rounded-[32px] p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Wallet</p>
+          <div className="mt-6 flex items-center gap-4">
+            <span className="vant-glass rounded-2xl p-4 text-primary">
+              <Coins className="h-6 w-6" />
+            </span>
+            <div>
+              <p className="text-5xl font-semibold text-text-main">{walletSummary.balance}</p>
+              <p className="mt-2 text-sm text-text-secondary">Available coins</p>
+            </div>
+          </div>
+          <p className="mt-6 max-w-md text-sm leading-6 text-text-secondary">
+            {walletSummary.isConfigured
+                ? user
+                ? stripeReady || paystackReady
+                  ? "Your wallet is now reading from Supabase, and users can top up coins through Stripe or Paystack depending on what works best for them."
+                  : "Your wallet is now reading from Supabase. Stripe and Paystack keys are still missing, so the buttons stay in mock mode for testing."
+                : "Sign in to see your real wallet balance and transaction history."
+              : "Connect Supabase to activate live wallet balances and transaction history."}
+          </p>
+          {!walletSummary.isConfigured ? (
+            <div className="vant-card mt-5 inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
+              <DatabaseZap className="h-4 w-4" />
+              Wallet is using local fallback cookies
+            </div>
+          ) : null}
+        </div>
+
+        <div className="vant-card rounded-[32px] p-8">
+          <div className="flex items-center gap-3">
+            <Wallet className="h-5 w-5 text-primary" />
+            <h1 className="text-2xl font-semibold text-text-main">Buy coins with Stripe or Paystack</h1>
+          </div>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
+            The main top-up pack gives users 50 coins for either $5.91 through Stripe or NGN 3,125 through Paystack. Each locked card deducts its own admin-set coin price from the wallet until the user needs another card payment top-up.
+          </p>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {walletSummary.bundles.map((bundle) => (
+              <article
+                key={bundle.id}
+                className="vant-card vant-card-hover rounded-[28px] p-5"
+              >
+                <div className="flex items-center gap-2">
+                  <Coins className="h-5 w-5 text-primary" />
+                  <p className="text-3xl font-semibold text-text-main">{bundle.coins}</p>
+                </div>
+                <p className="mt-1 text-sm text-text-secondary">coins</p>
+                <div className="vant-card mt-4 inline-flex items-center gap-2 rounded-2xl px-3 py-1 text-xs text-primary">
+                  <Gem className="h-3.5 w-3.5" />+{bundle.diamondsBonus ?? 0} diamonds visual bonus
+                </div>
+                <div className="mt-6 space-y-4">
+                  <div className="rounded-2xl border border-cyan-300/12 bg-cyan-400/8 px-4 py-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-cyan-100/80">Stripe</p>
+                    <p className="mt-2 text-lg font-medium text-primary">{bundle.stripePriceLabel}</p>
+                    <p className="mt-1 text-xs text-text-secondary">Global cards in USD</p>
+                  </div>
+                  {stripeReady ? (
+                    <StripeCheckoutButton
+                      bundleId={bundle.id}
+                      label="Pay with Stripe"
+                      className="vant-btn w-full text-sm"
+                    />
+                  ) : (
+                    <MockStripeButton
+                      label="Pay with Stripe"
+                      successHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=success`}
+                      cancelHref="/wallet/cancel?message=Mock+Stripe+checkout+was+cancelled."
+                      className="vant-btn w-full text-sm"
+                    />
+                  )}
+
+                  <div className="rounded-2xl border border-fuchsia-300/12 bg-fuchsia-400/8 px-4 py-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-fuchsia-100/80">Paystack</p>
+                    <p className="mt-2 text-lg font-medium text-fuchsia-100">{bundle.paystackPriceLabel}</p>
+                    <p className="mt-1 text-xs text-text-secondary">Africa cards including local rails</p>
+                  </div>
+                  {paystackReady ? (
+                    <PaystackCheckoutButton
+                      flow="wallet"
+                      bundleId={bundle.id}
+                      label="Pay with Paystack"
+                      className="vant-btn-secondary w-full text-sm text-fuchsia-100"
+                    />
+                  ) : (
+                    <MockPaystackButton
+                      label="Pay with Paystack"
+                      successHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=success`}
+                      cancelHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=cancel`}
+                      className="vant-btn-secondary w-full text-sm text-fuchsia-100"
+                    />
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]">
+        <div className="vant-card rounded-[32px] bg-fuchsia-400/10 p-8">
+          <div className="flex items-center gap-3">
+            <Gem className="h-5 w-5 text-fuchsia-100" />
+            <h2 className="text-2xl font-semibold text-text-main">How coin pricing works</h2>
+          </div>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-text-secondary">
+            Coins remain the wallet balance users buy through card checkout. Premium card pricing is
+            still displayed with diamond-style language in the UI, but every deduction comes from the
+            real coin wallet balance the admin prices each card against.
+          </p>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="vant-card rounded-[28px] bg-bg-secondary/70 p-5">
+              <p className="text-sm font-medium text-text-main">Flexible premium card price</p>
+              <p className="mt-3 text-3xl font-semibold text-fuchsia-100">Admin set</p>
+              <p className="mt-2 text-sm leading-6 text-text-secondary">
+                Each locked card can cost a different number of coins depending on how detailed the lesson is.
+              </p>
+            </div>
+            <div className="vant-card rounded-[28px] bg-bg-secondary/70 p-5">
+              <p className="text-sm font-medium text-text-main">Main wallet pack</p>
+              <p className="mt-3 text-3xl font-semibold text-fuchsia-100">50 coins</p>
+              <p className="mt-2 text-sm leading-6 text-text-secondary">
+                Stripe charges $5.91 and Paystack charges NGN 3,125 for the same 50-coin wallet top-up.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="top-up-pack" className="vant-card rounded-[32px] bg-primary/10 p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin access pack</p>
+          <h2 className="mt-3 text-3xl font-semibold text-text-main">{walletSummary.plan.name}</h2>
+          <p className="mt-4 text-sm leading-7 text-text-secondary">{walletSummary.plan.description}</p>
+          <p className="mt-5 text-4xl font-semibold text-text-main">
+            {walletSummary.plan.priceLabel}
+            <span className="ml-2 text-lg font-medium text-primary/80">{walletSummary.plan.billingLabel}</span>
+          </p>
+          <div className="mt-6 flex flex-wrap gap-4">
+            <a href="#top-up-pack" className="vant-btn inline-flex items-center gap-2">
+              Buy coins now
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            {!walletSummary.isConfigured ? (
+              <form action={resetLocalDemoState}>
+                <button type="submit" className="vant-btn-secondary text-sm">
+                  Reset local wallet state
+                </button>
+              </form>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      <section className="vant-card rounded-[32px] p-8">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <History className="h-5 w-5 text-text-secondary" />
+            <h2 className="text-2xl font-semibold text-text-main">Recent wallet activity</h2>
+          </div>
+          <span className="vant-card inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
+            <Gem className="h-4 w-4" />
+            Premium card prices deduct real coins from the wallet
+          </span>
+        </div>
+        <div className="mt-6 space-y-4">
+          {!walletSummary.transactions.length ? (
+            <div className="vant-card rounded-2xl border-dashed px-5 py-6">
+              <p className="font-medium text-text-main">No wallet activity yet.</p>
+              <p className="mt-2 text-sm text-text-secondary">
+                Coin top-ups and unlock deductions will appear here once the user starts using the platform.
+              </p>
+            </div>
+          ) : null}
+          {walletSummary.transactions.map((transaction) => (
+            <div
+              key={transaction.id}
+              className="vant-card flex flex-col gap-3 rounded-2xl px-5 py-4 md:flex-row md:items-center md:justify-between"
+            >
+              <div>
+                <p className="font-medium text-text-main">{transaction.label}</p>
+                <p className="mt-1 text-sm text-text-secondary">{transaction.date}</p>
+              </div>
+              <p className="text-lg font-semibold text-primary">{transaction.amount}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </main>
+  );
+}

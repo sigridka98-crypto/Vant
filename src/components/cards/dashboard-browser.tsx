@@ -1,0 +1,662 @@
+"use client";
+
+import { useDeferredValue, useState } from "react";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Bell,
+  Bookmark,
+  Coins,
+  CreditCard,
+  Flame,
+  FolderKanban,
+  Gem,
+  GraduationCap,
+  Home,
+  LockKeyhole,
+  Search,
+  Settings,
+  ShieldAlert,
+  Sparkles,
+  Wallet2
+} from "lucide-react";
+
+import { ScamCard } from "@/components/cards/scam-card";
+import { compareAlertCards, isAlertCard } from "@/lib/utils";
+import type { CardAccessState, CreditTransaction, ScamCard as ScamCardType } from "@/types";
+
+type DashboardBrowserProps = {
+  cards: ScamCardType[];
+  categories: string[];
+  isConfigured: boolean;
+  balance: number;
+  transactions: CreditTransaction[];
+  userName: string;
+  userEmail: string;
+};
+
+type AccessFilter = "all" | "free" | "locked" | "unlocked";
+type SortMode = "newest" | "title" | "cost_high" | "cost_low";
+
+function matchesAccess(card: ScamCardType, filter: AccessFilter) {
+  if (filter === "all") return true;
+  if (filter === "free") return card.isFree;
+  return (card.accessState ?? "locked") === filter;
+}
+
+function sortCards(cards: ScamCardType[], sortMode: SortMode) {
+  const next = [...cards];
+  const withPriority = (secondaryCompare?: (a: ScamCardType, b: ScamCardType) => number) =>
+    next.sort((a, b) => {
+      const alertCompare = compareAlertCards(a, b);
+
+      if (alertCompare !== 0) {
+        return alertCompare;
+      }
+
+      return secondaryCompare ? secondaryCompare(a, b) : 0;
+    });
+
+  if (sortMode === "title") {
+    return withPriority((a, b) => a.title.localeCompare(b.title));
+  }
+
+  if (sortMode === "cost_high") {
+    return withPriority((a, b) => b.creditCost - a.creditCost);
+  }
+
+  if (sortMode === "cost_low") {
+    return withPriority((a, b) => a.creditCost - b.creditCost);
+  }
+
+  return withPriority();
+}
+
+function EmptyResults({
+  isConfigured,
+  hasAnyCards
+}: {
+  isConfigured: boolean;
+  hasAnyCards: boolean;
+}) {
+  return (
+    <section className="grid gap-6 rounded-[32px] border border-dashed border-white/10 bg-white/4 p-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <p className="text-lg font-medium text-white">
+          {hasAnyCards
+            ? "No cards match the current search or filter."
+            : isConfigured
+              ? "No scam cards have been published yet."
+              : "No locally published scam cards yet."}
+        </p>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+          {hasAnyCards
+            ? "Try another category, access filter, or search phrase."
+            : "When the admin creates and publishes the first template, it will appear here automatically."}
+        </p>
+      </div>
+
+      <div className="rounded-[28px] border border-cyan-300/15 bg-cyan-400/10 p-5">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-100">Quick test path</p>
+        <div className="mt-4 space-y-3 text-sm leading-6 text-cyan-50/90">
+          <p>1. Go to the admin panel and create a new draft template.</p>
+          <p>2. Publish the template when you are ready to surface it publicly.</p>
+          <p>3. Return here and test wallet top-ups and premium unlocks.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function initialsForName(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part.trim()[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+export function DashboardBrowser({
+  cards,
+  categories,
+  isConfigured,
+  balance,
+  transactions,
+  userName,
+  userEmail
+}: DashboardBrowserProps) {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
+  const [accessFilter, setAccessFilter] = useState<AccessFilter>("all");
+  const [sortMode, setSortMode] = useState<SortMode>("newest");
+  const deferredSearch = useDeferredValue(search);
+
+  const normalizedSearch = deferredSearch.trim().toLowerCase();
+  const filteredCards = sortCards(
+    cards.filter((card) => {
+      const matchesSearch =
+        !normalizedSearch ||
+        card.title.toLowerCase().includes(normalizedSearch) ||
+        card.category.toLowerCase().includes(normalizedSearch) ||
+        card.description.toLowerCase().includes(normalizedSearch) ||
+        card.severity.replaceAll("_", " ").toLowerCase().includes(normalizedSearch);
+
+      const matchesCategory = category === "all" || card.category === category;
+      const matchesAccessFilter = matchesAccess(card, accessFilter);
+
+      return matchesSearch && matchesCategory && matchesAccessFilter;
+    }),
+    sortMode
+  );
+
+  const statusCounts = cards.reduce(
+    (acc, card) => {
+      const state = (card.accessState ?? (card.isFree ? "free" : "locked")) as CardAccessState;
+      acc.all += 1;
+      if (card.isFree) acc.free += 1;
+      if (state === "locked") acc.locked += 1;
+      if (state === "unlocked") acc.unlocked += 1;
+      return acc;
+    },
+    { all: 0, free: 0, locked: 0, unlocked: 0 }
+  );
+
+  const accessibleCards = cards.filter((card) => {
+    const state = card.accessState ?? (card.isFree ? "free" : "locked");
+    return state !== "locked";
+  }).length;
+  const freeTemplatesUsed = Math.min(statusCounts.free, 5);
+  const lockedCards = cards.filter((card) => (card.accessState ?? "locked") === "locked");
+  const premiumLockedCount = lockedCards.length;
+  const premiumCreditAverage = premiumLockedCount
+    ? Math.round(
+        lockedCards.reduce((total, card) => total + card.creditCost, 0) / premiumLockedCount
+      )
+    : 0;
+  const learningStreak = Math.max(1, Math.min(7, accessibleCards || transactions.length || 1));
+  const alertCards = [...cards].filter(isAlertCard).sort(compareAlertCards);
+  const unseenAlertCount = alertCards.filter((card) => !card.isAlertSeen).length;
+
+  const sidebarItems = [
+    { label: "Dashboard", icon: Home, active: true, href: "/dashboard" },
+    { label: "Scam Alerts", icon: Bell, active: false, href: "/alerts" },
+    { label: "Explore Scams", icon: ShieldAlert, active: false, href: "/dashboard" },
+    { label: "My Learning", icon: GraduationCap, active: false, href: "/dashboard" },
+    { label: "Bookmarks", icon: Bookmark, active: false, href: "/bookmarks" },
+    { label: "Transactions", icon: CreditCard, active: false, href: "/wallet" },
+    { label: "Wallet", icon: Wallet2, active: false, href: "/wallet" },
+    { label: "Settings", icon: Settings, active: false, href: "/settings" }
+  ];
+
+  const statCards = [
+    {
+      label: "Available Credits",
+      value: `${balance}`,
+      meta: "Ready for new premium lessons",
+      icon: Coins,
+      accent: "from-cyan-400/20 to-cyan-500/5 text-cyan-100"
+    },
+    {
+      label: "Free Templates Used",
+      value: `${freeTemplatesUsed}/5`,
+      meta: `${statusCounts.free} free lessons published`,
+      icon: FolderKanban,
+      accent: "from-emerald-400/20 to-emerald-500/5 text-emerald-100"
+    },
+    {
+      label: "Scams Learned",
+      value: `${accessibleCards}`,
+      meta: "Cards currently open in your library",
+      icon: GraduationCap,
+      accent: "from-amber-400/20 to-amber-500/5 text-amber-100"
+    },
+    {
+      label: "Wallet Balance",
+      value: `${balance} coins`,
+      meta: premiumLockedCount ? `Average premium card: ${premiumCreditAverage} credits` : "Top up when you are ready",
+      icon: Wallet2,
+      accent: "from-fuchsia-400/20 to-fuchsia-500/5 text-fuchsia-100"
+    }
+  ];
+
+  return (
+    <section className="vant-glass overflow-hidden rounded-[34px] bg-bg-primary shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+      <div className="grid min-h-[calc(100vh-150px)] lg:grid-cols-[260px_minmax(0,1fr)]">
+        <aside className="border-b border-white/8 bg-[linear-gradient(180deg,rgba(17,94,89,0.18),rgba(5,10,22,0.92)_35%,rgba(5,10,22,0.96))] p-6 lg:border-b-0 lg:border-r">
+          <div className="vant-card rounded-[28px] bg-primary/10 p-5 shadow-[0_16px_50px_rgba(20,184,166,0.12)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">VANT Workspace</p>
+            <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online scams</h2>
+            <p className="mt-3 text-sm leading-6 text-text-secondary">
+              Browse scam templates, keep your learning streak alive, and unlock deeper lessons with credits.
+            </p>
+          </div>
+
+          <nav className="mt-8 space-y-2">
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition ${
+                    item.active
+                      ? "vant-card bg-primary/12 text-text-main shadow-[0_18px_40px_rgba(20,184,166,0.12)]"
+                      : "border border-transparent text-text-secondary hover:border-white/8 hover:bg-white/5 hover:text-text-main"
+                  }`}
+                >
+                  <Icon className={`h-4 w-4 ${item.active ? "text-cyan-200" : "text-slate-400"}`} />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="vant-card mt-8 rounded-[28px] bg-fuchsia-400/10 p-5">
+            <div className="flex items-center gap-3">
+              <span className="vant-glass rounded-2xl p-3 text-fuchsia-100">
+                <Gem className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-text-main">Premium awareness unlocks</p>
+                <p className="text-xs text-text-secondary">Use credits to access advanced scam breakdowns.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div className="bg-[radial-gradient(circle_at_top_right,rgba(45,212,191,0.12),transparent_18%),linear-gradient(180deg,#07101d_0%,#040814_100%)]">
+          <header className="border-b border-white/8 px-5 py-5 md:px-8">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Dashboard</p>
+                <h1 className="mt-2 text-3xl font-semibold text-text-main md:text-4xl">
+                  See your VANT learning at a glance
+                </h1>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-text-secondary md:text-base">
+                  Explore scam templates, track progress, and unlock premium learning paths from one clean workspace.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href="/alerts"
+                  className="vant-card vant-card-hover inline-flex items-center gap-3 rounded-[22px] px-4 py-3 text-text-secondary"
+                >
+                  <span className="relative inline-flex">
+                    <Bell className="h-5 w-5" />
+                    {unseenAlertCount ? (
+                      <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-400 px-1 text-[10px] font-semibold text-white">
+                        {Math.min(unseenAlertCount, 9)}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="hidden text-left md:block">
+                    <span className="block text-xs uppercase tracking-[0.2em] text-text-muted">
+                      Alerts
+                    </span>
+                    <span className="block text-sm text-text-main">
+                      {unseenAlertCount
+                        ? `${unseenAlertCount} unseen warning${unseenAlertCount === 1 ? "" : "s"}`
+                        : "No unseen warnings"}
+                    </span>
+                  </span>
+                </Link>
+                <div className="vant-card flex items-center gap-3 rounded-[22px] px-3 py-2 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/14 text-sm font-semibold text-cyan-100">
+                    {initialsForName(userName)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-text-main">{userName}</p>
+                    <p className="text-xs text-text-secondary">{userEmail}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div className="grid gap-6 p-5 md:p-8 2xl:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="space-y-6">
+              {alertCards.length ? (
+                <section className="relative overflow-hidden rounded-[32px] border border-rose-300/12 bg-[linear-gradient(135deg,rgba(244,63,94,0.16),rgba(8,15,30,0.98)_45%,rgba(34,211,238,0.12))] p-6 shadow-[0_26px_80px_rgba(0,0,0,0.24)]">
+                  <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-rose-400/15 blur-3xl" />
+                  <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+                    <div className="max-w-3xl">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-100/80">
+                        Active Scam Alerts
+                      </p>
+                      <h2 className="mt-3 text-3xl font-semibold text-text-main">
+                        Fresh warnings from the VANT admin desk
+                      </h2>
+                      <p className="mt-3 text-sm leading-6 text-slate-200/90">
+                        New scam alerts, trending fraud patterns, and the most reported threats are pushed to the top here so users can respond quickly.
+                      </p>
+                      <p className="mt-3 text-sm font-medium text-rose-100">
+                        {unseenAlertCount
+                          ? `${unseenAlertCount} unseen alert${unseenAlertCount === 1 ? "" : "s"} need attention.`
+                          : "You are caught up on the current alert queue."}
+                      </p>
+                    </div>
+
+                    <Link href="/alerts" className="vant-btn inline-flex items-center justify-center gap-2">
+                      View all alerts
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+
+                  <div className="relative mt-6 grid gap-4 xl:grid-cols-3">
+                    {alertCards.slice(0, 3).map((card) => (
+                      <Link
+                        key={card.id}
+                        href={`/cards/${card.slug}`}
+                        className="vant-card vant-card-hover rounded-[26px] border-rose-300/10 bg-slate-950/30 p-5"
+                      >
+                        <div className="flex flex-wrap gap-2">
+                          {card.isMostReported ? (
+                            <span className="rounded-full bg-rose-400/15 px-3 py-1 text-xs font-semibold text-rose-100">
+                              Most Reported
+                            </span>
+                          ) : null}
+                          {card.isTrendingAlert ? (
+                            <span className="rounded-full bg-fuchsia-400/15 px-3 py-1 text-xs font-semibold text-fuchsia-100">
+                              Trending Scam
+                            </span>
+                          ) : null}
+                          {card.isNewAlert ? (
+                            <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold text-cyan-100">
+                              New Scam Alert
+                            </span>
+                          ) : null}
+                        </div>
+
+                        <p className="mt-4 text-lg font-semibold text-text-main">{card.title}</p>
+                        <p className="mt-3 text-sm leading-6 text-slate-200/85">
+                          {card.alertSummary || "This card has been flagged by the admin as a priority awareness lesson."}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {statCards.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <article
+                      key={item.label}
+                      className={`vant-card rounded-[28px] bg-gradient-to-br ${item.accent} p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)]`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm text-text-secondary">{item.label}</p>
+                          <p className="mt-4 text-3xl font-semibold text-text-main">{item.value}</p>
+                        </div>
+                        <span className="vant-glass rounded-2xl p-3 text-text-main">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                      </div>
+                      <p className="mt-4 text-sm leading-6 text-text-secondary">{item.meta}</p>
+                    </article>
+                  );
+                })}
+              </section>
+
+              <section className="vant-card rounded-[30px] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.25)] md:p-6">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Scam Library</p>
+                    <h2 className="mt-2 text-2xl font-semibold text-text-main">Explore scam template cards</h2>
+                  </div>
+
+                  <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_170px_170px] xl:min-w-[760px]">
+                    <label className="vant-card flex items-center gap-3 rounded-2xl px-4 py-3 text-text-secondary">
+                      <Search className="h-4 w-4" />
+                      <input
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        className="w-full bg-transparent text-sm outline-none placeholder:text-text-muted"
+                        placeholder="Search scam templates"
+                      />
+                    </label>
+
+                    <select
+                      value={category}
+                      onChange={(event) => setCategory(event.target.value)}
+                      className="vant-input text-sm"
+                    >
+                      <option value="all">All categories</option>
+                      {categories.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+
+                    <select
+                      value={accessFilter}
+                      onChange={(event) => setAccessFilter(event.target.value as AccessFilter)}
+                      className="vant-input text-sm"
+                    >
+                      <option value="all">All access</option>
+                      <option value="free">Free</option>
+                      <option value="locked">Locked</option>
+                      <option value="unlocked">Unlocked</option>
+                    </select>
+
+                    <select
+                      value={sortMode}
+                      onChange={(event) => setSortMode(event.target.value as SortMode)}
+                      className="vant-input text-sm"
+                    >
+                      <option value="newest">Newest</option>
+                      <option value="title">Title A-Z</option>
+                      <option value="cost_low">Lowest cost</option>
+                      <option value="cost_high">Highest cost</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {[
+                    { id: "all", label: "All Templates", count: statusCounts.all, icon: ShieldAlert },
+                    { id: "free", label: "Free", count: statusCounts.free, icon: Coins },
+                    { id: "locked", label: "Locked", count: statusCounts.locked, icon: LockKeyhole },
+                    { id: "unlocked", label: "Unlocked", count: statusCounts.unlocked, icon: Gem },
+                  ].map((chip) => {
+                    const Icon = chip.icon;
+                    const active = accessFilter === chip.id;
+
+                    return (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        onClick={() => setAccessFilter(chip.id as AccessFilter)}
+                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                          active
+                            ? "border-cyan-300/25 bg-cyan-400/12 text-text-main"
+                            : "border-white/10 bg-white/5 text-text-secondary hover:bg-white/10"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        {chip.label}
+                        <span className="rounded-full bg-slate-950/70 px-2 py-0.5 text-xs text-text-secondary">
+                          {chip.count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6">
+                  {filteredCards.length ? (
+                    <section className="grid gap-5 xl:grid-cols-2 3xl:grid-cols-3">
+                      {filteredCards.map((card) => (
+                        <ScamCard key={card.id} card={card} />
+                      ))}
+                    </section>
+                  ) : (
+                    <EmptyResults isConfigured={isConfigured} hasAnyCards={cards.length > 0} />
+                  )}
+                </div>
+              </section>
+
+              <section className="vant-card rounded-[32px] bg-[linear-gradient(135deg,rgba(20,184,166,0.18),rgba(8,15,30,0.98)_60%)] p-6 shadow-[0_26px_80px_rgba(0,0,0,0.24)]">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin Top-Up</p>
+                    <h2 className="mt-3 text-3xl font-semibold text-text-main">Keep your coin wallet ready for more premium lessons</h2>
+                    <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
+                      NGN 5,350 adds 50 coins to the wallet. Each admin-priced premium card deducts from that balance as users unlock more scam lessons.
+                    </p>
+                  </div>
+                  <Link href="/wallet" className="vant-btn inline-flex items-center justify-center">
+                    Buy 50 coins
+                  </Link>
+                </div>
+              </section>
+            </div>
+
+            <aside className="space-y-6">
+              <section className="vant-card rounded-[30px] bg-primary/10 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-text-main">Scam alerts</p>
+                    <p className="text-xs text-text-secondary">Admin-published warning highlights</p>
+                  </div>
+                  <span className="vant-card rounded-2xl px-3 py-1 text-xs text-primary">
+                    {unseenAlertCount} unseen
+                  </span>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  {alertCards.length ? (
+                    alertCards.slice(0, 4).map((card) => (
+                      <Link
+                        key={card.id}
+                        href={`/cards/${card.slug}`}
+                        className="vant-card vant-card-hover block rounded-[22px] border-cyan-300/12 bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(8,15,30,0.9))] p-4"
+                      >
+                        <div className="flex flex-wrap gap-2">
+                          {card.isNewAlert ? (
+                            <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold text-cyan-100">
+                              New Scam Alert
+                            </span>
+                          ) : null}
+                          {card.isTrendingAlert ? (
+                            <span className="rounded-full bg-fuchsia-400/15 px-3 py-1 text-xs font-semibold text-fuchsia-100">
+                              Trending Scam
+                            </span>
+                          ) : null}
+                          {card.isMostReported ? (
+                            <span className="rounded-full bg-rose-400/15 px-3 py-1 text-xs font-semibold text-rose-100">
+                              Most Reported
+                            </span>
+                          ) : null}
+                        </div>
+                        <p className="mt-3 text-sm font-medium text-text-main">{card.title}</p>
+                        <p className="mt-2 text-xs leading-5 text-text-secondary">
+                          {card.alertSummary || "Admin marked this lesson as a live scam alert for users."}
+                        </p>
+                        <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
+                          {card.isAlertSeen ? "Seen" : "Unseen"}
+                        </p>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="vant-card rounded-[22px] p-4">
+                      <p className="text-sm font-medium text-text-main">No active scam alerts right now</p>
+                      <p className="mt-2 text-xs leading-5 text-text-secondary">
+                        When the admin flags a lesson as new, trending, or most reported, it will appear here.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {alertCards.length ? (
+                  <Link
+                    href="/alerts"
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:text-cyan-200"
+                  >
+                    Browse every active alert
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                ) : null}
+              </section>
+
+              <section className="vant-card rounded-[30px] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)]">
+                <div className="flex items-center gap-3">
+                  <span className="vant-glass rounded-2xl p-3 text-cyan-100">
+                    <Flame className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-text-main">Learning streak</p>
+                    <p className="text-xs text-text-secondary">Keep your awareness fresh every day</p>
+                  </div>
+                </div>
+                <p className="mt-6 text-5xl font-semibold text-text-main">{learningStreak} days</p>
+                <div className="mt-5 flex gap-2">
+                  {Array.from({ length: 7 }).map((_, index) => (
+                    <span
+                      key={index}
+                      className={`h-2 flex-1 rounded-full ${
+                        index < learningStreak ? "bg-cyan-400" : "bg-white/8"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <section className="vant-card rounded-[30px] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-text-main">Recent activity</p>
+                    <p className="text-xs text-text-secondary">Latest wallet and learning actions</p>
+                  </div>
+                  <span className="vant-card rounded-2xl px-3 py-1 text-xs text-text-secondary">
+                    {transactions.length} items
+                  </span>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  {transactions.length ? (
+                    transactions.slice(0, 5).map((transaction) => (
+                      <div
+                        key={transaction.id}
+                        className="vant-card rounded-[22px] p-4"
+                      >
+                        <p className="text-sm font-medium text-text-main">{transaction.label}</p>
+                        <div className="mt-2 flex items-center justify-between text-xs text-text-secondary">
+                          <span>{transaction.date}</span>
+                          <span className="font-semibold text-primary">{transaction.amount}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="vant-card rounded-[22px] border-dashed p-4">
+                      <p className="text-sm font-medium text-text-main">No recent activity yet</p>
+                      <p className="mt-2 text-xs leading-5 text-text-secondary">
+                        Start unlocking scam lessons or topping up your wallet and activity will show here.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </section>
+
+              <section className="vant-card rounded-[30px] bg-fuchsia-400/10 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.22)]">
+                <p className="text-sm font-semibold text-text-main">Premium scam cards waiting</p>
+                <p className="mt-3 text-4xl font-semibold text-text-main">{premiumLockedCount}</p>
+                <p className="mt-3 text-sm leading-6 text-text-secondary">
+                  Locked cards reveal full scam breakdowns, red flags, and protection steps once credits are used.
+                </p>
+              </section>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

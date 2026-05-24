@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScamShield Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <nav class="topbar">
+          <div>
+            <p class="eyebrow">Scam Awareness Platform</p>
+            <h1>ScamShield Library</h1>
+          </div>
+          <button id="admin-toggle" class="ghost-button" type="button">Admin</button>
+        </nav>
+
+        <div class="hero-grid">
+          <section class="hero-copy">
+            <span class="pill">5 free full-access templates</span>
+            <h2>Learn how online scams work before they reach you.</h2>
+            <p>
+              Browse scam-pattern cards, unlock detailed breakdowns, and study the warning
+              signs scammers use across email, social media, marketplaces, and fake investment
+              offers.
+            </p>
+
+            <div class="hero-actions">
+              <a class="primary-button" href="#library">Explore templates</a>
+              <button id="open-wallet" class="secondary-button" type="button">Buy credits</button>
+            </div>
+          </section>
+
+          <aside class="hero-panel">
+            <div class="wallet-card">
+              <p class="wallet-label">Your credits</p>
+              <p id="credit-balance" class="wallet-balance">0</p>
+              <p class="wallet-note">
+                Premium scam-format cards cost credits. Free trial cards stay open for everyone.
+              </p>
+            </div>
+
+            <div class="stats-grid">
+              <article class="stat-card">
+                <span id="total-count">0</span>
+                <p>Total templates</p>
+              </article>
+              <article class="stat-card">
+                <span id="free-count">0</span>
+                <p>Free lessons</p>
+              </article>
+              <article class="stat-card">
+                <span id="premium-count">0</span>
+                <p>Premium lessons</p>
+              </article>
+            </div>
+          </aside>
+        </div>
+      </header>
+
+      <main>
+        <section class="section-head">
+          <div>
+            <p class="eyebrow">How it works</p>
+            <h3>Short cards outside, deep education inside</h3>
+          </div>
+          <p class="section-copy">
+            Each card introduces one scam format. Open it to study the hook, the red flags, the
+            step-by-step scam flow, and how to stay safe.
+          </p>
+        </section>
+
+        <section class="info-band">
+          <article>
+            <h4>Free trial</h4>
+            <p>Five starter templates are fully accessible to help users understand the platform.</p>
+          </article>
+          <article>
+            <h4>Credit unlock</h4>
+            <p>Premium cards can be opened with credits that users top up through payments.</p>
+          </article>
+          <article>
+            <h4>Admin updates</h4>
+            <p>You can add, edit, or remove scam templates anytime from the built-in admin panel.</p>
+          </article>
+        </section>
+
+        <section id="library" class="library-section">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Template library</p>
+              <h3>Scam formats to study</h3>
+            </div>
+
+            <div class="filters">
+              <input
+                id="search-input"
+                type="search"
+                placeholder="Search by title or category"
+                aria-label="Search templates"
+              />
+              <select id="filter-select" aria-label="Filter templates">
+                <option value="all">All templates</option>
+                <option value="free">Free only</option>
+                <option value="premium">Premium only</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="card-grid" class="card-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="template-modal" class="modal">
+      <div class="modal-content">
+        <button id="close-modal" class="close-button" type="button" aria-label="Close">
+          ×
+        </button>
+        <div id="modal-body"></div>
+      </div>
+    </dialog>
+
+    <dialog id="wallet-modal" class="modal">
+      <div class="modal-content narrow">
+        <button id="close-wallet" class="close-button" type="button" aria-label="Close">
+          ×
+        </button>
+        <div class="modal-head">
+          <p class="eyebrow">Credit top-up</p>
+          <h3>Choose a payment-style top-up</h3>
+        </div>
+        <div class="bundle-grid">
+          <button class="bundle-card" data-credits="5" data-method="Card">
+            <strong>5 credits</strong>
+            <span>Pay by card</span>
+            <small>Demo top-up for MVP</small>
+          </button>
+          <button class="bundle-card" data-credits="12" data-method="Transfer">
+            <strong>12 credits</strong>
+            <span>Bank transfer</span>
+            <small>Demo top-up for MVP</small>
+          </button>
+          <button class="bundle-card" data-credits="25" data-method="Card">
+            <strong>25 credits</strong>
+            <span>Premium card bundle</span>
+            <small>Demo top-up for MVP</small>
+          </button>
+        </div>
+        <p class="wallet-helper">
+          This prototype simulates successful payment. Later we can connect Paystack, Flutterwave,
+          Stripe, or manual transfer verification.
+        </p>
+      </div>
+    </dialog>
+
+    <section id="admin-panel" class="admin-panel hidden">
+      <div class="admin-shell">
+        <div class="admin-header">
+          <div>
+            <p class="eyebrow">Admin control</p>
+            <h3>Manage scam-format templates</h3>
+          </div>
+          <button id="close-admin" class="ghost-button" type="button">Close</button>
+        </div>
+
+        <div id="admin-lock" class="admin-lock">
+          <p>Enter the demo admin password to manage templates.</p>
+          <div class="lock-row">
+            <input id="admin-password" type="password" placeholder="Enter password" />
+            <button id="admin-login" class="primary-button" type="button">Unlock</button>
+          </div>
+          <p class="hint">Demo password: <code>admin123</code></p>
+        </div>
+
+        <div id="admin-content" class="admin-content hidden">
+          <form id="template-form" class="admin-form">
+            <input id="template-id" type="hidden" />
+            <div class="form-row">
+              <label>
+                Title
+                <input id="title-input" type="text" required />
+              </label>
+              <label>
+                Category
+                <input id="category-input" type="text" required />
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label>
+                Credit cost
+                <input id="cost-input" type="number" min="0" required />
+              </label>
+              <label class="checkbox-row">
+                <input id="free-input" type="checkbox" />
+                <span>Mark as free trial lesson</span>
+              </label>
+            </div>
+
+            <label>
+              Short summary
+              <textarea id="summary-input" rows="2" required></textarea>
+            </label>
+
+            <label>
+              Full lesson content
+              <textarea
+                id="content-input"
+                rows="8"
+                placeholder="Explain how the scam works, warning signs, and how to stay safe."
+                required
+              ></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">Save template</button>
+              <button id="reset-form" class="ghost-button" type="button">Clear</button>
+            </div>
+          </form>
+
+          <div>
+            <h4>Existing templates</h4>
+            <div id="admin-list" class="admin-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>

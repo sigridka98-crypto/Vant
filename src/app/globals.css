@@ -1,0 +1,144 @@
+@config "../../tailwind.config.ts";
+@import "tailwindcss";
+
+:root {
+  --color-primary: #00e6a8;
+  --color-primary-dark: #00bfa6;
+  --color-bg-primary: #020617;
+  --color-bg-secondary: #0b1220;
+  --color-bg-soft: #111827;
+  --color-text-main: #ffffff;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+  --color-border-soft: rgba(255, 255, 255, 0.08);
+  --background: var(--color-bg-primary);
+  --foreground: var(--color-text-main);
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-bg-primary: var(--color-bg-primary);
+  --color-bg-secondary: var(--color-bg-secondary);
+  --color-bg-soft: var(--color-bg-soft);
+  --color-text-main: var(--color-text-main);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-border-soft: var(--color-border-soft);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-bg-primary);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(0, 230, 168, 0.1), transparent 24%),
+    radial-gradient(circle at top right, rgba(0, 191, 166, 0.08), transparent 22%),
+    linear-gradient(180deg, #020617 0%, #07101d 35%, #0b1220 100%);
+  color: var(--foreground);
+  font-feature-settings: "ss01" on, "cv01" on;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+@layer base {
+  ::selection {
+    background: rgba(0, 230, 168, 0.24);
+    color: #ffffff;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: rgba(0, 230, 168, 0.55);
+    box-shadow:
+      0 0 0 1px rgba(0, 230, 168, 0.34),
+      0 0 0 6px rgba(0, 230, 168, 0.08);
+  }
+}
+
+@layer components {
+  .vant-card {
+    @apply rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur;
+    border-color: var(--color-border-soft);
+  }
+
+  .vant-card-hover {
+    @apply transition duration-200;
+  }
+
+  .vant-card-hover:hover {
+    filter: brightness(1.03);
+    box-shadow:
+      0 18px 40px rgba(2, 6, 23, 0.36),
+      0 0 0 1px rgba(0, 230, 168, 0.1);
+  }
+
+  .vant-glass {
+    @apply border border-white/10 bg-white/5 backdrop-blur;
+    border-color: var(--color-border-soft);
+    box-shadow: 0 18px 55px rgba(2, 6, 23, 0.35);
+  }
+
+  .vant-btn {
+    @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium text-slate-950 shadow-lg transition duration-200;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    box-shadow:
+      0 0 0 1px rgba(0, 230, 168, 0.16),
+      0 16px 40px rgba(0, 230, 168, 0.18);
+  }
+
+  .vant-btn:hover {
+    filter: brightness(1.05);
+    box-shadow:
+      0 0 0 1px rgba(0, 230, 168, 0.24),
+      0 20px 44px rgba(0, 230, 168, 0.24),
+      0 0 24px rgba(0, 230, 168, 0.18);
+  }
+
+  .vant-btn-secondary {
+    @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium text-white shadow-lg transition duration-200 backdrop-blur;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border-soft);
+  }
+
+  .vant-btn-secondary:hover {
+    filter: brightness(1.06);
+    box-shadow:
+      0 16px 34px rgba(2, 6, 23, 0.3),
+      0 0 20px rgba(0, 230, 168, 0.08);
+  }
+
+  .vant-input {
+    @apply w-full rounded-2xl border bg-transparent px-4 py-3 text-white shadow-lg backdrop-blur;
+    border-color: var(--color-border-soft);
+    background-color: rgba(17, 24, 39, 0.55);
+    color: var(--color-text-main);
+  }
+
+  .vant-input::placeholder {
+    color: var(--color-text-muted);
+  }
+}
