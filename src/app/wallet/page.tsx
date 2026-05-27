@@ -92,35 +92,7 @@ export default async function WalletPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]">
-        <div className="vant-card rounded-[32px] bg-fuchsia-400/10 p-8">
-          <div className="flex items-center gap-3">
-            <Gem className="h-5 w-5 text-fuchsia-100" />
-            <h2 className="text-2xl font-semibold text-text-main">How coin pricing works</h2>
-          </div>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-text-secondary">
-            Coins remain the wallet balance users buy through card checkout. Premium card pricing is
-            still displayed with diamond-style language in the UI, but every deduction comes from the
-            real coin wallet balance the admin prices each card against.
-          </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <div className="vant-card rounded-[28px] bg-bg-secondary/70 p-5">
-              <p className="text-sm font-medium text-text-main">Flexible premium card price</p>
-              <p className="mt-3 text-3xl font-semibold text-fuchsia-100">Admin set</p>
-              <p className="mt-2 text-sm leading-6 text-text-secondary">
-                Each locked card can cost a different number of coins depending on how detailed the lesson is.
-              </p>
-            </div>
-            <div className="vant-card rounded-[28px] bg-bg-secondary/70 p-5">
-              <p className="text-sm font-medium text-text-main">Main wallet pack</p>
-              <p className="mt-3 text-3xl font-semibold text-fuchsia-100">50 coins</p>
-              <p className="mt-2 text-sm leading-6 text-text-secondary">
-                Paystack charges NGN 3,125 for the 50-coin wallet top-up.
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <section>
         <div id="top-up-pack" className="vant-card rounded-[32px] bg-primary/10 p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin access pack</p>
           <h2 className="mt-3 text-3xl font-semibold text-text-main">{walletSummary.plan.name}</h2>

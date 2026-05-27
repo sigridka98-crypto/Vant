@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,7 +14,6 @@ import {
   GraduationCap,
   Home,
   LockKeyhole,
-  Search,
   Settings,
   ShieldAlert,
   Sparkles,
@@ -37,6 +36,34 @@ type DashboardBrowserProps = {
 
 type AccessFilter = "all" | "free" | "locked" | "unlocked";
 type SortMode = "newest" | "title" | "cost_high" | "cost_low";
+type ScamFocus =
+  | "all"
+  | "phishing"
+  | "job"
+  | "romance"
+  | "investment"
+  | "impersonation"
+  | "marketplace"
+  | "crypto"
+  | "loan"
+  | "giveaway";
+
+const scamFocusOptions: Array<{
+  id: ScamFocus;
+  label: string;
+  matcher?: string[];
+}> = [
+  { id: "all", label: "All scam cards" },
+  { id: "phishing", label: "Phishing", matcher: ["phishing", "email", "sms", "smish", "link"] },
+  { id: "job", label: "Job scams", matcher: ["job", "recruit", "employment", "offer"] },
+  { id: "romance", label: "Romance scams", matcher: ["romance", "dating", "lover"] },
+  { id: "investment", label: "Investment scams", matcher: ["investment", "trading", "forex", "ponzi"] },
+  { id: "impersonation", label: "Impersonation", matcher: ["imperson", "fake agent", "government", "bank"] },
+  { id: "marketplace", label: "Marketplace scams", matcher: ["marketplace", "buyer", "seller", "delivery"] },
+  { id: "crypto", label: "Crypto scams", matcher: ["crypto", "bitcoin", "wallet", "token"] },
+  { id: "loan", label: "Loan scams", matcher: ["loan", "credit", "grant"] },
+  { id: "giveaway", label: "Giveaway scams", matcher: ["giveaway", "promo", "prize", "winner"] }
+];
 
 function matchesAccess(card: ScamCardType, filter: AccessFilter) {
   if (filter === "all") return true;
@@ -84,23 +111,23 @@ function EmptyResults({
       <div>
         <p className="text-lg font-medium text-white">
           {hasAnyCards
-            ? "No cards match the current search or filter."
+            ? "No cards match the current scam type or filter."
             : isConfigured
               ? "No scam cards have been published yet."
               : "No locally published scam cards yet."}
         </p>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
           {hasAnyCards
-            ? "Try another category, access filter, or search phrase."
-            : "When the admin creates and publishes the first template, it will appear here automatically."}
+            ? "Try another scam type, category, or access filter."
+            : "When the admin creates and publishes the first scam card, it will appear here automatically."}
         </p>
       </div>
 
       <div className="rounded-[28px] border border-cyan-300/15 bg-cyan-400/10 p-5">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-100">Quick test path</p>
         <div className="mt-4 space-y-3 text-sm leading-6 text-cyan-50/90">
-          <p>1. Go to the admin panel and create a new draft template.</p>
-          <p>2. Publish the template when you are ready to surface it publicly.</p>
+          <p>1. Go to the admin panel and create a new scam card draft.</p>
+          <p>2. Publish the card when you are ready to surface it publicly.</p>
           <p>3. Return here and test wallet top-ups and premium unlocks.</p>
         </div>
       </div>
@@ -127,26 +154,29 @@ export function DashboardBrowser({
   userName,
   userEmail
 }: DashboardBrowserProps) {
-  const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [accessFilter, setAccessFilter] = useState<AccessFilter>("all");
   const [sortMode, setSortMode] = useState<SortMode>("newest");
-  const deferredSearch = useDeferredValue(search);
-
-  const normalizedSearch = deferredSearch.trim().toLowerCase();
+  const [scamFocus, setScamFocus] = useState<ScamFocus>("all");
   const filteredCards = sortCards(
     cards.filter((card) => {
-      const matchesSearch =
-        !normalizedSearch ||
-        card.title.toLowerCase().includes(normalizedSearch) ||
-        card.category.toLowerCase().includes(normalizedSearch) ||
-        card.description.toLowerCase().includes(normalizedSearch) ||
-        card.severity.replaceAll("_", " ").toLowerCase().includes(normalizedSearch);
+      const focusOption = scamFocusOptions.find((option) => option.id === scamFocus);
+      const focusHaystack = [
+        card.title,
+        card.category,
+        card.description,
+        card.severity.replaceAll("_", " ")
+      ]
+        .join(" ")
+        .toLowerCase();
+      const matchesFocus =
+        scamFocus === "all" ||
+        (focusOption?.matcher?.some((term) => focusHaystack.includes(term)) ?? false);
 
       const matchesCategory = category === "all" || card.category === category;
       const matchesAccessFilter = matchesAccess(card, accessFilter);
 
-      return matchesSearch && matchesCategory && matchesAccessFilter;
+      return matchesCategory && matchesAccessFilter && matchesFocus;
     }),
     sortMode
   );
@@ -229,7 +259,7 @@ export function DashboardBrowser({
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">VANT Workspace</p>
             <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online scams</h2>
             <p className="mt-3 text-sm leading-6 text-text-secondary">
-              Browse scam templates, keep your learning streak alive, and unlock deeper lessons with credits.
+              Browse real scam patterns, keep your learning streak alive, and unlock deeper lessons with credits.
             </p>
           </div>
 
@@ -276,7 +306,7 @@ export function DashboardBrowser({
                   See your VANT learning at a glance
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-text-secondary md:text-base">
-                  Explore scam templates, track progress, and unlock premium learning paths from one clean workspace.
+                  Explore scam types people face online every day, track progress, and unlock deeper learning from one clean workspace.
                 </p>
               </div>
 
@@ -409,33 +439,13 @@ export function DashboardBrowser({
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Scam Library</p>
-                    <h2 className="mt-2 text-2xl font-semibold text-text-main">Explore scam template cards</h2>
+                    <h2 className="mt-2 text-2xl font-semibold text-text-main">Explore scam card options by type</h2>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">
+                      Pick from common scam patterns seen across the internet, then narrow the cards by access level, category, or cost.
+                    </p>
                   </div>
 
-                  <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_170px_170px] xl:min-w-[760px]">
-                    <label className="vant-card flex items-center gap-3 rounded-2xl px-4 py-3 text-text-secondary">
-                      <Search className="h-4 w-4" />
-                      <input
-                        value={search}
-                        onChange={(event) => setSearch(event.target.value)}
-                        className="w-full bg-transparent text-sm outline-none placeholder:text-text-muted"
-                        placeholder="Search scam templates"
-                      />
-                    </label>
-
-                    <select
-                      value={category}
-                      onChange={(event) => setCategory(event.target.value)}
-                      className="vant-input text-sm"
-                    >
-                      <option value="all">All categories</option>
-                      {categories.map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-
+                  <div className="grid gap-3 lg:grid-cols-[170px_170px] xl:min-w-[350px]">
                     <select
                       value={accessFilter}
                       onChange={(event) => setAccessFilter(event.target.value as AccessFilter)}
@@ -461,8 +471,60 @@ export function DashboardBrowser({
                 </div>
 
                 <div className="mt-5 flex flex-wrap gap-3">
+                  {scamFocusOptions.map((option) => {
+                    const active = scamFocus === option.id;
+
+                    return (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => setScamFocus(option.id)}
+                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                          active
+                            ? "border-primary/30 bg-primary/12 text-text-main"
+                            : "border-white/10 bg-white/5 text-text-secondary hover:bg-white/10"
+                        }`}
+                      >
+                        <ShieldAlert className="h-4 w-4" />
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setCategory("all")}
+                    className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                      category === "all"
+                        ? "border-fuchsia-300/25 bg-fuchsia-400/12 text-text-main"
+                        : "border-white/10 bg-white/5 text-text-secondary hover:bg-white/10"
+                    }`}
+                  >
+                    <FolderKanban className="h-4 w-4" />
+                    All categories
+                  </button>
+                  {categories.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => setCategory(item)}
+                      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                        category === item
+                          ? "border-fuchsia-300/25 bg-fuchsia-400/12 text-text-main"
+                          : "border-white/10 bg-white/5 text-text-secondary hover:bg-white/10"
+                      }`}
+                    >
+                      <FolderKanban className="h-4 w-4" />
+                      {item}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
                   {[
-                    { id: "all", label: "All Templates", count: statusCounts.all, icon: ShieldAlert },
+                    { id: "all", label: "All cards", count: statusCounts.all, icon: ShieldAlert },
                     { id: "free", label: "Free", count: statusCounts.free, icon: Coins },
                     { id: "locked", label: "Locked", count: statusCounts.locked, icon: LockKeyhole },
                     { id: "unlocked", label: "Unlocked", count: statusCounts.unlocked, icon: Gem },
