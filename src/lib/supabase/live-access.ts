@@ -357,7 +357,7 @@ export async function unlockCardForUser(
 export async function createPendingPayment(
   userId: string,
   input: {
-    provider?: "paystack" | "stripe";
+    provider?: "paystack";
     reference: string;
     amount: number;
     paymentKind: "credit_topup" | "subscription";
@@ -387,7 +387,7 @@ export async function createPendingPayment(
 }
 
 export async function processVerifiedWalletPayment(
-  provider: "paystack" | "stripe",
+  provider: "paystack",
   reference: string,
   transaction: VerifiedWalletPayment,
   input: {
@@ -493,13 +493,12 @@ export async function processVerifiedWalletPayment(
     return { ok: false, message: walletError.message, flow };
   }
 
-  const providerLabel = provider === "stripe" ? "Stripe" : "Paystack";
   const { error: transactionError } = await serviceSupabase.from("credit_transactions").insert({
     user_id: pendingPayment.user_id,
     amount: bundle.coins,
     type: "topup",
     payment_id: pendingPayment.id,
-    note: `${providerLabel} top-up (${bundle.coins} coins)`
+    note: `Paystack top-up (${bundle.coins} coins)`
   });
 
   if (transactionError) {

@@ -2,17 +2,14 @@ import { ArrowRight, Coins, DatabaseZap, Gem, History, Wallet } from "lucide-rea
 
 import { resetLocalDemoState } from "@/app/local/actions";
 import { MockPaystackButton } from "@/components/payments/mock-paystack-button";
-import { MockStripeButton } from "@/components/payments/mock-stripe-button";
 import { PaystackCheckoutButton } from "@/components/payments/paystack-checkout-button";
-import { StripeCheckoutButton } from "@/components/payments/stripe-checkout-button";
 import { getAuthContext } from "@/lib/auth";
-import { isPaystackConfigured, isStripeConfigured } from "@/lib/env";
+import { isPaystackConfigured } from "@/lib/env";
 import { getWalletPageData } from "@/lib/supabase/queries";
 
 export default async function WalletPage() {
   const [{ user }, walletSummary] = await Promise.all([getAuthContext(), getWalletPageData()]);
   const paystackReady = isPaystackConfigured();
-  const stripeReady = isStripeConfigured();
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
@@ -31,9 +28,9 @@ export default async function WalletPage() {
           <p className="mt-6 max-w-md text-sm leading-6 text-text-secondary">
             {walletSummary.isConfigured
                 ? user
-                ? stripeReady || paystackReady
-                  ? "Your wallet is now reading from Supabase, and users can top up coins through Stripe or Paystack depending on what works best for them."
-                  : "Your wallet is now reading from Supabase. Stripe and Paystack keys are still missing, so the buttons stay in mock mode for testing."
+                ? paystackReady
+                  ? "Your wallet is now reading from Supabase, and users can top up coins through Paystack card payments."
+                  : "Your wallet is now reading from Supabase. Paystack keys are still missing, so the buttons stay in mock mode for testing."
                 : "Sign in to see your real wallet balance and transaction history."
               : "Connect Supabase to activate live wallet balances and transaction history."}
           </p>
@@ -48,10 +45,10 @@ export default async function WalletPage() {
         <div className="vant-card rounded-[32px] p-8">
           <div className="flex items-center gap-3">
             <Wallet className="h-5 w-5 text-primary" />
-            <h1 className="text-2xl font-semibold text-text-main">Buy coins with Stripe or Paystack</h1>
+            <h1 className="text-2xl font-semibold text-text-main">Buy coins with Paystack</h1>
           </div>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
-            The main top-up pack gives users 50 coins for either $5.91 through Stripe or NGN 3,125 through Paystack. Each locked card deducts its own admin-set coin price from the wallet until the user needs another card payment top-up.
+            The main top-up pack gives users 50 coins for NGN 3,125 through Paystack. Each locked card deducts its own admin-set coin price from the wallet until the user needs another card payment top-up.
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {walletSummary.bundles.map((bundle) => (
@@ -68,44 +65,24 @@ export default async function WalletPage() {
                   <Gem className="h-3.5 w-3.5" />+{bundle.diamondsBonus ?? 0} diamonds visual bonus
                 </div>
                 <div className="mt-6 space-y-4">
-                  <div className="rounded-2xl border border-cyan-300/12 bg-cyan-400/8 px-4 py-3">
-                    <p className="text-xs uppercase tracking-[0.18em] text-cyan-100/80">Stripe</p>
-                    <p className="mt-2 text-lg font-medium text-primary">{bundle.stripePriceLabel}</p>
-                    <p className="mt-1 text-xs text-text-secondary">Global cards in USD</p>
-                  </div>
-                  {stripeReady ? (
-                    <StripeCheckoutButton
-                      bundleId={bundle.id}
-                      label="Pay with Stripe"
-                      className="vant-btn w-full text-sm"
-                    />
-                  ) : (
-                    <MockStripeButton
-                      label="Pay with Stripe"
-                      successHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=success`}
-                      cancelHref="/wallet/cancel?message=Mock+Stripe+checkout+was+cancelled."
-                      className="vant-btn w-full text-sm"
-                    />
-                  )}
-
                   <div className="rounded-2xl border border-fuchsia-300/12 bg-fuchsia-400/8 px-4 py-3">
                     <p className="text-xs uppercase tracking-[0.18em] text-fuchsia-100/80">Paystack</p>
                     <p className="mt-2 text-lg font-medium text-fuchsia-100">{bundle.paystackPriceLabel}</p>
-                    <p className="mt-1 text-xs text-text-secondary">Africa cards including local rails</p>
+                    <p className="mt-1 text-xs text-text-secondary">Card payments through Paystack</p>
                   </div>
                   {paystackReady ? (
                     <PaystackCheckoutButton
                       flow="wallet"
                       bundleId={bundle.id}
-                      label="Pay with Paystack"
-                      className="vant-btn-secondary w-full text-sm text-fuchsia-100"
+                      label="Pay with card"
+                      className="vant-btn w-full text-sm"
                     />
                   ) : (
                     <MockPaystackButton
-                      label="Pay with Paystack"
+                      label="Pay with card"
                       successHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=success`}
                       cancelHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=cancel`}
-                      className="vant-btn-secondary w-full text-sm text-fuchsia-100"
+                      className="vant-btn w-full text-sm"
                     />
                   )}
                 </div>
@@ -138,7 +115,7 @@ export default async function WalletPage() {
               <p className="text-sm font-medium text-text-main">Main wallet pack</p>
               <p className="mt-3 text-3xl font-semibold text-fuchsia-100">50 coins</p>
               <p className="mt-2 text-sm leading-6 text-text-secondary">
-                Stripe charges $5.91 and Paystack charges NGN 3,125 for the same 50-coin wallet top-up.
+                Paystack charges NGN 3,125 for the 50-coin wallet top-up.
               </p>
             </div>
           </div>

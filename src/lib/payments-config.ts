@@ -8,8 +8,6 @@ export const creditBundles: CreditBundle[] = [
     amountKobo: 312500,
     paystackAmountKobo: 312500,
     paystackPriceLabel: "NGN 3,125",
-    stripeAmountCents: 591,
-    stripePriceLabel: "$5.91",
     diamondsBonus: 12
   }
 ];
@@ -17,7 +15,7 @@ export const creditBundles: CreditBundle[] = [
 export const subscriptionPlan: SubscriptionPlan = {
   id: "legacy-coin-access",
   name: "50 Coin Access Pack",
-  priceLabel: "$5.91 / NGN 3,125",
+  priceLabel: "NGN 3,125",
   amountKobo: 312500,
   billingLabel: "one-time top-up",
   description: "A one-time 50 coin top-up that users spend across admin-priced locked scam cards.",

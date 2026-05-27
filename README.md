@@ -1,6 +1,6 @@
 # VANT
 
-Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Supabase, Stripe, and Paystack.
+Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Supabase and Paystack.
 
 ## Stack
 
@@ -8,7 +8,7 @@ Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Sup
 - Tailwind CSS
 - TypeScript
 - Supabase client helpers
-- Stripe and Paystack coin top-up flow
+- Paystack coin top-up flow
 - Cloudflare Workers deployment support
 
 ## Routes included
@@ -25,7 +25,7 @@ Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Sup
 
 1. Install dependencies
 2. Copy `.env.example` to `.env.local`
-3. Fill in your Supabase, Stripe, and Paystack keys
+3. Fill in your Supabase and Paystack keys
 4. Run `npm run dev`
 
 ## Cloudflare deployment

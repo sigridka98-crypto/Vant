@@ -65,8 +65,6 @@ export type CreditBundle = {
   coins: number;
   priceLabel: string;
   amountKobo: number;
-  stripeAmountCents?: number;
-  stripePriceLabel?: string;
   paystackAmountKobo?: number;
   paystackPriceLabel?: string;
   diamondsBonus?: number;
