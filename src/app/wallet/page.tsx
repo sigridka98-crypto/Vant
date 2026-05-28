@@ -1,15 +1,12 @@
 import { ArrowRight, Coins, DatabaseZap, Gem, History, Wallet } from "lucide-react";
 
 import { resetLocalDemoState } from "@/app/local/actions";
-import { MockPaystackButton } from "@/components/payments/mock-paystack-button";
 import { PaystackCheckoutButton } from "@/components/payments/paystack-checkout-button";
 import { getAuthContext } from "@/lib/auth";
-import { isPaystackConfigured } from "@/lib/env";
 import { getWalletPageData } from "@/lib/supabase/queries";
 
 export default async function WalletPage() {
   const [{ user }, walletSummary] = await Promise.all([getAuthContext(), getWalletPageData()]);
-  const paystackReady = isPaystackConfigured();
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
@@ -28,9 +25,7 @@ export default async function WalletPage() {
           <p className="mt-6 max-w-md text-sm leading-6 text-text-secondary">
             {walletSummary.isConfigured
                 ? user
-                ? paystackReady
-                  ? "Your wallet is now reading from Supabase, and users can top up coins through Paystack card payments."
-                  : "Your wallet is now reading from Supabase. Paystack keys are still missing, so the buttons stay in mock mode for testing."
+                ? "Your wallet is now reading from Supabase, and users can top up coins through Paystack card payments."
                 : "Sign in to see your real wallet balance and transaction history."
               : "Connect Supabase to activate live wallet balances and transaction history."}
           </p>
@@ -70,21 +65,12 @@ export default async function WalletPage() {
                     <p className="mt-2 text-lg font-medium text-fuchsia-100">{bundle.paystackPriceLabel}</p>
                     <p className="mt-1 text-xs text-text-secondary">Card payments through Paystack</p>
                   </div>
-                  {paystackReady ? (
-                    <PaystackCheckoutButton
-                      flow="wallet"
-                      bundleId={bundle.id}
-                      label="Pay with card"
-                      className="vant-btn w-full text-sm"
-                    />
-                  ) : (
-                    <MockPaystackButton
-                      label="Pay with card"
-                      successHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=success`}
-                      cancelHref={`/mock/paystack?flow=wallet&bundle=${bundle.id}&outcome=cancel`}
-                      className="vant-btn w-full text-sm"
-                    />
-                  )}
+                  <PaystackCheckoutButton
+                    flow="wallet"
+                    bundleId={bundle.id}
+                    label="Pay with card"
+                    className="vant-btn w-full text-sm"
+                  />
                 </div>
               </article>
             ))}

@@ -2,9 +2,7 @@ import Link from "next/link";
 import { Coins, Gem, LockKeyhole, RefreshCw } from "lucide-react";
 
 import { unlockCardAccess } from "@/app/cards/actions";
-import { MockPaystackButton } from "@/components/payments/mock-paystack-button";
 import { PaystackCheckoutButton } from "@/components/payments/paystack-checkout-button";
-import { isPaystackConfigured } from "@/lib/env";
 import { formatCredits } from "@/lib/utils";
 
 type LockedUnlockPanelProps = {
@@ -24,8 +22,6 @@ export function LockedUnlockPanel({
   creditCost,
   reUnlockCost
 }: LockedUnlockPanelProps) {
-  const paystackReady = isPaystackConfigured();
-
   return (
     <section className="vant-card rounded-[34px] bg-fuchsia-400/10 p-8">
       <div className="flex items-start gap-4">
@@ -92,21 +88,12 @@ export function LockedUnlockPanel({
                 Unlock now with {formatCredits(creditCost)}
               </button>
             </form>
-            {paystackReady ? (
-              <PaystackCheckoutButton
-                flow="wallet"
-                bundleId="bundle-50"
-                label="Buy 50 coins with Paystack"
-                className="vant-btn"
-              />
-            ) : (
-              <MockPaystackButton
-                label="Top up 50 coins"
-                successHref="/mock/paystack?flow=wallet&bundle=bundle-50&outcome=success"
-                cancelHref="/mock/paystack?flow=wallet&bundle=bundle-50&outcome=cancel"
-                className="vant-btn"
-              />
-            )}
+            <PaystackCheckoutButton
+              flow="wallet"
+              bundleId="bundle-50"
+              label="Buy 50 coins with Paystack"
+              className="vant-btn"
+            />
             <Link href="/wallet" className="vant-btn-secondary inline-flex items-center gap-2">
               <Coins className="h-4 w-4" />
               View wallet balance

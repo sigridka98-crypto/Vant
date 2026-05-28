@@ -10,8 +10,7 @@ import {
 import { createPendingPayment } from "@/lib/supabase/live-access";
 
 type InitializeRequestBody =
-  | { flow: "wallet"; bundleId: string }
-  | { flow: "subscription" };
+  { flow: "wallet"; bundleId: string };
 
 export async function POST(request: Request) {
   try {
@@ -95,9 +94,8 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Subscriptions are no longer active. Use the wallet top-up flow to buy coins instead."
-      }
-    ,
+        message: "Only wallet top-up payments are active right now."
+      },
       { status: 400 }
     );
   } catch (error) {
