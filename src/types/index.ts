@@ -8,7 +8,7 @@ export type ScamCardStep = {
 };
 
 export type ScamSeverity = "common" | "trending" | "high_risk";
-export type CardAccessState = "free" | "locked" | "unlocked" | "subscription";
+export type CardAccessState = "free" | "locked" | "unlocked";
 export type ScamAlertTag = "new_scam_alert" | "trending_scam" | "most_reported";
 export type CardUpdateType = "minor" | "major";
 
@@ -77,7 +77,7 @@ export type CreditTransaction = {
   date: string;
 };
 
-export type SubscriptionPlan = {
+export type CoinTopUpPack = {
   id: string;
   name: string;
   priceLabel: string;

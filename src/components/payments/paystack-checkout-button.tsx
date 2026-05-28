@@ -19,17 +19,12 @@ declare global {
 }
 
 type PaystackCheckoutButtonProps =
-  | {
-      flow: "wallet";
-      bundleId: string;
-      className: string;
-      label: string;
-    }
-  | {
-      flow: "subscription";
-      className: string;
-      label: string;
-    };
+  {
+    flow: "wallet";
+    bundleId: string;
+    className: string;
+    label: string;
+  };
 
 export function PaystackCheckoutButton(props: PaystackCheckoutButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -159,10 +154,7 @@ export function PaystackCheckoutButton(props: PaystackCheckoutButtonProps) {
         headers: {
           "Content-Type": "application/json"
         },
-        body:
-          props.flow === "wallet"
-            ? JSON.stringify({ flow: "wallet", bundleId: props.bundleId })
-            : JSON.stringify({ flow: "subscription" })
+        body: JSON.stringify({ flow: "wallet", bundleId: props.bundleId })
       });
 
       const raw = await response.text();
@@ -198,9 +190,7 @@ export function PaystackCheckoutButton(props: PaystackCheckoutButtonProps) {
           window.location.href = `/api/paystack/callback?reference=${encodeURIComponent(transaction.reference)}`;
         },
         onCancel: () => {
-          const cancelHref =
-            props.flow === "subscription" ? "/subscription/cancel" : "/wallet/cancel";
-          window.location.href = cancelHref;
+          window.location.href = "/wallet/cancel";
         },
         onError: (popupError) => {
           setError(popupError.message || "Unable to continue Paystack checkout.");

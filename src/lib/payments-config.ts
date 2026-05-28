@@ -1,4 +1,4 @@
-import type { CreditBundle, SubscriptionPlan } from "@/types";
+import type { CoinTopUpPack, CreditBundle } from "@/types";
 
 export const creditBundles: CreditBundle[] = [
   {
@@ -12,8 +12,8 @@ export const creditBundles: CreditBundle[] = [
   }
 ];
 
-export const subscriptionPlan: SubscriptionPlan = {
-  id: "legacy-coin-access",
+export const topUpPack: CoinTopUpPack = {
+  id: "coin-pack-50",
   name: "50 Coin Access Pack",
   priceLabel: "NGN 3,125",
   amountKobo: 312500,

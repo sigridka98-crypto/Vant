@@ -54,7 +54,7 @@ function getSecretKey() {
   return secret;
 }
 
-export function createPaystackReference(prefix: "wallet" | "subscription", userId: string) {
+export function createPaystackReference(prefix: "wallet", userId: string) {
   return `vant-${prefix}-${userId.slice(0, 8)}-${Date.now()}`;
 }
 

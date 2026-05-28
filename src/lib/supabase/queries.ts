@@ -6,19 +6,12 @@ import {
   getLocalBalance,
   getLocalBookmarks,
   getLocalSeenAlerts,
-  getLocalSubscriptionActive,
   getLocalTransactions,
   getLocalUnlocks
 } from "@/lib/local-user-state";
-import { creditBundles, subscriptionPlan } from "@/lib/payments-config";
+import { creditBundles, topUpPack } from "@/lib/payments-config";
 import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
-import type {
-  CardUpdateLog,
-  CreditBundle,
-  CreditTransaction,
-  ScamCard,
-  SubscriptionPlan
-} from "@/types";
+import type { CardUpdateLog, CreditBundle, CreditTransaction, ScamCard } from "@/types";
 
 function mapCardRecord(record: {
   id: string;
@@ -97,7 +90,6 @@ async function getUserAccessMap(cardIds: string[]) {
     const seenAlerts = await getLocalSeenAlerts();
     const bookmarks = await getLocalBookmarks();
     return {
-      subscriptionActive: await getLocalSubscriptionActive(),
       unlockedVersions: new Map<string, number>(
         cardIds
           .filter((cardId) => unlocks[cardId] !== undefined)
@@ -119,24 +111,18 @@ async function getUserAccessMap(cardIds: string[]) {
 
   if (!user) {
     return {
-      subscriptionActive: false,
       unlockedVersions: new Map<string, number>(),
       bookmarkedIds: new Set<string>(),
       seenAlerts: new Set<string>()
     };
   }
 
-  const [{ data: unlocks }, { data: subscriptions }, { data: seenAlerts }, { data: bookmarks }] = await Promise.all([
+  const [{ data: unlocks }, { data: seenAlerts }, { data: bookmarks }] = await Promise.all([
     supabase
       .from("user_card_unlocks")
       .select("card_id, unlocked_version")
       .eq("user_id", user.id)
       .in("card_id", cardIds),
-    supabase
-      .from("subscriptions")
-      .select("status, current_period_end")
-      .eq("user_id", user.id)
-      .eq("status", "active"),
     supabase
       .from("user_alert_views")
       .select("card_id")
@@ -154,13 +140,7 @@ async function getUserAccessMap(cardIds: string[]) {
     unlockedVersions.set(unlock.card_id, unlock.unlocked_version);
   });
 
-  const now = new Date();
-  const subscriptionActive = (subscriptions ?? []).some((subscription) => {
-    return !subscription.current_period_end || new Date(subscription.current_period_end) > now;
-  });
-
   return {
-    subscriptionActive,
     bookmarkedIds: new Set<string>((bookmarks ?? []).map((item) => item.card_id)),
     unlockedVersions,
     seenAlerts: new Set<string>((seenAlerts ?? []).map((item) => item.card_id))
@@ -202,11 +182,9 @@ export const getPublishedCards = cache(async () => {
 
       card.accessState = card.isFree
         ? "free"
-        : access.subscriptionActive
-          ? "subscription"
-          : unlockedVersion === card.currentVersion
-            ? "unlocked"
-            : "locked";
+        : unlockedVersion === card.currentVersion
+          ? "unlocked"
+          : "locked";
       card.isAlertSeen = access.seenAlerts.has(card.id);
       card.isBookmarked = access.bookmarkedIds.has(card.id);
 
@@ -243,11 +221,9 @@ export const getPublishedCards = cache(async () => {
 
     card.accessState = card.isFree
       ? "free"
-      : access.subscriptionActive
-        ? "subscription"
-        : unlockedVersion === card.currentVersion
-          ? "unlocked"
-          : "locked";
+      : unlockedVersion === card.currentVersion
+        ? "unlocked"
+        : "locked";
     card.isAlertSeen = access.seenAlerts.has(card.id);
     card.isBookmarked = access.bookmarkedIds.has(card.id);
 
@@ -279,18 +255,13 @@ export const getPublishedCardBySlug = cache(async (slug: string) => {
     const card = mapCardRecord(record);
     const access = await getUserAccessMap([card.id]);
     const unlockedVersion = access.unlockedVersions.get(card.id);
-    const hasFullAccess =
-      card.isFree ||
-      access.subscriptionActive ||
-      unlockedVersion === card.currentVersion;
+    const hasFullAccess = card.isFree || unlockedVersion === card.currentVersion;
 
     card.accessState = card.isFree
       ? "free"
-      : access.subscriptionActive
-        ? "subscription"
-        : unlockedVersion === card.currentVersion
-          ? "unlocked"
-          : "locked";
+      : unlockedVersion === card.currentVersion
+        ? "unlocked"
+        : "locked";
     card.isAlertSeen = access.seenAlerts.has(card.id);
     card.isBookmarked = access.bookmarkedIds.has(card.id);
 
@@ -329,18 +300,13 @@ export const getPublishedCardBySlug = cache(async (slug: string) => {
   const card = mapCardRecord(record as unknown as CardRecord);
   const access = await getUserAccessMap([card.id]);
   const unlockedVersion = access.unlockedVersions.get(card.id);
-  const hasFullAccess =
-    card.isFree ||
-    access.subscriptionActive ||
-    unlockedVersion === card.currentVersion;
+  const hasFullAccess = card.isFree || unlockedVersion === card.currentVersion;
 
   card.accessState = card.isFree
     ? "free"
-    : access.subscriptionActive
-      ? "subscription"
-      : unlockedVersion === card.currentVersion
-        ? "unlocked"
-        : "locked";
+    : unlockedVersion === card.currentVersion
+      ? "unlocked"
+      : "locked";
   card.isAlertSeen = access.seenAlerts.has(card.id);
   card.isBookmarked = access.bookmarkedIds.has(card.id);
 
@@ -392,7 +358,7 @@ export const getWalletPageData = cache(async () => {
       transactions: await getLocalTransactions(),
       bankTransferRequests: [] as Array<any>,
       bundles: creditBundles,
-      plan: subscriptionPlan
+      pack: topUpPack
     };
   }
 
@@ -408,7 +374,7 @@ export const getWalletPageData = cache(async () => {
       transactions: [] as CreditTransaction[],
       bankTransferRequests: [] as Array<any>,
       bundles: creditBundles,
-      plan: subscriptionPlan
+      pack: topUpPack
     };
   }
 
@@ -426,7 +392,7 @@ export const getWalletPageData = cache(async () => {
     isConfigured: true,
     balance: wallet?.credit_balance ?? 0,
     bundles: creditBundles,
-    plan: subscriptionPlan,
+    pack: topUpPack,
     transactions: (transactions ?? []).map((transaction) => ({
       id: transaction.id,
       label: transaction.note || transaction.type.replaceAll("_", " "),

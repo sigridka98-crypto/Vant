@@ -25,21 +25,6 @@ type VerifiedWalletPayment = {
   metadata?: Record<string, unknown> | null;
 };
 
-function isSubscriptionCurrentlyActive(
-  subscription:
-    | {
-        status: string;
-        current_period_end: string | null;
-      }
-    | null
-) {
-  if (!subscription || subscription.status !== "active") {
-    return false;
-  }
-
-  return !subscription.current_period_end || new Date(subscription.current_period_end) > new Date();
-}
-
 async function ensureWalletBalance(userId: string) {
   const serviceSupabase = createSupabaseServiceClient();
   const { data: wallet } = await serviceSupabase
@@ -156,21 +141,6 @@ export async function unlockCardForUser(
     return {
       ok: true,
       message: "This card is already free to open."
-    };
-  }
-
-  const { data: subscription } = await serviceSupabase
-    .from("subscriptions")
-    .select("status, current_period_end")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (isSubscriptionCurrentlyActive(subscription)) {
-    return {
-      ok: true,
-      message: "Your active subscription already unlocks this lesson."
     };
   }
 

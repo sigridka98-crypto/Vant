@@ -81,11 +81,11 @@ export default async function WalletPage() {
       <section>
         <div id="top-up-pack" className="vant-card rounded-[32px] bg-primary/10 p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin access pack</p>
-          <h2 className="mt-3 text-3xl font-semibold text-text-main">{walletSummary.plan.name}</h2>
-          <p className="mt-4 text-sm leading-7 text-text-secondary">{walletSummary.plan.description}</p>
+          <h2 className="mt-3 text-3xl font-semibold text-text-main">{walletSummary.pack.name}</h2>
+          <p className="mt-4 text-sm leading-7 text-text-secondary">{walletSummary.pack.description}</p>
           <p className="mt-5 text-4xl font-semibold text-text-main">
-            {walletSummary.plan.priceLabel}
-            <span className="ml-2 text-lg font-medium text-primary/80">{walletSummary.plan.billingLabel}</span>
+            {walletSummary.pack.priceLabel}
+            <span className="ml-2 text-lg font-medium text-primary/80">{walletSummary.pack.billingLabel}</span>
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
             <a href="#top-up-pack" className="vant-btn inline-flex items-center gap-2">

@@ -15,7 +15,6 @@ const COOKIE_KEYS = {
   balance: "scamshield_local_balance",
   unlocks: "scamshield_local_unlocks",
   transactions: "scamshield_local_transactions",
-  subscription: "scamshield_local_subscription_active",
   admin: "scamshield_local_admin_access",
   seenAlerts: "scamshield_local_seen_alerts",
   bookmarks: "scamshield_local_bookmarks"
@@ -88,20 +87,6 @@ export async function addLocalTransaction(transaction: Omit<LocalTransaction, "i
 
   const store = await getCookieStore();
   store.set(COOKIE_KEYS.transactions, JSON.stringify(updated), {
-    httpOnly: false,
-    path: "/",
-    sameSite: "lax"
-  });
-}
-
-export async function getLocalSubscriptionActive() {
-  const store = await getCookieStore();
-  return store.get(COOKIE_KEYS.subscription)?.value === "true";
-}
-
-export async function setLocalSubscriptionActive(active: boolean) {
-  const store = await getCookieStore();
-  store.set(COOKIE_KEYS.subscription, active ? "true" : "false", {
     httpOnly: false,
     path: "/",
     sameSite: "lax"

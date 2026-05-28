@@ -8,7 +8,6 @@ import {
   setLocalBalance,
   setLocalBookmarks,
   setLocalSeenAlerts,
-  setLocalSubscriptionActive,
   setLocalUnlocks
 } from "@/lib/local-user-state";
 
@@ -18,12 +17,10 @@ export async function resetLocalDemoState() {
   await setLocalBookmarks({});
   await setLocalUnlocks({});
   await setLocalSeenAlerts({});
-  await setLocalSubscriptionActive(false);
 
   revalidatePath("/");
   revalidatePath("/dashboard");
   revalidatePath("/wallet");
-  revalidatePath("/subscription");
   revalidatePath("/admin");
 
   redirect("/admin?message=Local demo state reset. You can start testing from a clean slate.");

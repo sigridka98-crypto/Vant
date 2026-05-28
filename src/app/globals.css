@@ -4,12 +4,12 @@
 :root {
   --color-primary: #00e6a8;
   --color-primary-dark: #00bfa6;
-  --color-bg-primary: #f8fbff;
-  --color-bg-secondary: #eef5fb;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #ffffff;
   --color-bg-soft: #ffffff;
   --color-text-main: #081120;
-  --color-text-secondary: #516074;
-  --color-text-muted: #7c8899;
+  --color-text-secondary: #3f4d61;
+  --color-text-muted: #657285;
   --color-border-soft: rgba(8, 17, 32, 0.08);
   --background: var(--color-bg-primary);
   --foreground: var(--color-text-main);
@@ -47,10 +47,7 @@ html {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(0, 230, 168, 0.08), transparent 24%),
-    radial-gradient(circle at top right, rgba(0, 191, 166, 0.05), transparent 22%),
-    linear-gradient(180deg, #f8fbff 0%, #f3f8fd 38%, #eef5fb 100%);
+  background: #ffffff;
   color: var(--foreground);
   font-feature-settings: "ss01" on, "cv01" on;
 }
@@ -100,7 +97,7 @@ select {
   .vant-card {
     @apply rounded-2xl border shadow-lg backdrop-blur;
     border-color: var(--color-border-soft);
-    background: color-mix(in srgb, var(--color-bg-soft) 88%, transparent);
+    background: var(--color-bg-soft);
   }
 
   .vant-card-hover {
@@ -117,7 +114,7 @@ select {
   .vant-glass {
     @apply border backdrop-blur;
     border-color: var(--color-border-soft);
-    background: color-mix(in srgb, var(--color-bg-soft) 82%, transparent);
+    background: var(--color-bg-soft);
     box-shadow: 0 18px 55px rgba(2, 6, 23, 0.12);
   }
 
@@ -140,7 +137,7 @@ select {
   .vant-btn-secondary {
     @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium shadow-lg transition duration-200 backdrop-blur;
     color: var(--color-text-main);
-    background: color-mix(in srgb, var(--color-bg-soft) 85%, transparent);
+    background: var(--color-bg-soft);
     border: 1px solid var(--color-border-soft);
   }
 
@@ -154,11 +151,70 @@ select {
   .vant-input {
     @apply w-full rounded-2xl border bg-transparent px-4 py-3 shadow-lg backdrop-blur;
     border-color: var(--color-border-soft);
-    background-color: color-mix(in srgb, var(--color-bg-soft) 92%, transparent);
+    background-color: var(--color-bg-soft);
     color: var(--color-text-main);
   }
 
   .vant-input::placeholder {
     color: var(--color-text-muted);
   }
+}
+
+html[data-theme="light"] .site-shell-header {
+  background: #ffffff;
+  border-color: rgba(8, 17, 32, 0.08);
+}
+
+html[data-theme="light"] .dashboard-shell,
+html[data-theme="light"] .dashboard-main,
+html[data-theme="light"] .dashboard-sidebar,
+html[data-theme="light"] .dashboard-empty,
+html[data-theme="light"] .dashboard-alert-hero {
+  background: #ffffff !important;
+}
+
+html[data-theme="light"] .dashboard-shell,
+html[data-theme="light"] .dashboard-sidebar,
+html[data-theme="light"] .dashboard-main,
+html[data-theme="light"] .dashboard-empty,
+html[data-theme="light"] .dashboard-alert-hero {
+  border-color: rgba(8, 17, 32, 0.08) !important;
+  box-shadow: 0 18px 55px rgba(2, 6, 23, 0.08) !important;
+}
+
+html[data-theme="light"] .dashboard-sidebar,
+html[data-theme="light"] .dashboard-main {
+  background-image: none !important;
+}
+
+html[data-theme="light"] .dashboard-shell .text-white,
+html[data-theme="light"] .dashboard-empty .text-white,
+html[data-theme="light"] .dashboard-alert-hero .text-white,
+html[data-theme="light"] .dashboard-shell .text-slate-300,
+html[data-theme="light"] .dashboard-shell .text-slate-200\/90,
+html[data-theme="light"] .dashboard-shell .text-slate-200\/85,
+html[data-theme="light"] .dashboard-shell .text-cyan-50\/90,
+html[data-theme="light"] .dashboard-shell .text-rose-100,
+html[data-theme="light"] .dashboard-shell .text-fuchsia-100,
+html[data-theme="light"] .dashboard-shell .text-cyan-100 {
+  color: var(--color-text-main) !important;
+}
+
+html[data-theme="light"] .dashboard-shell .text-slate-400,
+html[data-theme="light"] .dashboard-shell .text-slate-200\/85,
+html[data-theme="light"] .dashboard-shell .text-slate-200\/90,
+html[data-theme="light"] .dashboard-shell .text-text-secondary,
+html[data-theme="light"] .dashboard-shell .text-cyan-100\/80 {
+  color: var(--color-text-secondary) !important;
+}
+
+html[data-theme="light"] .dashboard-shell .bg-white\/5,
+html[data-theme="light"] .dashboard-shell .bg-white\/4,
+html[data-theme="light"] .dashboard-shell .bg-primary\/10,
+html[data-theme="light"] .dashboard-shell .bg-fuchsia-400\/10,
+html[data-theme="light"] .dashboard-shell .bg-cyan-400\/10,
+html[data-theme="light"] .dashboard-shell .bg-cyan-400\/12,
+html[data-theme="light"] .dashboard-shell .bg-fuchsia-400\/12,
+html[data-theme="light"] .dashboard-shell .bg-rose-400\/10 {
+  background: #ffffff !important;
 }

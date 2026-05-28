@@ -70,7 +70,7 @@ export function LockedUnlockPanel({
                 <Coins className="h-5 w-5" />
                 <p className="font-medium">50 coin top-up pack</p>
               </div>
-              <p className="mt-4 text-3xl font-semibold text-text-main">NGN 5,350</p>
+              <p className="mt-4 text-3xl font-semibold text-text-main">NGN 3,125</p>
               <p className="mt-2 text-sm leading-6 text-text-secondary">
                 Buy 50 coins, then unlock admin-priced cards one by one until your wallet runs low.
               </p>

@@ -107,7 +107,7 @@ function EmptyResults({
   hasAnyCards: boolean;
 }) {
   return (
-    <section className="grid gap-6 rounded-[32px] border border-dashed border-white/10 bg-white/4 p-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <section className="dashboard-empty grid gap-6 rounded-[32px] border border-dashed border-white/10 bg-white/4 p-8 lg:grid-cols-[1.1fr_0.9fr]">
       <div>
         <p className="text-lg font-medium text-white">
           {hasAnyCards
@@ -252,9 +252,9 @@ export function DashboardBrowser({
   ];
 
   return (
-    <section className="vant-glass overflow-hidden rounded-[34px] bg-bg-primary shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+    <section className="dashboard-shell vant-glass overflow-hidden rounded-[34px] bg-bg-primary shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
       <div className="grid min-h-[calc(100vh-150px)] lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="border-b border-white/8 bg-[linear-gradient(180deg,rgba(17,94,89,0.18),rgba(5,10,22,0.92)_35%,rgba(5,10,22,0.96))] p-6 lg:border-b-0 lg:border-r">
+        <aside className="dashboard-sidebar border-b border-white/8 bg-[linear-gradient(180deg,rgba(17,94,89,0.18),rgba(5,10,22,0.92)_35%,rgba(5,10,22,0.96))] p-6 lg:border-b-0 lg:border-r">
           <div className="vant-card rounded-[28px] bg-primary/10 p-5 shadow-[0_16px_50px_rgba(20,184,166,0.12)]">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">VANT Workspace</p>
             <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online scams</h2>
@@ -297,7 +297,7 @@ export function DashboardBrowser({
           </div>
         </aside>
 
-        <div className="bg-[radial-gradient(circle_at_top_right,rgba(45,212,191,0.12),transparent_18%),linear-gradient(180deg,#07101d_0%,#040814_100%)]">
+        <div className="dashboard-main bg-[radial-gradient(circle_at_top_right,rgba(45,212,191,0.12),transparent_18%),linear-gradient(180deg,#07101d_0%,#040814_100%)]">
           <header className="border-b border-white/8 px-5 py-5 md:px-8">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div>
@@ -350,7 +350,7 @@ export function DashboardBrowser({
           <div className="grid gap-6 p-5 md:p-8 2xl:grid-cols-[minmax(0,1fr)_320px]">
             <div className="space-y-6">
               {alertCards.length ? (
-                <section className="relative overflow-hidden rounded-[32px] border border-rose-300/12 bg-[linear-gradient(135deg,rgba(244,63,94,0.16),rgba(8,15,30,0.98)_45%,rgba(34,211,238,0.12))] p-6 shadow-[0_26px_80px_rgba(0,0,0,0.24)]">
+                <section className="dashboard-alert-hero relative overflow-hidden rounded-[32px] border border-rose-300/12 bg-[linear-gradient(135deg,rgba(244,63,94,0.16),rgba(8,15,30,0.98)_45%,rgba(34,211,238,0.12))] p-6 shadow-[0_26px_80px_rgba(0,0,0,0.24)]">
                   <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-rose-400/15 blur-3xl" />
                   <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div className="max-w-3xl">
@@ -572,7 +572,7 @@ export function DashboardBrowser({
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin Top-Up</p>
                     <h2 className="mt-3 text-3xl font-semibold text-text-main">Keep your coin wallet ready for more premium lessons</h2>
                     <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
-                      NGN 5,350 adds 50 coins to the wallet. Each admin-priced premium card deducts from that balance as users unlock more scam lessons.
+                      NGN 3,125 adds 50 coins to the wallet. Each admin-priced premium card deducts from that balance as users unlock more scam lessons.
                     </p>
                   </div>
                   <Link href="/wallet" className="vant-btn inline-flex items-center justify-center">
