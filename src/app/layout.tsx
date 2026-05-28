@@ -5,6 +5,20 @@ import { SiteHeader } from "@/components/layout/site-header";
 
 import "./globals.css";
 
+const themeInitScript = `
+  (() => {
+    try {
+      const savedTheme = localStorage.getItem("vant-theme");
+      const theme = savedTheme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch {
+      document.documentElement.dataset.theme = "light";
+      document.documentElement.style.colorScheme = "light";
+    }
+  })();
+`;
+
 export const metadata: Metadata = {
   title: "ScamShield Library",
   description: "A scam-awareness platform that teaches users how to recognize online scam patterns."
@@ -12,7 +26,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>
         <SiteHeader />
         <LocalModeBanner />

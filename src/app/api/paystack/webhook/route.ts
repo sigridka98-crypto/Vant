@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { getBundleById, getSubscriptionPlanConfig, verifyPaystackSignature } from "@/lib/paystack";
+import { getBundleById, verifyPaystackSignature } from "@/lib/paystack";
 import { processVerifiedPaystackTransaction } from "@/lib/supabase/live-access";
 
 type PaystackWebhookEvent = {
@@ -34,7 +34,6 @@ export async function POST(request: Request) {
 
   const metadata = event.data.metadata ?? {};
   const bundleId = typeof metadata.bundleId === "string" ? metadata.bundleId : "";
-  const planId = typeof metadata.planId === "string" ? metadata.planId : "";
 
   await processVerifiedPaystackTransaction(
     event.data.reference,
@@ -47,15 +46,13 @@ export async function POST(request: Request) {
       plan: event.data.plan ?? null
     },
     {
-      walletBundle: bundleId ? getBundleById(bundleId) : null,
-      subscriptionPlan: planId ? getSubscriptionPlanConfig() : null
+      walletBundle: bundleId ? getBundleById(bundleId) : null
     }
   );
 
   revalidatePath("/", "layout");
   revalidatePath("/dashboard");
   revalidatePath("/wallet");
-  revalidatePath("/subscription");
 
   return NextResponse.json({ ok: true });
 }

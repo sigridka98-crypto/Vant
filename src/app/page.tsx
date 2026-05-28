@@ -4,82 +4,31 @@ import {
   BookOpen,
   Coins,
   Gem,
-  Globe,
-  Lock,
   PlayCircle,
-  Quote,
   Shield,
-  ShieldCheck,
   Sparkles,
   TriangleAlert,
-  UserPlus,
   WalletCards,
-  Zap
 } from "lucide-react";
 
 import { getPublishedCards } from "@/lib/supabase/queries";
 
 const valueCards = [
   {
-    title: "Learn Real Scam Formats",
-    description:
-      "Understand scam structures through safe educational breakdowns, modified examples, and step-by-step explanations.",
+    title: "Learn how scams work",
+    description: "Study real scam patterns through short educational cards that explain the setup and trap clearly.",
     icon: BookOpen
   },
   {
-    title: "Spot Red Flags Easily",
-    description:
-      "Notice urgency, impersonation, pressure, suspicious payment demands, and other warning patterns before harm happens.",
+    title: "Spot the warning signs",
+    description: "See the urgency, impersonation, payment pressure, and trust tricks scammers reuse again and again.",
+    icon: TriangleAlert
+  },
+  {
+    title: "Protect yourself earlier",
+    description: "Build safer habits before fraud reaches you, instead of learning only after damage has been done.",
     icon: Shield
-  },
-  {
-    title: "Stay Ahead Always",
-    description:
-      "VANT is designed for an admin-managed library so new scam methods can be added as online threats evolve.",
-    icon: Zap
-  },
-  {
-    title: "Unlock with Coins and Diamonds",
-    description:
-      "Users begin with free lessons, then continue learning through coin top-ups that unlock admin-priced premium scam cards over time.",
-    icon: Lock
   }
-];
-
-const processSteps = [
-  {
-    title: "Sign Up",
-    description: "Create an account and begin with the starter lessons designed to teach the basics of scam recognition.",
-    icon: UserPlus
-  },
-  {
-    title: "Get Coins",
-    description: "Top up 50 coins when you want to unlock more advanced premium learning cards priced by the admin.",
-    icon: WalletCards
-  },
-  {
-    title: "Explore and Learn",
-    description: "Open scam cards, study the structure, review the warning signs, and understand how the trap usually unfolds.",
-    icon: BookOpen
-  },
-  {
-    title: "Stay Protected",
-    description: "Apply what you learn in everyday life so you can notice scams earlier and avoid costly mistakes online.",
-    icon: ShieldCheck
-  }
-];
-
-const trustStats = [
-  { value: "50,000+", label: "Awareness Sessions" },
-  { value: "100+", label: "Scam Templates Ready" },
-  { value: "98%", label: "Learning Satisfaction Goal" },
-  { value: "120+", label: "Reach-Friendly Countries" }
-];
-
-const anonymousTrust = [
-  "VANT makes scam awareness feel simple, practical, and easy to remember.",
-  "The card format turns confusing scam tactics into clear lessons anyone can follow.",
-  "It helps users recognize red flags faster instead of learning only after being targeted."
 ];
 
 const navItems = ["Home", "Explore Scams", "How It Works", "Pricing", "About VANT", "Blog"];
@@ -202,27 +151,27 @@ export default async function HomePage() {
   const publishedCount = cards.length;
 
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8 md:py-10">
-      <section className="relative overflow-hidden rounded-[40px] border border-white/8 bg-[#050c16]/95 px-8 py-8 shadow-[0_40px_140px_rgba(0,0,0,0.45)] md:px-10 lg:px-12 lg:py-10">
-        <div className="absolute inset-x-1/2 top-[52%] h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute bottom-10 left-1/2 h-48 w-[65%] -translate-x-1/2 rounded-full border border-cyan-300/20 bg-[radial-gradient(circle,rgba(34,211,238,0.22),rgba(34,211,238,0.02)_55%,transparent_70%)] blur-sm" />
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8 md:py-10">
+      <section className="relative overflow-hidden rounded-[40px] border border-slate-200 bg-white/95 px-8 py-8 shadow-[0_30px_100px_rgba(8,17,32,0.08)] md:px-10 lg:px-12 lg:py-10">
+        <div className="absolute inset-x-1/2 top-[52%] h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/8 blur-3xl" />
+        <div className="absolute bottom-10 left-1/2 h-48 w-[65%] -translate-x-1/2 rounded-full border border-cyan-200/40 bg-[radial-gradient(circle,rgba(34,211,238,0.18),rgba(34,211,238,0.02)_55%,transparent_70%)] blur-sm" />
 
-        <div className="relative z-20 flex flex-col gap-5 border-b border-white/8 pb-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative z-20 flex flex-col gap-5 border-b border-slate-200 pb-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-300/15 bg-emerald-400/10 text-emerald-300">
               <Shield className="h-6 w-6" />
             </span>
             <div>
-              <p className="text-3xl font-semibold tracking-tight text-white">VANT</p>
+              <p className="text-3xl font-semibold tracking-tight text-slate-950">VANT</p>
             </div>
           </div>
 
-          <nav className="hidden items-center gap-8 text-sm text-slate-200 lg:flex">
+          <nav className="hidden items-center gap-8 text-sm text-slate-600 lg:flex">
             {navItems.map((item, index) => (
               <span
                 key={item}
                 className={`relative cursor-default transition ${
-                  index === 0 ? "text-white" : "text-slate-300"
+                  index === 0 ? "text-slate-950" : "text-slate-600"
                 }`}
               >
                 {item}
@@ -234,7 +183,7 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/login"
-              className="rounded-2xl border border-white/10 bg-white/4 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/8"
+              className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
             >
               Log In
             </Link>
@@ -249,12 +198,12 @@ export default async function HomePage() {
 
         <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="relative z-10">
-            <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-cyan-300/12 bg-cyan-400/8 px-4 py-2 text-sm font-medium text-cyan-100">
+            <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-800">
               <Shield className="h-4 w-4" />
               Stay Aware. Stay Safe.
             </span>
 
-            <h1 className="mt-7 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-tight text-white md:text-6xl xl:text-7xl">
+            <h1 className="mt-7 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-tight text-slate-950 md:text-6xl xl:text-7xl">
               See the <span className="text-emerald-300">scam</span>
               <br />
               before it
@@ -262,13 +211,13 @@ export default async function HomePage() {
               sees <span className="text-cyan-300">you.</span>
             </h1>
 
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
               VANT is a scam-awareness app built to help people recognize online fraud before it succeeds.
               It teaches how scams work, highlights the red flags scammers repeat, and explains how users can
               protect themselves through simple, structured learning cards.
             </p>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-400">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-500">
               Instead of confusing people with noise, VANT organizes scam education into clear lessons:
               title, description, how the scam works, red flags, safe examples, protection steps, and a quick memory rule.
             </p>
@@ -283,7 +232,7 @@ export default async function HomePage() {
               </Link>
               <Link
                 href="/wallet"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-4 font-medium text-white transition hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-6 py-4 font-medium text-slate-900 transition hover:bg-slate-100"
               >
                 Buy 50 Coins
                 <PlayCircle className="h-4 w-4" />
@@ -296,7 +245,7 @@ export default async function HomePage() {
                   {[0, 1, 2].map((item) => (
                     <span
                       key={item}
-                      className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[#050c16] bg-slate-700 text-sm font-semibold text-white"
+                      className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-slate-700 text-sm font-semibold text-white"
                     >
                       V
                     </span>
@@ -308,7 +257,7 @@ export default async function HomePage() {
                       <Sparkles key={index} className="h-4 w-4 fill-current" />
                     ))}
                   </div>
-                  <p className="mt-1 text-sm text-slate-300">Built for practical scam awareness at scale.</p>
+                  <p className="mt-1 text-sm text-slate-600">Built for practical scam awareness at scale.</p>
                 </div>
               </div>
             </div>
@@ -321,9 +270,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="vant-glass grid gap-0 overflow-hidden rounded-[34px] bg-bg-secondary/92 lg:grid-cols-4">
+      <section className="vant-glass grid gap-0 overflow-hidden rounded-[34px] bg-white/90 lg:grid-cols-3">
         {valueCards.map(({ title, description, icon: Icon }) => (
-          <article key={title} className="border-b border-white/8 p-6 last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
+          <article key={title} className="border-b border-slate-200 p-6 last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
             <span className="vant-glass inline-flex rounded-2xl p-3 text-primary">
               <Icon className="h-6 w-6" />
             </span>
@@ -333,97 +282,40 @@ export default async function HomePage() {
         ))}
       </section>
 
-      <section className="grid gap-0 overflow-hidden rounded-[34px] border border-emerald-300/12 bg-[#07141a] lg:grid-cols-4">
-        {trustStats.map((item) => (
-          <div key={item.label} className="border-b border-white/8 px-6 py-6 last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
-            <p className="text-5xl font-semibold text-emerald-300">{item.value}</p>
-            <p className="mt-2 text-base text-slate-300">{item.label}</p>
-          </div>
-        ))}
-      </section>
-
-      <section className="rounded-[36px] border border-white/8 bg-[#06101a]/80 px-8 py-10 md:px-10">
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300/80">Simple Process</p>
-          <h2 className="mt-4 text-4xl font-semibold text-white md:text-5xl">
-            How <span className="text-emerald-300">VANT</span> Works
-          </h2>
-        </div>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-4">
-          {processSteps.map(({ title, description, icon: Icon }, index) => (
-            <div key={title} className="relative rounded-[30px] border border-white/8 bg-white/4 p-6 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-cyan-300/15 bg-cyan-400/10 text-cyan-100">
-                <Icon className="h-8 w-8" />
-              </div>
-              <div className="mx-auto mt-5 flex h-7 w-7 items-center justify-center rounded-full bg-emerald-300 text-sm font-semibold text-slate-950">
-                {index + 1}
-              </div>
-              <h3 className="mt-5 text-2xl font-semibold text-white">{title}</h3>
-              <p className="mt-4 text-sm leading-7 text-slate-300">{description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-[36px] border border-white/8 bg-[#06101a]/80 px-8 py-10 md:px-10">
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300/80">What VANT Explains</p>
-          <h2 className="mt-4 text-4xl font-semibold text-white md:text-5xl">Built for real scam awareness, not random tips.</h2>
-        </div>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          {anonymousTrust.map((quoteText) => (
-            <article key={quoteText} className="rounded-[28px] border border-white/8 bg-white/4 p-6">
-              <Quote className="h-8 w-8 text-emerald-300" />
-              <p className="mt-5 text-lg leading-8 text-slate-200">{quoteText}</p>
-              <div className="mt-6 rounded-2xl border border-white/8 bg-slate-950/55 px-4 py-3 text-sm text-slate-400">
-                Anonymous product feedback summary
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="rounded-[34px] border border-white/8 bg-[#09111d]/85 p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100/70">Why It Matters</p>
-          <h2 className="mt-4 text-4xl font-semibold text-white">A full awareness system, not just a warning page.</h2>
-          <div className="mt-6 space-y-4 text-sm leading-7 text-slate-300">
+        <div className="rounded-[34px] border border-slate-200 bg-white/90 p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">What ScamShield does</p>
+          <h2 className="mt-4 text-4xl font-semibold text-slate-950">A simple scam-learning app built for real awareness.</h2>
+          <div className="mt-6 space-y-4 text-sm leading-7 text-slate-600">
             <p>
-              VANT focuses on education and awareness. Every scam card is built to teach recognition, not misuse.
-              That means the app explains scam structure safely without exposing real payout details, dangerous scripts,
-              or operational fraud instructions.
+              ScamShield teaches scam recognition through structured cards instead of long articles or scattered tips.
             </p>
             <p>
-              Users begin with five free lessons, then unlock deeper premium cards using coins. The admin sets the
-              coin price for each locked lesson, and users top up again whenever their wallet runs low.
+              Each card explains the scam, shows the warning signs, and helps users understand how to respond safely.
             </p>
             <p>
-              The admin controls the entire content system. New scam cards can be created, edited, categorized, updated,
-              and published as online threats change, making VANT a living awareness platform instead of a static site.
+              New scam cards can keep being added as online threats evolve, so the app stays useful over time.
             </p>
           </div>
         </div>
 
-        <div className="rounded-[34px] border border-fuchsia-300/12 bg-[#0a101b]/90 p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-fuchsia-100/70">Platform Snapshot</p>
-          <h2 className="mt-4 text-4xl font-semibold text-white">Designed for structured scam learning.</h2>
+        <div className="rounded-[34px] border border-fuchsia-200 bg-white/90 p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Quick summary</p>
           <div className="mt-6 space-y-4">
-            <div className="rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-              <p className="text-sm font-medium text-white">Published learning cards</p>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
+              <p className="text-sm font-medium text-slate-950">Published scam cards</p>
               <p className="mt-2 text-4xl font-semibold text-emerald-300">{publishedCount}</p>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-              <p className="text-sm font-medium text-white">Free lesson path</p>
-              <p className="mt-2 text-lg leading-7 text-slate-300">
-                Users begin with five accessible lessons that explain major scam patterns in a simple, memorable way.
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
+              <p className="text-sm font-medium text-slate-950">Free learning path</p>
+              <p className="mt-2 text-lg leading-7 text-slate-600">
+                Users begin with free cards, then unlock deeper premium cards with coins.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-              <p className="text-sm font-medium text-white">Premium path</p>
-              <p className="mt-2 text-lg leading-7 text-slate-300">
-                More detailed lessons unlock through a flexible coin wallet where each admin-priced card deducts from the user balance.
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
+              <p className="text-sm font-medium text-slate-950">Top-up model</p>
+              <p className="mt-2 text-lg leading-7 text-slate-600">
+                One Paystack card payment adds coins that users spend across locked scam cards.
               </p>
             </div>
           </div>
@@ -433,11 +325,8 @@ export default async function HomePage() {
       <section className="rounded-[36px] border border-emerald-300/15 bg-gradient-to-r from-[#0b1b1b] to-[#0a1320] p-8 shadow-[0_30px_100px_rgba(0,0,0,0.3)] md:p-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-3xl">
-            <div className="inline-flex rounded-2xl border border-emerald-300/12 bg-emerald-300/10 p-3 text-emerald-200">
-              <ShieldCheck className="h-7 w-7" />
-            </div>
-            <h2 className="mt-5 text-4xl font-semibold text-white md:text-5xl">Ready to protect yourself?</h2>
-            <p className="mt-4 text-lg leading-8 text-slate-300">
+            <h2 className="text-4xl font-semibold text-white md:text-5xl">Ready to protect yourself?</h2>
+            <p className="mt-4 text-lg leading-8 text-slate-100">
               Start with the free lessons, understand how scammers build trust and pressure, and use VANT to learn the warning signs before the damage happens.
             </p>
           </div>
@@ -451,28 +340,6 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-
-      <footer className="flex flex-col gap-5 rounded-[30px] border border-white/8 bg-[#070e18]/90 px-6 py-6 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-emerald-300/15 bg-emerald-400/10 text-emerald-300">
-            <Shield className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="text-2xl font-semibold text-white">VANT</p>
-            <p className="text-sm text-slate-400">Scam awareness through structured learning.</p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
-          <span>Contact</span>
-          <span className="inline-flex items-center gap-2 text-cyan-200">
-            <Globe className="h-4 w-4" />
-            Global awareness focused
-          </span>
-        </div>
-      </footer>
     </main>
   );
 }

@@ -5,14 +5,10 @@ import { isSupabaseConfigured } from "@/lib/env";
 import {
   addLocalTransaction,
   getLocalBalance,
-  setLocalBalance,
-  setLocalSubscriptionActive
+  setLocalBalance
 } from "@/lib/local-user-state";
-import { creditBundles, subscriptionPlan } from "@/lib/payments-config";
-import {
-  applyMockSubscriptionActivation,
-  applyMockWalletTopUp
-} from "@/lib/supabase/live-access";
+import { creditBundles } from "@/lib/payments-config";
+import { applyMockWalletTopUp } from "@/lib/supabase/live-access";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -21,10 +17,6 @@ export async function GET(request: Request) {
   const outcome = searchParams.get("outcome");
 
   if (outcome === "cancel") {
-    if (flow === "subscription") {
-      return NextResponse.redirect(new URL("/subscription/cancel", origin));
-    }
-
     return NextResponse.redirect(new URL("/wallet/cancel", origin));
   }
 
@@ -43,16 +35,6 @@ export async function GET(request: Request) {
       }
 
       return NextResponse.redirect(new URL(`/wallet/success?bundle=${bundleId ?? ""}`, origin));
-    }
-
-    if (flow === "subscription") {
-      await setLocalSubscriptionActive(true);
-      await addLocalTransaction({
-        label: `${subscriptionPlan.name} activated`,
-        amount: "+subscription"
-      });
-
-      return NextResponse.redirect(new URL("/subscription/success?plan=monthly", origin));
     }
   }
 
@@ -86,27 +68,6 @@ export async function GET(request: Request) {
 
     return NextResponse.redirect(
       new URL(`/wallet/success?bundle=${bundle.id}&message=${encodeURIComponent(result.message)}`, origin)
-    );
-  }
-
-  if (flow === "subscription") {
-    const result = await applyMockSubscriptionActivation(user.id, subscriptionPlan);
-    revalidatePath("/", "layout");
-    revalidatePath("/wallet");
-    revalidatePath("/dashboard");
-    revalidatePath("/subscription");
-
-    if (!result.ok) {
-      return NextResponse.redirect(
-        new URL(`/subscription?error=${encodeURIComponent(result.message)}`, origin)
-      );
-    }
-
-    return NextResponse.redirect(
-      new URL(
-        `/subscription/success?plan=monthly&message=${encodeURIComponent(result.message)}`,
-        origin
-      )
     );
   }
 

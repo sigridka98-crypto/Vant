@@ -19,7 +19,3 @@ export function isPaystackConfigured() {
       process.env.NEXT_PUBLIC_APP_URL
   );
 }
-
-export function getPaystackMonthlyPlanCode() {
-  return process.env.PAYSTACK_MONTHLY_PLAN_CODE ?? "";
-}

@@ -1,7 +1,6 @@
 import crypto from "crypto";
 
-import { creditBundles, subscriptionPlan } from "@/lib/payments-config";
-import { getPaystackMonthlyPlanCode } from "@/lib/env";
+import { creditBundles } from "@/lib/payments-config";
 
 type InitializePayload = {
   email: string;
@@ -114,11 +113,4 @@ export function verifyPaystackSignature(rawBody: string, signature: string | nul
 
 export function getBundleById(bundleId: string) {
   return creditBundles.find((bundle) => bundle.id === bundleId) ?? null;
-}
-
-export function getSubscriptionPlanConfig() {
-  return {
-    ...subscriptionPlan,
-    paystackPlanCode: getPaystackMonthlyPlanCode()
-  };
 }

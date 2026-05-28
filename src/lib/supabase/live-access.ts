@@ -1,5 +1,5 @@
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
-import type { CreditBundle, SubscriptionPlan } from "@/types";
+import type { CreditBundle } from "@/types";
 
 type OperationResult = {
   ok: boolean;
@@ -129,103 +129,6 @@ export async function applyMockWalletTopUp(userId: string, bundle: CreditBundle)
   return {
     ok: true,
     message: `${bundle.coins} coins added to your wallet.`
-  };
-}
-
-export async function applyMockSubscriptionActivation(
-  userId: string,
-  plan: SubscriptionPlan
-): Promise<OperationResult> {
-  const serviceSupabase = createSupabaseServiceClient();
-  const reference = `mock-subscription-${userId.slice(0, 8)}-${Date.now()}`;
-  const startedAt = new Date();
-  const currentPeriodEnd = new Date(startedAt);
-  currentPeriodEnd.setMonth(currentPeriodEnd.getMonth() + 1);
-
-  const { data: existingSubscription } = await serviceSupabase
-    .from("subscriptions")
-    .select("id")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (existingSubscription) {
-    const { error: subscriptionError } = await serviceSupabase
-      .from("subscriptions")
-      .update({
-        provider: "paystack",
-        status: "active",
-        started_at: startedAt.toISOString(),
-        current_period_end: currentPeriodEnd.toISOString()
-      })
-      .eq("id", existingSubscription.id);
-
-    if (subscriptionError) {
-      return {
-        ok: false,
-        message: subscriptionError.message
-      };
-    }
-  } else {
-    const { error: subscriptionError } = await serviceSupabase.from("subscriptions").insert({
-      user_id: userId,
-      provider: "paystack",
-      status: "active",
-      started_at: startedAt.toISOString(),
-      current_period_end: currentPeriodEnd.toISOString()
-    });
-
-    if (subscriptionError) {
-      return {
-        ok: false,
-        message: subscriptionError.message
-      };
-    }
-  }
-
-  const { data: payment, error: paymentError } = await serviceSupabase
-    .from("payments")
-    .insert({
-      user_id: userId,
-      provider: "paystack",
-      reference,
-      amount: plan.amountKobo,
-      payment_kind: "subscription",
-      status: "success",
-      metadata: {
-        mode: "mock",
-        plan_id: plan.id
-      }
-    })
-    .select("id")
-    .single();
-
-  if (paymentError) {
-    return {
-      ok: false,
-      message: paymentError.message
-    };
-  }
-
-  const { error: transactionError } = await serviceSupabase.from("credit_transactions").insert({
-    user_id: userId,
-    amount: 0,
-    type: "admin_adjustment",
-    payment_id: payment.id,
-    note: `${plan.name} activated`
-  });
-
-  if (transactionError) {
-    return {
-      ok: false,
-      message: transactionError.message
-    };
-  }
-
-  return {
-    ok: true,
-    message: "Subscription activated successfully."
   };
 }
 
@@ -360,7 +263,7 @@ export async function createPendingPayment(
     provider?: "paystack";
     reference: string;
     amount: number;
-    paymentKind: "credit_topup" | "subscription";
+    paymentKind: "credit_topup";
     metadata: Record<string, unknown>;
   }
 ) {
@@ -393,7 +296,7 @@ export async function processVerifiedWalletPayment(
   input: {
     walletBundle?: CreditBundle | null;
   }
-): Promise<OperationResult & { flow?: "wallet" | "subscription" }> {
+): Promise<OperationResult & { flow?: "wallet" }> {
   const serviceSupabase = createSupabaseServiceClient();
 
   if (transaction.status !== "success" && transaction.status !== "paid") {
@@ -416,7 +319,7 @@ export async function processVerifiedWalletPayment(
     return {
       ok: false,
       message: `Payment is currently ${transaction.status}.`,
-      flow: (transaction.metadata?.flow as "wallet" | "subscription" | undefined) ?? undefined
+      flow: (transaction.metadata?.flow as "wallet" | undefined) ?? undefined
     };
   }
 
@@ -455,15 +358,11 @@ export async function processVerifiedWalletPayment(
         existingPayment?.status === "success"
           ? "Payment already verified."
           : "Payment could not be verified.",
-      flow:
-        (existingPayment?.metadata as Record<string, unknown> | null)?.flow as
-          | "wallet"
-          | "subscription"
-          | undefined
+      flow: (existingPayment?.metadata as Record<string, unknown> | null)?.flow as "wallet" | undefined
     };
   }
 
-  const flow = (pendingPayment.metadata?.flow as "wallet" | "subscription" | undefined) ?? undefined;
+  const flow = (pendingPayment.metadata?.flow as "wallet" | undefined) ?? undefined;
 
   if (pendingPayment.payment_kind !== "credit_topup") {
     return {
@@ -517,124 +416,11 @@ export async function processVerifiedPaystackTransaction(
   transaction: VerifiedPaystackTransaction,
   input: {
     walletBundle?: CreditBundle | null;
-    subscriptionPlan?: SubscriptionPlan | null;
   }
-): Promise<OperationResult & { flow?: "wallet" | "subscription" }> {
-  const flow = (transaction.metadata?.flow as "wallet" | "subscription" | undefined) ?? undefined;
-
-  if (flow !== "subscription") {
-    return processVerifiedWalletPayment("paystack", reference, transaction, {
-      walletBundle: input.walletBundle
-    });
-  }
-
-  const serviceSupabase = createSupabaseServiceClient();
-  const { data: pendingPayment, error: pendingError } = await serviceSupabase
-    .from("payments")
-    .update({
-      status: "success",
-      metadata: {
-        ...(transaction.metadata ?? {}),
-        paid_at: transaction.paid_at ?? null
-      }
-    })
-    .eq("reference", reference)
-    .neq("status", "success")
-    .select("id, user_id, payment_kind, metadata")
-    .maybeSingle();
-
-  if (pendingError) {
-    return { ok: false, message: pendingError.message };
-  }
-
-  if (!pendingPayment) {
-    const { data: existingPayment, error: existingError } = await serviceSupabase
-      .from("payments")
-      .select("status, payment_kind, metadata")
-      .eq("reference", reference)
-      .maybeSingle();
-
-    if (existingError) {
-      return { ok: false, message: existingError.message };
-    }
-
-    return {
-      ok: existingPayment?.status === "success",
-      message:
-        existingPayment?.status === "success"
-          ? "Payment already verified."
-          : "Payment could not be verified.",
-      flow:
-        (existingPayment?.metadata as Record<string, unknown> | null)?.flow as
-          | "wallet"
-          | "subscription"
-          | undefined
-    };
-  }
-
-  const plan = input.subscriptionPlan;
-
-  if (!plan) {
-    return { ok: false, message: "Subscription plan could not be matched.", flow };
-  }
-
-  const startedAt = transaction.paid_at ? new Date(transaction.paid_at) : new Date();
-  const currentPeriodEnd = new Date(startedAt);
-  currentPeriodEnd.setMonth(currentPeriodEnd.getMonth() + 1);
-
-  const { data: existingSubscription } = await serviceSupabase
-    .from("subscriptions")
-    .select("id")
-    .eq("user_id", pendingPayment.user_id)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (existingSubscription) {
-    const { error: subscriptionError } = await serviceSupabase
-      .from("subscriptions")
-      .update({
-        provider: "paystack",
-        status: "active",
-        started_at: startedAt.toISOString(),
-        current_period_end: currentPeriodEnd.toISOString()
-      })
-      .eq("id", existingSubscription.id);
-
-    if (subscriptionError) {
-      return { ok: false, message: subscriptionError.message, flow };
-    }
-  } else {
-    const { error: subscriptionError } = await serviceSupabase.from("subscriptions").insert({
-      user_id: pendingPayment.user_id,
-      provider: "paystack",
-      status: "active",
-      started_at: startedAt.toISOString(),
-      current_period_end: currentPeriodEnd.toISOString()
-    });
-
-    if (subscriptionError) {
-      return { ok: false, message: subscriptionError.message, flow };
-    }
-  }
-
-  const { error: transactionError } = await serviceSupabase.from("credit_transactions").insert({
-    user_id: pendingPayment.user_id,
-    amount: 0,
-    type: "admin_adjustment",
-    payment_id: pendingPayment.id,
-    note: `${plan.name} activated`
+): Promise<OperationResult & { flow?: "wallet" }> {
+  return processVerifiedWalletPayment("paystack", reference, transaction, {
+    walletBundle: input.walletBundle
   });
-
-  if (transactionError) {
-    return { ok: false, message: transactionError.message, flow };
-  }
-
-  return {
-    ok: true,
-    message: "Subscription activated successfully.",
-    flow
-  };
 }
 
 export async function markAlertSeenForUser(

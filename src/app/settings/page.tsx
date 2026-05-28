@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { KeyRound, Mail, ShieldCheck, User2, Wallet2 } from "lucide-react";
 
 import { signOut } from "@/app/login/actions";
+import { ThemeToggleCard } from "@/components/layout/theme-toggle-card";
 import { updatePassword, updateProfile } from "@/app/settings/actions";
 import { getAuthContext } from "@/lib/auth";
 import { getWalletPageData } from "@/lib/supabase/queries";
@@ -140,6 +141,8 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
         </div>
 
         <div className="space-y-6">
+          <ThemeToggleCard />
+
           <section className="vant-card rounded-[32px] bg-primary/10 p-8">
             <div className="flex items-center gap-3">
               <span className="vant-glass rounded-2xl p-3 text-primary">
