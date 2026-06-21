@@ -11,9 +11,9 @@ function EmptyAlertsState() {
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-cyan-400/12 text-cyan-100">
         <BellRing className="h-7 w-7" />
       </div>
-      <h2 className="mt-5 text-2xl font-semibold text-text-main">No active scam alerts right now</h2>
+      <h2 className="mt-5 text-2xl font-semibold text-text-main">No active update alerts right now</h2>
       <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-text-secondary">
-        When the admin flags a lesson as a new scam alert, trending scam, or most reported threat,
+        When the admin flags a lesson as a new update alert, trending update, or most reported topic,
         it will appear here for faster awareness.
       </p>
       <Link href="/dashboard" className="vant-btn mt-6 inline-flex items-center gap-2">
@@ -39,19 +39,19 @@ export default async function AlertsPage() {
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100/80">
-              Scam Alerts Center
+              Update Alerts Center
             </p>
             <h1 className="mt-3 text-4xl font-semibold text-text-main md:text-5xl">
-              Urgent scam warnings curated by the GetUpdated admin
+              New update highlights curated by the GetUpdated admin
             </h1>
             <p className="mt-4 text-sm leading-7 text-slate-200/90 md:text-base">
-              This page collects new scam alerts, trending scam patterns, and the most reported
-              threats so users can focus on the lessons that matter most right now.
+              This page collects new update alerts, trending update patterns, and the most reported
+              topics so users can focus on the lessons that matter most right now.
             </p>
             <p className="mt-4 text-sm font-medium text-cyan-100">
               {unseenAlerts
-                ? `${unseenAlerts} unseen alert${unseenAlerts === 1 ? "" : "s"} are still waiting for review.`
-                : "You have reviewed the current alert queue."}
+                ? `${unseenAlerts} unseen update${unseenAlerts === 1 ? "" : "s"} are still waiting for review.`
+                : "You have reviewed the current update queue."}
             </p>
           </div>
 
@@ -73,7 +73,7 @@ export default async function AlertsPage() {
                 <BellRing className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-sm text-text-secondary">Unseen alerts</p>
+                <p className="text-sm text-text-secondary">Unseen updates</p>
                 <p className="mt-1 text-3xl font-semibold text-text-main">{unseenAlerts}</p>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default async function AlertsPage() {
                 <TrendingUp className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-sm text-text-secondary">Trending scams</p>
+                <p className="text-sm text-text-secondary">Trending updates</p>
                 <p className="mt-1 text-3xl font-semibold text-text-main">{trendingAlerts}</p>
               </div>
             </div>
@@ -122,18 +122,18 @@ export default async function AlertsPage() {
               How alerts work
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-text-main">
-              Admin-led warnings built for quick awareness
+              Admin-led updates built for quick awareness
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-text-secondary">
-              The admin can mark scam lessons as new scam alerts, trending scams, or most reported
-              threats. Those cards rise to the top of the library and appear here first so users
+              The admin can mark update lessons as new update alerts, trending updates, or most reported
+              topics. Those cards rise to the top of the library and appear here first so users
               notice them quickly.
             </p>
           </div>
 
           <div className="flex items-center gap-3 rounded-[24px] border border-white/8 bg-white/4 px-4 py-3 text-sm text-text-secondary">
             <ShieldAlert className="h-5 w-5 text-primary" />
-            Alerts are educational notices, not live chat warnings.
+            Updates here are educational notices, not live chat messages.
           </div>
         </div>
       </section>

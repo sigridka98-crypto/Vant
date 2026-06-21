@@ -21,7 +21,7 @@ const themeInitScript = `
 
 export const metadata: Metadata = {
   title: "GetUpdated",
-  description: "A scam-awareness platform that teaches users how to recognize online scam patterns."
+  description: "An awareness platform that teaches users how to recognize online update patterns."
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

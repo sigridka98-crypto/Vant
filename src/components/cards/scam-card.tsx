@@ -48,12 +48,12 @@ export function ScamCard({ card }: ScamCardProps) {
               {card.isNewAlert ? (
                 <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold text-cyan-100">
                   <BellRing className="mr-1 inline h-3.5 w-3.5" />
-                  New Scam Alert
+                  New Update Alert
                 </span>
               ) : null}
               {card.isTrendingAlert ? (
                 <span className="rounded-full bg-fuchsia-400/15 px-3 py-1 text-xs font-semibold text-fuchsia-100">
-                  Trending Scam
+                  Trending Update
                 </span>
               ) : null}
               {card.isMostReported ? (

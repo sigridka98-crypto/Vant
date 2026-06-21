@@ -35,7 +35,7 @@ export function CardSections({ card }: { card: ScamCard }) {
 
       <section className="vant-card rounded-[28px] p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/70">
-          How The Scam Works
+          How The Update Works
         </p>
         <div className="mt-4">
           <SectionList items={howItWorks} />

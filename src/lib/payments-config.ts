@@ -18,7 +18,7 @@ export const topUpPack: CoinTopUpPack = {
   priceLabel: "NGN 3,125",
   amountKobo: 312500,
   billingLabel: "one-time top-up",
-  description: "A one-time 50 coin top-up that users spend across admin-priced locked scam cards.",
+  description: "A one-time 50 coin top-up that users spend across admin-priced locked update cards.",
   features: [
     "50 coins added after successful payment",
     "Admin sets card prices in coins",

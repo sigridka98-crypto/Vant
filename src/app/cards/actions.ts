@@ -56,7 +56,7 @@ export async function unlockCardAccess(formData: FormData) {
   const auth = await getAuthContext();
 
   if (!auth.user) {
-    redirect(`/login?message=${encodeURIComponent("Sign in to unlock premium scam lessons.")}`);
+    redirect(`/login?message=${encodeURIComponent("Sign in to unlock premium update lessons.")}`);
   }
 
   const result = await unlockCardForUser(auth.user.id, {

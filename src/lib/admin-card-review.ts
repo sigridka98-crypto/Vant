@@ -45,7 +45,7 @@ export function buildCardReadiness(card: Pick<
       detail: safeExampleIssue || undefined
     },
     { label: "Quick memory rule is filled", ok: Boolean(card.quickMemoryRule.trim()) },
-    { label: "How the scam works has at least one step", ok: howItWorksCount > 0 },
+    { label: "How the update works has at least one step", ok: howItWorksCount > 0 },
     { label: "Red flags has at least one item", ok: redFlagsCount > 0 },
     { label: "Protection steps has at least one item", ok: protectionCount > 0 },
     {

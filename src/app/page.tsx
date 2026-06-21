@@ -15,23 +15,23 @@ import { getPublishedCards } from "@/lib/supabase/queries";
 
 const valueCards = [
   {
-    title: "Learn how scams work",
-    description: "Study real scam patterns through short educational cards that explain the setup and trap clearly.",
+    title: "Learn how updates work",
+    description: "Study real update patterns through short educational cards that explain the setup and trap clearly.",
     icon: BookOpen
   },
   {
-    title: "Spot the warning signs",
-    description: "See the urgency, impersonation, payment pressure, and trust tricks scammers reuse again and again.",
+    title: "See what is changing",
+    description: "Follow the urgency, impersonation, payment pressure, and trust patterns that keep showing up across new updates.",
     icon: TriangleAlert
   },
   {
-    title: "Protect yourself earlier",
-    description: "Build safer habits before fraud reaches you, instead of learning only after damage has been done.",
+    title: "Stay current earlier",
+    description: "Build better awareness habits early, instead of trying to catch up only after something goes wrong.",
     icon: Shield
   }
 ];
 
-const navItems = ["Home", "Explore Scams", "How It Works", "Pricing", "About GetUpdated", "Blog"];
+const navItems = ["Home", "Explore Updates", "How It Works", "Pricing", "About GetUpdated", "Blog"];
 
 function PhoneMockupLeft() {
   return (
@@ -42,7 +42,7 @@ function PhoneMockupLeft() {
           <span>GetUpdated</span>
         </div>
         <p className="text-xl font-semibold text-white">Stay informed.</p>
-        <p className="mt-1 text-xs text-slate-400">Study scam patterns before they reach you.</p>
+        <p className="mt-1 text-xs text-slate-400">Study update patterns before they reach you.</p>
 
         <div className="mt-5 rounded-[24px] bg-gradient-to-br from-emerald-400/25 to-cyan-400/20 p-4">
           <p className="text-xs text-emerald-50/80">Coin Balance</p>
@@ -57,7 +57,7 @@ function PhoneMockupLeft() {
           <div className="mt-3 rounded-2xl border border-white/8 bg-white/5 p-3">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-medium text-white">Fake Job Offer Scam</p>
+                <p className="text-sm font-medium text-white">Fake Job Offer Update</p>
                 <p className="text-xs text-slate-400">50% complete</p>
               </div>
               <Shield className="h-5 w-5 text-cyan-200" />
@@ -71,7 +71,7 @@ function PhoneMockupLeft() {
         <div className="mt-5">
           <p className="text-sm font-medium text-white">Free Lessons (5/5)</p>
           <div className="mt-3 space-y-2 text-xs text-slate-300">
-            {["Prize Scam", "Lottery Scam", "Fake Job Offer", "Phishing Email", "Social Media Scam"].map((item) => (
+            {["Prize Update", "Lottery Update", "Fake Job Offer", "Phishing Email", "Social Media Update"].map((item) => (
               <div key={item} className="flex items-center justify-between rounded-xl border border-white/8 bg-white/5 px-3 py-2">
                 <span>{item}</span>
                 <span className="text-emerald-300">✓</span>
@@ -90,15 +90,15 @@ function PhoneMockupRight() {
       <div className="rounded-[30px] border border-white/8 bg-[#09101b] p-4">
         <div className="mb-4 flex items-center justify-between text-[10px] text-slate-400">
           <span>9:41</span>
-          <span>Scam Details</span>
+          <span>Update Details</span>
         </div>
 
         <span className="inline-flex rounded-full bg-fuchsia-400/15 px-3 py-1 text-[10px] font-semibold text-fuchsia-100">
-          Job Scam
+          Job Update
         </span>
-        <h3 className="mt-4 text-2xl font-semibold text-white">Fake Job Offer Scam</h3>
+        <h3 className="mt-4 text-2xl font-semibold text-white">Fake Job Offer Update</h3>
         <p className="mt-3 text-xs leading-5 text-slate-400">
-          Scammers pretend to offer jobs and then ask for money or sensitive details before any real work begins.
+          Attackers pretend to offer jobs and then ask for money or sensitive details before any real work begins.
         </p>
 
         <div className="mt-5 rounded-2xl border border-white/8 bg-white/5 p-4">
@@ -200,11 +200,11 @@ export default async function HomePage() {
           <div className="relative z-10">
             <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-800">
               <Shield className="h-4 w-4" />
-              Stay Aware. Stay Safe.
+              Stay current. Stay informed.
             </span>
 
             <h1 className="mt-7 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-tight text-slate-950 md:text-6xl xl:text-7xl">
-              See the <span className="text-emerald-300">scam</span>
+              See the <span className="text-emerald-300">update</span>
               <br />
               before it
               <br />
@@ -212,14 +212,13 @@ export default async function HomePage() {
             </h1>
 
             <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
-              GetUpdated is a scam-awareness app built to help people recognize online fraud before it succeeds.
-              It teaches how scams work, highlights the red flags scammers repeat, and explains how users can
-              protect themselves through simple, structured learning cards.
+              GetUpdated is an awareness app built to help people recognize online fraud before it succeeds.
+              It teaches how updates work, highlights the repeated patterns people should notice, and explains everything through simple, structured learning cards.
             </p>
 
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-500">
-              Instead of confusing people with noise, GetUpdated organizes scam education into clear lessons:
-              title, description, how the scam works, red flags, safe examples, protection steps, and a quick memory rule.
+              Instead of confusing people with noise, GetUpdated organizes update education into clear lessons:
+              title, description, how the update works, key signs to notice, safe examples, helpful response steps, and a quick memory rule.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
@@ -257,7 +256,7 @@ export default async function HomePage() {
                       <Sparkles key={index} className="h-4 w-4 fill-current" />
                     ))}
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">Built for practical scam awareness at scale.</p>
+                  <p className="mt-1 text-sm text-slate-600">Built for practical update awareness at scale.</p>
                 </div>
               </div>
             </div>
@@ -285,16 +284,16 @@ export default async function HomePage() {
       <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-[34px] border border-slate-200 bg-white/90 p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">What GetUpdated does</p>
-          <h2 className="mt-4 text-4xl font-semibold text-slate-950">A simple scam-learning app built for real awareness.</h2>
+          <h2 className="mt-4 text-4xl font-semibold text-slate-950">A simple update-learning app built for real awareness.</h2>
           <div className="mt-6 space-y-4 text-sm leading-7 text-slate-600">
             <p>
-              GetUpdated teaches scam recognition through structured cards instead of long articles or scattered tips.
+              GetUpdated teaches update recognition through structured cards instead of long articles or scattered tips.
             </p>
             <p>
-              Each card explains the scam, shows the warning signs, and helps users understand how to respond safely.
+              Each card explains the update, shows the key signs to notice, and helps users understand how to respond clearly.
             </p>
             <p>
-              New scam cards can keep being added as online threats evolve, so the app stays useful over time.
+              New update cards can keep being added as online threats evolve, so the app stays useful over time.
             </p>
           </div>
         </div>
@@ -303,7 +302,7 @@ export default async function HomePage() {
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Quick summary</p>
           <div className="mt-6 space-y-4">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
-              <p className="text-sm font-medium text-slate-950">Published scam cards</p>
+              <p className="text-sm font-medium text-slate-950">Published update cards</p>
               <p className="mt-2 text-4xl font-semibold text-emerald-300">{publishedCount}</p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
@@ -315,7 +314,7 @@ export default async function HomePage() {
             <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
               <p className="text-sm font-medium text-slate-950">Top-up model</p>
               <p className="mt-2 text-lg leading-7 text-slate-600">
-                One Paystack card payment adds coins that users spend across locked scam cards.
+                One Paystack card payment adds coins that users spend across locked update cards.
               </p>
             </div>
           </div>
@@ -325,9 +324,9 @@ export default async function HomePage() {
       <section className="rounded-[36px] border border-emerald-300/15 bg-gradient-to-r from-[#0b1b1b] to-[#0a1320] p-8 shadow-[0_30px_100px_rgba(0,0,0,0.3)] md:p-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-3xl">
-            <h2 className="text-4xl font-semibold text-white md:text-5xl">Ready to protect yourself?</h2>
+            <h2 className="text-4xl font-semibold text-white md:text-5xl">Ready to stay updated?</h2>
             <p className="mt-4 text-lg leading-8 text-slate-100">
-              Start with the free lessons, understand how scammers build trust and pressure, and use GetUpdated to learn the warning signs before the damage happens.
+              Start with the free lessons, understand how new online patterns unfold, and use GetUpdated to stay informed as more updates appear.
             </p>
           </div>
 

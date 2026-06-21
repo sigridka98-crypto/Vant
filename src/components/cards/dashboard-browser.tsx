@@ -53,16 +53,16 @@ const scamFocusOptions: Array<{
   label: string;
   matcher?: string[];
 }> = [
-  { id: "all", label: "All scam cards" },
+  { id: "all", label: "All update cards" },
   { id: "phishing", label: "Phishing", matcher: ["phishing", "email", "sms", "smish", "link"] },
-  { id: "job", label: "Job scams", matcher: ["job", "recruit", "employment", "offer"] },
-  { id: "romance", label: "Romance scams", matcher: ["romance", "dating", "lover"] },
-  { id: "investment", label: "Investment scams", matcher: ["investment", "trading", "forex", "ponzi"] },
+  { id: "job", label: "Job updates", matcher: ["job", "recruit", "employment", "offer"] },
+  { id: "romance", label: "Romance updates", matcher: ["romance", "dating", "lover"] },
+  { id: "investment", label: "Investment updates", matcher: ["investment", "trading", "forex", "ponzi"] },
   { id: "impersonation", label: "Impersonation", matcher: ["imperson", "fake agent", "government", "bank"] },
-  { id: "marketplace", label: "Marketplace scams", matcher: ["marketplace", "buyer", "seller", "delivery"] },
-  { id: "crypto", label: "Crypto scams", matcher: ["crypto", "bitcoin", "wallet", "token"] },
-  { id: "loan", label: "Loan scams", matcher: ["loan", "credit", "grant"] },
-  { id: "giveaway", label: "Giveaway scams", matcher: ["giveaway", "promo", "prize", "winner"] }
+  { id: "marketplace", label: "Marketplace updates", matcher: ["marketplace", "buyer", "seller", "delivery"] },
+  { id: "crypto", label: "Crypto updates", matcher: ["crypto", "bitcoin", "wallet", "token"] },
+  { id: "loan", label: "Loan updates", matcher: ["loan", "credit", "grant"] },
+  { id: "giveaway", label: "Giveaway updates", matcher: ["giveaway", "promo", "prize", "winner"] }
 ];
 
 function matchesAccess(card: ScamCardType, filter: AccessFilter) {
@@ -111,22 +111,22 @@ function EmptyResults({
       <div>
         <p className="text-lg font-medium text-white">
           {hasAnyCards
-            ? "No cards match the current scam type or filter."
+            ? "No cards match the current update type or filter."
             : isConfigured
-              ? "No scam cards have been published yet."
-              : "No locally published scam cards yet."}
+              ? "No update cards have been published yet."
+              : "No locally published update cards yet."}
         </p>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
           {hasAnyCards
-            ? "Try another scam type, category, or access filter."
-            : "When the admin creates and publishes the first scam card, it will appear here automatically."}
+            ? "Try another update type, category, or access filter."
+            : "When the admin creates and publishes the first update card, it will appear here automatically."}
         </p>
       </div>
 
       <div className="rounded-[28px] border border-cyan-300/15 bg-cyan-400/10 p-5">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-100">Quick test path</p>
         <div className="mt-4 space-y-3 text-sm leading-6 text-cyan-50/90">
-          <p>1. Go to the admin panel and create a new scam card draft.</p>
+          <p>1. Go to the admin panel and create a new update card draft.</p>
           <p>2. Publish the card when you are ready to surface it publicly.</p>
           <p>3. Return here and test wallet top-ups and premium unlocks.</p>
         </div>
@@ -211,8 +211,8 @@ export function DashboardBrowser({
 
   const sidebarItems = [
     { label: "Dashboard", icon: Home, active: true, href: "/dashboard" },
-    { label: "Scam Alerts", icon: Bell, active: false, href: "/alerts" },
-    { label: "Explore Scams", icon: ShieldAlert, active: false, href: "/dashboard" },
+    { label: "Update Alerts", icon: Bell, active: false, href: "/alerts" },
+    { label: "Explore Updates", icon: ShieldAlert, active: false, href: "/dashboard" },
     { label: "My Learning", icon: GraduationCap, active: false, href: "/dashboard" },
     { label: "Bookmarks", icon: Bookmark, active: false, href: "/bookmarks" },
     { label: "Transactions", icon: CreditCard, active: false, href: "/wallet" },
@@ -236,7 +236,7 @@ export function DashboardBrowser({
       accent: "from-emerald-400/20 to-emerald-500/5 text-emerald-100"
     },
     {
-      label: "Scams Learned",
+      label: "Updates Learned",
       value: `${accessibleCards}`,
       meta: "Cards currently open in your library",
       icon: GraduationCap,
@@ -257,9 +257,9 @@ export function DashboardBrowser({
         <aside className="dashboard-sidebar border-b border-white/8 bg-[linear-gradient(180deg,rgba(17,94,89,0.18),rgba(5,10,22,0.92)_35%,rgba(5,10,22,0.96))] p-6 lg:border-b-0 lg:border-r">
           <div className="vant-card rounded-[28px] bg-primary/10 p-5 shadow-[0_16px_50px_rgba(20,184,166,0.12)]">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">GetUpdated Workspace</p>
-            <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online scams</h2>
+            <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online updates</h2>
             <p className="mt-3 text-sm leading-6 text-text-secondary">
-              Browse real scam patterns, keep your learning streak alive, and unlock deeper lessons with credits.
+              Browse real updates, keep your learning streak alive, and unlock deeper lessons with credits.
             </p>
           </div>
 
@@ -291,7 +291,7 @@ export function DashboardBrowser({
               </span>
               <div>
                 <p className="text-sm font-semibold text-text-main">Premium awareness unlocks</p>
-                <p className="text-xs text-text-secondary">Use credits to access advanced scam breakdowns.</p>
+                <p className="text-xs text-text-secondary">Use credits to access advanced update breakdowns.</p>
               </div>
             </div>
           </div>
@@ -306,7 +306,7 @@ export function DashboardBrowser({
                   See your GetUpdated learning at a glance
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-text-secondary md:text-base">
-                  Explore scam types people face online every day, track progress, and unlock deeper learning from one clean workspace.
+                  Explore update types people face online every day, track progress, and unlock deeper learning from one clean workspace.
                 </p>
               </div>
 
@@ -329,8 +329,8 @@ export function DashboardBrowser({
                     </span>
                     <span className="block text-sm text-text-main">
                       {unseenAlertCount
-                        ? `${unseenAlertCount} unseen warning${unseenAlertCount === 1 ? "" : "s"}`
-                        : "No unseen warnings"}
+                        ? `${unseenAlertCount} unseen update${unseenAlertCount === 1 ? "" : "s"}`
+                        : "No unseen updates"}
                     </span>
                   </span>
                 </Link>
@@ -355,18 +355,18 @@ export function DashboardBrowser({
                   <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div className="max-w-3xl">
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-100/80">
-                        Active Scam Alerts
+                        Active Update Alerts
                       </p>
                       <h2 className="mt-3 text-3xl font-semibold text-text-main">
-                        Fresh warnings from the GetUpdated admin desk
+                        Fresh updates from the GetUpdated admin desk
                       </h2>
                       <p className="mt-3 text-sm leading-6 text-slate-200/90">
-                        New scam alerts, trending fraud patterns, and the most reported threats are pushed to the top here so users can respond quickly.
+                        New update alerts, trending patterns, and the most reported topics are pushed to the top here so users can stay current quickly.
                       </p>
                       <p className="mt-3 text-sm font-medium text-rose-100">
                         {unseenAlertCount
-                          ? `${unseenAlertCount} unseen alert${unseenAlertCount === 1 ? "" : "s"} need attention.`
-                          : "You are caught up on the current alert queue."}
+                          ? `${unseenAlertCount} unseen update${unseenAlertCount === 1 ? "" : "s"} waiting for review.`
+                          : "You are caught up on the current update queue."}
                       </p>
                     </div>
 
@@ -391,19 +391,19 @@ export function DashboardBrowser({
                           ) : null}
                           {card.isTrendingAlert ? (
                             <span className="rounded-full bg-fuchsia-400/15 px-3 py-1 text-xs font-semibold text-fuchsia-100">
-                              Trending Scam
+                              Trending Update
                             </span>
                           ) : null}
                           {card.isNewAlert ? (
                             <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold text-cyan-100">
-                              New Scam Alert
+                              New Update Alert
                             </span>
                           ) : null}
                         </div>
 
                         <p className="mt-4 text-lg font-semibold text-text-main">{card.title}</p>
                         <p className="mt-3 text-sm leading-6 text-slate-200/85">
-                          {card.alertSummary || "This card has been flagged by the admin as a priority awareness lesson."}
+                          {card.alertSummary || "This card has been flagged by the admin as a priority update for users."}
                         </p>
                       </Link>
                     ))}
@@ -438,10 +438,10 @@ export function DashboardBrowser({
               <section className="vant-card rounded-[30px] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.25)] md:p-6">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Scam Library</p>
-                    <h2 className="mt-2 text-2xl font-semibold text-text-main">Explore scam card options by type</h2>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Update Library</p>
+                    <h2 className="mt-2 text-2xl font-semibold text-text-main">Explore update card options by type</h2>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">
-                      Pick from common scam patterns seen across the internet, then narrow the cards by access level, category, or cost.
+                      Pick from common update patterns seen across the internet, then narrow the cards by access level, category, or cost.
                     </p>
                   </div>
 
@@ -572,7 +572,7 @@ export function DashboardBrowser({
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin Top-Up</p>
                     <h2 className="mt-3 text-3xl font-semibold text-text-main">Keep your coin wallet ready for more premium lessons</h2>
                     <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
-                      NGN 3,125 adds 50 coins to the wallet. Each admin-priced premium card deducts from that balance as users unlock more scam lessons.
+                      NGN 3,125 adds 50 coins to the wallet. Each admin-priced premium card deducts from that balance as users unlock more update lessons.
                     </p>
                   </div>
                   <Link href="/wallet" className="vant-btn inline-flex items-center justify-center">
@@ -586,8 +586,8 @@ export function DashboardBrowser({
               <section className="vant-card rounded-[30px] bg-primary/10 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)]">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-text-main">Scam alerts</p>
-                    <p className="text-xs text-text-secondary">Admin-published warning highlights</p>
+                    <p className="text-sm font-semibold text-text-main">Update alerts</p>
+                    <p className="text-xs text-text-secondary">Admin-published update highlights</p>
                   </div>
                   <span className="vant-card rounded-2xl px-3 py-1 text-xs text-primary">
                     {unseenAlertCount} unseen
@@ -605,12 +605,12 @@ export function DashboardBrowser({
                         <div className="flex flex-wrap gap-2">
                           {card.isNewAlert ? (
                             <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold text-cyan-100">
-                              New Scam Alert
+                              New Update Alert
                             </span>
                           ) : null}
                           {card.isTrendingAlert ? (
                             <span className="rounded-full bg-fuchsia-400/15 px-3 py-1 text-xs font-semibold text-fuchsia-100">
-                              Trending Scam
+                              Trending Update
                             </span>
                           ) : null}
                           {card.isMostReported ? (
@@ -621,7 +621,7 @@ export function DashboardBrowser({
                         </div>
                         <p className="mt-3 text-sm font-medium text-text-main">{card.title}</p>
                         <p className="mt-2 text-xs leading-5 text-text-secondary">
-                          {card.alertSummary || "Admin marked this lesson as a live scam alert for users."}
+                          {card.alertSummary || "Admin marked this lesson as a live update alert for users."}
                         </p>
                         <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
                           {card.isAlertSeen ? "Seen" : "Unseen"}
@@ -630,9 +630,9 @@ export function DashboardBrowser({
                     ))
                   ) : (
                     <div className="vant-card rounded-[22px] p-4">
-                      <p className="text-sm font-medium text-text-main">No active scam alerts right now</p>
+                      <p className="text-sm font-medium text-text-main">No active update alerts right now</p>
                       <p className="mt-2 text-xs leading-5 text-text-secondary">
-                        When the admin flags a lesson as new, trending, or most reported, it will appear here.
+                        When the admin flags a lesson as new, trending, or most reported, it will appear here as part of the latest updates.
                       </p>
                     </div>
                   )}
@@ -701,7 +701,7 @@ export function DashboardBrowser({
                     <div className="vant-card rounded-[22px] border-dashed p-4">
                       <p className="text-sm font-medium text-text-main">No recent activity yet</p>
                       <p className="mt-2 text-xs leading-5 text-text-secondary">
-                        Start unlocking scam lessons or topping up your wallet and activity will show here.
+                        Start unlocking update lessons or topping up your wallet and activity will show here.
                       </p>
                     </div>
                   )}
@@ -709,10 +709,10 @@ export function DashboardBrowser({
               </section>
 
               <section className="vant-card rounded-[30px] bg-fuchsia-400/10 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.22)]">
-                <p className="text-sm font-semibold text-text-main">Premium scam cards waiting</p>
+                <p className="text-sm font-semibold text-text-main">Premium update cards waiting</p>
                 <p className="mt-3 text-4xl font-semibold text-text-main">{premiumLockedCount}</p>
                 <p className="mt-3 text-sm leading-6 text-text-secondary">
-                  Locked cards reveal full scam breakdowns, red flags, and protection steps once credits are used.
+                  Locked cards reveal full update breakdowns, red flags, and protection steps once credits are used.
                 </p>
               </section>
             </aside>

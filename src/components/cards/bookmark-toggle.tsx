@@ -49,7 +49,7 @@ export function BookmarkToggle({
 
         if (response.status === 401) {
           setBookmarked(!nextState);
-          router.push("/login?message=Sign in to save scam cards.");
+          router.push("/login?message=Sign in to save update cards.");
           return;
         }
 

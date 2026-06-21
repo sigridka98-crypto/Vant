@@ -76,10 +76,10 @@ export default async function CardPage({ params, searchParams }: CardPageProps) 
               </span>
             ) : null}
             {card.isNewAlert ? (
-              <span className="rounded-full bg-cyan-400/15 px-4 py-2 text-sm text-cyan-100">New Scam Alert</span>
+              <span className="rounded-full bg-cyan-400/15 px-4 py-2 text-sm text-cyan-100">New Update Alert</span>
             ) : null}
             {card.isTrendingAlert ? (
-              <span className="rounded-full bg-fuchsia-400/15 px-4 py-2 text-sm text-fuchsia-100">Trending Scam</span>
+              <span className="rounded-full bg-fuchsia-400/15 px-4 py-2 text-sm text-fuchsia-100">Trending Update</span>
             ) : null}
             {card.isMostReported ? (
               <span className="rounded-full bg-rose-400/15 px-4 py-2 text-sm text-rose-100">Most Reported</span>
@@ -118,7 +118,7 @@ export default async function CardPage({ params, searchParams }: CardPageProps) 
         <section className="vant-card rounded-[32px] border-dashed p-8">
           <p className="text-lg font-medium text-text-main">This template has been created but not fully filled in yet.</p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-text-secondary">
-            The admin still needs to add the step-by-step scam flow, red flags, and protection guidance for this card.
+            The admin still needs to add the step-by-step update flow, red flags, and protection guidance for this card.
           </p>
         </section>
       )}
@@ -144,9 +144,9 @@ export default async function CardPage({ params, searchParams }: CardPageProps) 
       <section className="space-y-5">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Related lessons</p>
-          <h2 className="mt-2 text-3xl font-semibold text-text-main">Keep learning with similar scam cards</h2>
+          <h2 className="mt-2 text-3xl font-semibold text-text-main">Keep learning with similar update cards</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-text-secondary">
-            These suggestions are pulled from the same scam library so users can compare related fraud patterns, warning signs, and protection steps.
+            These suggestions are pulled from the same update library so users can compare related fraud patterns, warning signs, and protection steps.
           </p>
         </div>
 
@@ -158,7 +158,7 @@ export default async function CardPage({ params, searchParams }: CardPageProps) 
           </div>
         ) : (
           <div className="vant-card rounded-[28px] border-dashed p-6 text-sm text-text-secondary">
-            More related scam lessons will show here as the library grows.
+            More related update lessons will show here as the library grows.
           </div>
         )}
       </section>
@@ -215,8 +215,8 @@ function NavigationCard({
           <h3 className="mt-3 text-xl font-semibold text-text-main">{fallbackLabel}</h3>
           <p className="mt-2 text-sm text-text-secondary">
             {direction === "Previous"
-              ? "Return to the main library and choose another scam lesson."
-              : "Jump back into the scam dashboard and keep exploring."}
+              ? "Return to the main library and choose another update lesson."
+              : "Jump back into the update dashboard and keep exploring."}
           </p>
           <div className={`mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary ${align === "right" ? "ml-auto" : ""}`}>
             {align === "right" ? null : <ArrowLeft className="h-4 w-4" />}

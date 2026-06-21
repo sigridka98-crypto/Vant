@@ -13,9 +13,9 @@ import { getLocalAdminAccess } from "@/lib/local-user-state";
 import { getAdminCardOverview, getAdminCards } from "@/lib/supabase/queries";
 
 const adminTasks = [
-  "Create scam cards with the exact 7-field structure",
+  "Create update cards with the exact 7-field structure",
   "Edit title, description, safe example, and quick memory rule",
-  "Manage red flags, scam steps, and protection steps as ordered lists",
+  "Manage red flags, update steps, and protection steps as ordered lists",
   "Set free or premium access, credit cost, and category",
   "Publish cards and mark updates as minor or major"
 ];
@@ -99,9 +99,9 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
       <section className="vant-glass rounded-[36px] p-8 md:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin panel</p>
-        <h1 className="mt-4 text-4xl font-semibold text-text-main">Admin-managed content for every scam lesson</h1>
+        <h1 className="mt-4 text-4xl font-semibold text-text-main">Admin-managed content for every update lesson</h1>
         <p className="mt-5 max-w-3xl text-base leading-7 text-text-secondary">
-          This admin route is now role-aware and ready for card CRUD. Create empty templates first, then fill each card with its scam structure before publishing.
+          This admin route is now role-aware and ready for card CRUD. Create empty templates first, then fill each card with its update structure before publishing.
         </p>
         {!isConfigured ? (
           <div className="mt-6 flex flex-wrap gap-3">
@@ -205,7 +205,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             </div>
             <div className="vant-card hidden rounded-2xl px-4 py-2 text-sm text-primary md:inline-flex">
               <Plus className="mr-2 h-4 w-4" />
-              New scam card
+              New update card
             </div>
           </div>
 
@@ -215,7 +215,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         <div className="space-y-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Template library</p>
-            <h2 className="mt-2 text-3xl font-semibold text-text-main">Manage all created scam cards</h2>
+            <h2 className="mt-2 text-3xl font-semibold text-text-main">Manage all created update cards</h2>
           </div>
 
           {!cardData.cards.length ? (
@@ -224,7 +224,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 {cardData.isConfigured ? "No templates created yet." : "Connect Supabase to store templates."}
               </p>
               <p className="mt-3 text-sm leading-6 text-text-secondary">
-                Use the form to create your first empty scam card draft. It can stay hidden until you finish the content and publish it.
+                Use the form to create your first empty update card draft. It can stay hidden until you finish the content and publish it.
               </p>
             </div>
           ) : (

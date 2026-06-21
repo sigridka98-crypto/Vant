@@ -35,9 +35,9 @@ export default async function BookmarksPage({ searchParams }: BookmarksPageProps
           <p className="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
             Saved Cards
           </p>
-          <h1 className="mt-3 text-4xl font-semibold text-text-main">Your bookmarked scam library</h1>
+          <h1 className="mt-3 text-4xl font-semibold text-text-main">Your bookmarked update library</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">
-            Save lessons you want to revisit later, compare scam patterns side by side, and keep high-priority warnings close at hand.
+            Save lessons you want to revisit later, compare update patterns side by side, and keep important new updates close at hand.
           </p>
         </div>
 
@@ -99,12 +99,12 @@ export default async function BookmarksPage({ searchParams }: BookmarksPageProps
         </section>
       ) : (
         <section className="vant-card rounded-[32px] border-dashed p-8">
-          <p className="text-lg font-medium text-text-main">No bookmarked scam cards yet.</p>
+          <p className="text-lg font-medium text-text-main">No bookmarked update cards yet.</p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-text-secondary">
             Save important lessons from the dashboard or card detail page and they will appear here for quick access.
           </p>
           <Link href="/dashboard" className="vant-btn mt-6 inline-flex items-center justify-center">
-            Explore scam cards
+            Explore update cards
           </Link>
         </section>
       )}

@@ -150,9 +150,9 @@ export function CardForm({ mode, action, card, error }: CardFormProps) {
         <div className="vant-card rounded-[28px] p-5">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-text-secondary">Publishing rules</p>
           <div className="mt-4 space-y-3 text-sm leading-6 text-text-secondary">
-            <p>Only fully structured scam lessons should be published to users.</p>
+            <p>Only fully structured update lessons should be published to users.</p>
             <p>Safe examples must stay educational and sanitized.</p>
-            <p>Alert tags should only be used when you want the dashboard to notify users about urgent scam changes.</p>
+            <p>Alert tags should only be used when you want the dashboard to notify users about urgent update changes.</p>
           </div>
           <div className="mt-5 rounded-2xl border border-white/10 bg-bg-secondary/60 px-4 py-3 text-sm text-text-main">
             {draft.isPublished
@@ -189,7 +189,7 @@ export function CardForm({ mode, action, card, error }: CardFormProps) {
             name="category"
             defaultValue={card?.category ?? ""}
             className="vant-input"
-            placeholder="Job Scams"
+            placeholder="Job Updates"
             onChange={(event) => {
               setDraft((current) => ({ ...current, category: event.target.value }));
               setInlineError("");
@@ -260,7 +260,7 @@ export function CardForm({ mode, action, card, error }: CardFormProps) {
               setInlineError("");
             }}
           />
-          <span>New Scam Alert</span>
+          <span>New Update Alert</span>
         </label>
         <label className="vant-card flex items-center gap-3 rounded-2xl px-4 py-3 text-text-main">
           <input
@@ -273,7 +273,7 @@ export function CardForm({ mode, action, card, error }: CardFormProps) {
               setInlineError("");
             }}
           />
-          <span>Trending Scam</span>
+          <span>Trending Update</span>
         </label>
         <label className="vant-card flex items-center gap-3 rounded-2xl px-4 py-3 text-text-main">
           <input
@@ -312,7 +312,7 @@ export function CardForm({ mode, action, card, error }: CardFormProps) {
           defaultValue={card?.description ?? ""}
           rows={4}
           className="vant-input min-h-[120px] rounded-3xl"
-          placeholder="Explain what this scam is in simple words."
+          placeholder="Explain what this update is in simple words."
           onChange={(event) => {
             setDraft((current) => ({ ...current, description: event.target.value }));
             setInlineError("");
@@ -354,7 +354,7 @@ export function CardForm({ mode, action, card, error }: CardFormProps) {
 
       <div className="grid gap-6 xl:grid-cols-3">
         <label className="block">
-          <span className="mb-2 block text-sm text-text-secondary">How the scam works</span>
+          <span className="mb-2 block text-sm text-text-secondary">How the update works</span>
           <textarea
             name="howItWorks"
             defaultValue={stepsToText(card, "how_it_works")}

@@ -90,7 +90,7 @@ function validateCardForPublish(input: {
   const redFlagsCount = input.steps.filter((step) => step.step_type === "red_flags").length;
   const protectionCount = input.steps.filter((step) => step.step_type === "protection").length;
 
-  if (!howItWorksCount) errors.push("Add at least one 'How the scam works' step before publishing.");
+  if (!howItWorksCount) errors.push("Add at least one 'How the update works' step before publishing.");
   if (!redFlagsCount) errors.push("Add at least one red flag before publishing.");
   if (!protectionCount) errors.push("Add at least one protection step before publishing.");
 
@@ -98,7 +98,7 @@ function validateCardForPublish(input: {
   if (safeExampleError) errors.push(safeExampleError);
 
   if (hasAlertFlags(input) && !input.alert_summary.trim()) {
-    errors.push("Add an alert summary when marking a card as New Scam Alert, Trending Scam, or Most Reported.");
+    errors.push("Add an alert summary when marking a card as New Update Alert, Trending Update, or Most Reported.");
   }
 
   return errors;

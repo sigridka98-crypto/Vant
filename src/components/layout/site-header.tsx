@@ -10,7 +10,7 @@ import { isAlertCard } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/alerts", label: "Scam Alerts" },
+  { href: "/alerts", label: "Update Alerts" },
   { href: "/wallet", label: "Buy Coins" }
 ];
 
@@ -65,7 +65,7 @@ export async function SiteHeader() {
                 </span>
               ) : null}
             </span>
-            <span className="hidden md:inline">{alertCount ? `${alertCount} alerts` : "Alerts"}</span>
+            <span className="hidden md:inline">{alertCount ? `${alertCount} updates` : "Updates"}</span>
           </Link>
 
           <Link

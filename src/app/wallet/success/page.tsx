@@ -18,7 +18,7 @@ export default async function WalletSuccessPage({ searchParams }: WalletSuccessP
       primaryHref="/wallet"
       primaryLabel="Return to wallet"
       secondaryHref="/dashboard"
-      secondaryLabel="Browse scam cards"
+      secondaryLabel="Browse update cards"
     />
   );
 }
