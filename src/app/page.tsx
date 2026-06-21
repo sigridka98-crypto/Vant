@@ -206,9 +206,9 @@ export default async function HomePage() {
             <h1 className="mt-7 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-tight text-slate-950 md:text-6xl xl:text-7xl">
               See the <span className="text-emerald-300">update</span>
               <br />
-              before it
+              early before it
               <br />
-              sees <span className="text-cyan-300">you.</span>
+              goes <span className="text-cyan-300">viral.</span>
             </h1>
 
             <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
