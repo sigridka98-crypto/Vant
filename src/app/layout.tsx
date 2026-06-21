@@ -20,7 +20,7 @@ const themeInitScript = `
 `;
 
 export const metadata: Metadata = {
-  title: "ScamShield Library",
+  title: "GetUpdated",
   description: "A scam-awareness platform that teaches users how to recognize online scam patterns."
 };
 

@@ -21,14 +21,14 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
     redirect("/login?message=Sign in to manage your account settings.");
   }
 
-  const displayName = profile?.fullName || user?.email?.split("@")[0] || "VANT user";
+  const displayName = profile?.fullName || user?.email?.split("@")[0] || "GetUpdated user";
   const email = user?.email ?? "No email available";
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
       <section className="vant-glass rounded-[36px] p-8 md:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Settings</p>
-        <h1 className="mt-4 text-4xl font-semibold text-text-main">Manage your VANT account</h1>
+        <h1 className="mt-4 text-4xl font-semibold text-text-main">Manage your GetUpdated account</h1>
         <p className="mt-5 max-w-3xl text-base leading-7 text-text-secondary">
           Keep your profile details current, review your wallet status, and protect your account with a stronger password.
         </p>
@@ -150,7 +150,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
               </span>
               <div>
                 <p className="text-sm font-semibold text-text-main">Account summary</p>
-                <p className="text-xs text-text-secondary">A quick view of your current VANT account status.</p>
+                <p className="text-xs text-text-secondary">A quick view of your current GetUpdated account status.</p>
               </div>
             </div>
 

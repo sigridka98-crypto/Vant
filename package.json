@@ -2,7 +2,7 @@
   "name": "scam-awareness-platform",
   "version": "1.0.0",
   "type": "module",
-  "description": "ScamShield Library built with Next.js, Tailwind CSS, Supabase, and Paystack.",
+  "description": "GetUpdated built with Next.js, Tailwind CSS, Supabase, and Paystack.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

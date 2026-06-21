@@ -1,4 +1,4 @@
-# VANT
+# GetUpdated
 
 Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Supabase and Paystack.
 

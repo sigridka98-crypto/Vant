@@ -19,7 +19,7 @@ export default async function BookmarksPage({ searchParams }: BookmarksPageProps
   const learnedCards = cards.filter((card) => (card.accessState ?? "locked") !== "locked").length;
   const lockedCards = cards.length - learnedCards;
   const totalCoinValue = cards.reduce((sum, card) => sum + card.creditCost, 0);
-  const userName = auth.profile?.fullName || auth.user?.email?.split("@")[0] || "VANT User";
+  const userName = auth.profile?.fullName || auth.user?.email?.split("@")[0] || "GetUpdated User";
 
   return (
     <main className="mx-auto flex w-full max-w-[1320px] flex-col gap-8 px-4 py-6 md:px-6">

@@ -33,9 +33,9 @@ export async function SiteHeader() {
           </span>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">
-              Scam Awareness Platform
+              GetUpdated
             </p>
-            <p className="font-semibold text-text-main">ScamShield Library</p>
+            <p className="font-semibold text-text-main">GetUpdated</p>
           </div>
         </Link>
 

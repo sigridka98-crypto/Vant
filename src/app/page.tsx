@@ -31,7 +31,7 @@ const valueCards = [
   }
 ];
 
-const navItems = ["Home", "Explore Scams", "How It Works", "Pricing", "About VANT", "Blog"];
+const navItems = ["Home", "Explore Scams", "How It Works", "Pricing", "About GetUpdated", "Blog"];
 
 function PhoneMockupLeft() {
   return (
@@ -39,7 +39,7 @@ function PhoneMockupLeft() {
       <div className="rounded-[30px] border border-white/8 bg-[#09101b] p-4">
         <div className="mb-4 flex items-center justify-between text-[10px] text-slate-400">
           <span>9:41</span>
-          <span>VANT</span>
+          <span>GetUpdated</span>
         </div>
         <p className="text-xl font-semibold text-white">Stay informed.</p>
         <p className="mt-1 text-xs text-slate-400">Study scam patterns before they reach you.</p>
@@ -162,7 +162,7 @@ export default async function HomePage() {
               <Shield className="h-6 w-6" />
             </span>
             <div>
-              <p className="text-3xl font-semibold tracking-tight text-slate-950">VANT</p>
+              <p className="text-3xl font-semibold tracking-tight text-slate-950">GetUpdated</p>
             </div>
           </div>
 
@@ -212,13 +212,13 @@ export default async function HomePage() {
             </h1>
 
             <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
-              VANT is a scam-awareness app built to help people recognize online fraud before it succeeds.
+              GetUpdated is a scam-awareness app built to help people recognize online fraud before it succeeds.
               It teaches how scams work, highlights the red flags scammers repeat, and explains how users can
               protect themselves through simple, structured learning cards.
             </p>
 
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-500">
-              Instead of confusing people with noise, VANT organizes scam education into clear lessons:
+              Instead of confusing people with noise, GetUpdated organizes scam education into clear lessons:
               title, description, how the scam works, red flags, safe examples, protection steps, and a quick memory rule.
             </p>
 
@@ -284,11 +284,11 @@ export default async function HomePage() {
 
       <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-[34px] border border-slate-200 bg-white/90 p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">What ScamShield does</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">What GetUpdated does</p>
           <h2 className="mt-4 text-4xl font-semibold text-slate-950">A simple scam-learning app built for real awareness.</h2>
           <div className="mt-6 space-y-4 text-sm leading-7 text-slate-600">
             <p>
-              ScamShield teaches scam recognition through structured cards instead of long articles or scattered tips.
+              GetUpdated teaches scam recognition through structured cards instead of long articles or scattered tips.
             </p>
             <p>
               Each card explains the scam, shows the warning signs, and helps users understand how to respond safely.
@@ -327,7 +327,7 @@ export default async function HomePage() {
           <div className="max-w-3xl">
             <h2 className="text-4xl font-semibold text-white md:text-5xl">Ready to protect yourself?</h2>
             <p className="mt-4 text-lg leading-8 text-slate-100">
-              Start with the free lessons, understand how scammers build trust and pressure, and use VANT to learn the warning signs before the damage happens.
+              Start with the free lessons, understand how scammers build trust and pressure, and use GetUpdated to learn the warning signs before the damage happens.
             </p>
           </div>
 

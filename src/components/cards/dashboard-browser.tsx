@@ -256,7 +256,7 @@ export function DashboardBrowser({
       <div className="grid min-h-[calc(100vh-150px)] lg:grid-cols-[260px_minmax(0,1fr)]">
         <aside className="dashboard-sidebar border-b border-white/8 bg-[linear-gradient(180deg,rgba(17,94,89,0.18),rgba(5,10,22,0.92)_35%,rgba(5,10,22,0.96))] p-6 lg:border-b-0 lg:border-r">
           <div className="vant-card rounded-[28px] bg-primary/10 p-5 shadow-[0_16px_50px_rgba(20,184,166,0.12)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">VANT Workspace</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">GetUpdated Workspace</p>
             <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online scams</h2>
             <p className="mt-3 text-sm leading-6 text-text-secondary">
               Browse real scam patterns, keep your learning streak alive, and unlock deeper lessons with credits.
@@ -303,7 +303,7 @@ export function DashboardBrowser({
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Dashboard</p>
                 <h1 className="mt-2 text-3xl font-semibold text-text-main md:text-4xl">
-                  See your VANT learning at a glance
+                  See your GetUpdated learning at a glance
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-text-secondary md:text-base">
                   Explore scam types people face online every day, track progress, and unlock deeper learning from one clean workspace.
@@ -358,7 +358,7 @@ export function DashboardBrowser({
                         Active Scam Alerts
                       </p>
                       <h2 className="mt-3 text-3xl font-semibold text-text-main">
-                        Fresh warnings from the VANT admin desk
+                        Fresh warnings from the GetUpdated admin desk
                       </h2>
                       <p className="mt-3 text-sm leading-6 text-slate-200/90">
                         New scam alerts, trending fraud patterns, and the most reported threats are pushed to the top here so users can respond quickly.

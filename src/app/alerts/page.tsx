@@ -42,7 +42,7 @@ export default async function AlertsPage() {
               Scam Alerts Center
             </p>
             <h1 className="mt-3 text-4xl font-semibold text-text-main md:text-5xl">
-              Urgent scam warnings curated by the VANT admin
+              Urgent scam warnings curated by the GetUpdated admin
             </h1>
             <p className="mt-4 text-sm leading-7 text-slate-200/90 md:text-base">
               This page collects new scam alerts, trending scam patterns, and the most reported

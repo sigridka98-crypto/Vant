@@ -18,7 +18,7 @@ export default async function DashboardPage() {
         isConfigured={isConfigured}
         balance={wallet.balance}
         transactions={wallet.transactions}
-        userName={auth.profile?.fullName || auth.user?.email?.split("@")[0] || "VANT User"}
+        userName={auth.profile?.fullName || auth.user?.email?.split("@")[0] || "GetUpdated User"}
         userEmail={auth.user?.email ?? "Protected account"}
       />
     </main>
