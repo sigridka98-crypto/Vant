@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Bell, Coins, Gem, ShieldAlert } from "lucide-react";
+﻿import Link from "next/link";
+import { Bell, Coins, ShieldAlert } from "lucide-react";
 
 import { signOut } from "@/app/login/actions";
 import { getAuthContext } from "@/lib/auth";
@@ -9,9 +9,10 @@ import { getPublishedCards, getWalletPageData } from "@/lib/supabase/queries";
 import { isAlertCard } from "@/lib/utils";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/alerts", label: "Update Alerts" },
-  { href: "/wallet", label: "Buy Coins" }
+  { href: "/dashboard", label: "Updates" },
+  { href: "/alerts", label: "Alerts" },
+  { href: "/wallet", label: "Wallet" },
+  { href: "/settings", label: "Settings" }
 ];
 
 export async function SiteHeader() {
@@ -26,7 +27,7 @@ export async function SiteHeader() {
 
   return (
     <header className="site-shell-header border-b border-white/10 bg-bg-primary/80 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <Link href="/" className="flex items-center gap-3 text-text-main">
           <span className="vant-glass flex h-11 w-11 items-center justify-center text-primary">
             <ShieldAlert className="h-5 w-5" />
@@ -35,11 +36,11 @@ export async function SiteHeader() {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">
               GetUpdated
             </p>
-            <p className="font-semibold text-text-main">GetUpdated</p>
+            <p className="font-semibold text-text-main">Stay informed early</p>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm text-text-secondary md:flex">
+        <nav className="hidden items-center gap-5 text-sm text-text-secondary lg:flex">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="transition hover:text-text-main">
               {item.label}
@@ -65,7 +66,7 @@ export async function SiteHeader() {
                 </span>
               ) : null}
             </span>
-            <span className="hidden md:inline">{alertCount ? `${alertCount} updates` : "Updates"}</span>
+            <span className="hidden md:inline">Alerts</span>
           </Link>
 
           <Link
@@ -73,18 +74,14 @@ export async function SiteHeader() {
             className="vant-card vant-card-hover inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium text-primary"
           >
             <Coins className="h-4 w-4" />
-            {wallet.balance} coins
+            <span className="hidden sm:inline">{wallet.balance} coins</span>
+            <span className="sm:hidden">Wallet</span>
           </Link>
-
-          <span className="vant-card hidden items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium text-primary md:inline-flex">
-            <Gem className="h-4 w-4" />
-            Premium unlocks
-          </span>
 
           {user ? (
             <form action={signOut}>
               <button type="submit" className="vant-btn-secondary px-4 py-2 text-sm">
-                {profile?.role === "admin" ? "Admin sign out" : "Sign out"}
+                Sign out
               </button>
             </form>
           ) : (

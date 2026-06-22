@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,7 @@ export async function signIn(formData: FormData) {
   });
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`);
+    redirect(`/login?error=${encodeURIComponent(error.message || "Unable to sign in right now. Please try again.")}`);
   }
 
   redirect("/dashboard");
@@ -38,12 +38,10 @@ export async function signUp(formData: FormData) {
   });
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`);
+    redirect(`/login?error=${encodeURIComponent(error.message || "Unable to create your account right now. Please try again.")}`);
   }
 
-  redirect(
-    "/login?message=Account created. If Confirm email is disabled in Supabase, you can sign in immediately."
-  );
+  redirect("/login?message=Account created successfully. You can sign in now.");
 }
 
 export async function signOut() {

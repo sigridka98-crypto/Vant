@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -158,6 +159,7 @@ export function DashboardBrowser({
   const [accessFilter, setAccessFilter] = useState<AccessFilter>("all");
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [scamFocus, setScamFocus] = useState<ScamFocus>("all");
+  const pathname = usePathname();
   const filteredCards = sortCards(
     cards.filter((card) => {
       const focusOption = scamFocusOptions.find((option) => option.id === scamFocus);
@@ -210,14 +212,12 @@ export function DashboardBrowser({
   const unseenAlertCount = alertCards.filter((card) => !card.isAlertSeen).length;
 
   const sidebarItems = [
-    { label: "Dashboard", icon: Home, active: true, href: "/dashboard" },
-    { label: "Update Alerts", icon: Bell, active: false, href: "/alerts" },
-    { label: "Explore Updates", icon: ShieldAlert, active: false, href: "/dashboard" },
-    { label: "My Learning", icon: GraduationCap, active: false, href: "/dashboard" },
-    { label: "Bookmarks", icon: Bookmark, active: false, href: "/bookmarks" },
-    { label: "Transactions", icon: CreditCard, active: false, href: "/wallet" },
-    { label: "Wallet", icon: Wallet2, active: false, href: "/wallet" },
-    { label: "Settings", icon: Settings, active: false, href: "/settings" }
+    { label: "Overview", icon: Home, href: "/dashboard" },
+    { label: "Alerts", icon: Bell, href: "/alerts" },
+    { label: "Browse Updates", icon: ShieldAlert, href: "/dashboard" },
+    { label: "Saved Cards", icon: Bookmark, href: "/bookmarks" },
+    { label: "Wallet", icon: Wallet2, href: "/wallet" },
+    { label: "Settings", icon: Settings, href: "/settings" }
   ];
 
   const statCards = [
@@ -272,12 +272,11 @@ export function DashboardBrowser({
                   key={item.label}
                   href={item.href}
                   className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition ${
-                    item.active
-                      ? "vant-card bg-primary/12 text-text-main shadow-[0_18px_40px_rgba(20,184,166,0.12)]"
+                    pathname === item.href ? "vant-card bg-primary/12 text-text-main shadow-[0_18px_40px_rgba(20,184,166,0.12)]"
                       : "border border-transparent text-text-secondary hover:border-white/8 hover:bg-white/5 hover:text-text-main"
                   }`}
                 >
-                  <Icon className={`h-4 w-4 ${item.active ? "text-cyan-200" : "text-slate-400"}`} />
+                  <Icon className={`h-4 w-4 ${pathname === item.href ? "text-cyan-200" : "text-slate-400"}`} />
                   {item.label}
                 </Link>
               );
@@ -722,3 +721,5 @@ export function DashboardBrowser({
     </section>
   );
 }
+
+
