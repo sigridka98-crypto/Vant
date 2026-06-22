@@ -1,5 +1,7 @@
 import type { CoinTopUpPack, CreditBundle } from "@/types";
 
+export const MAX_WALLET_COINS = 100;
+
 export const creditBundles: CreditBundle[] = [
   {
     id: "bundle-50",
@@ -18,9 +20,10 @@ export const topUpPack: CoinTopUpPack = {
   priceLabel: "NGN 3,125",
   amountKobo: 312500,
   billingLabel: "one-time top-up",
-  description: "A one-time 50 coin top-up that users spend across admin-priced locked update cards.",
+  description: "A one-time 50 coin top-up that users spend across admin-priced locked update cards, with a wallet limit of 100 coins at a time.",
   features: [
     "50 coins added after successful payment",
+    "Users can hold up to 100 coins at once",
     "Admin sets card prices in coins",
     "Each locked card deducts its own coin amount",
     "Users top up again when their balance runs low"

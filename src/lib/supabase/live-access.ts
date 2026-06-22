@@ -1,4 +1,5 @@
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { MAX_WALLET_COINS } from "@/lib/payments-config";
 import type { CreditBundle } from "@/types";
 
 type OperationResult = {
@@ -54,6 +55,14 @@ async function ensureWalletBalance(userId: string) {
 export async function applyMockWalletTopUp(userId: string, bundle: CreditBundle): Promise<OperationResult> {
   const serviceSupabase = createSupabaseServiceClient();
   const startingBalance = await ensureWalletBalance(userId);
+
+  if (startingBalance + bundle.coins > MAX_WALLET_COINS) {
+    return {
+      ok: false,
+      message: `Wallets can only hold up to ${MAX_WALLET_COINS} coins. Spend some coins before topping up again.`
+    };
+  }
+
   const nextBalance = startingBalance + bundle.coins;
   const reference = `mock-wallet-${userId.slice(0, 8)}-${Date.now()}`;
 
@@ -349,6 +358,15 @@ export async function processVerifiedWalletPayment(
   }
 
   const startingBalance = await ensureWalletBalance(pendingPayment.user_id);
+
+  if (startingBalance + bundle.coins > MAX_WALLET_COINS) {
+    return {
+      ok: false,
+      message: `Wallet already reached the ${MAX_WALLET_COINS} coin limit. Spend some coins before your next top-up.`,
+      flow
+    };
+  }
+
   const nextBalance = startingBalance + bundle.coins;
 
   const { error: walletError } = await serviceSupabase

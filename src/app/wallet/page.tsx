@@ -1,12 +1,18 @@
-import { ArrowRight, Coins, DatabaseZap, Gem, History, Wallet } from "lucide-react";
+﻿import { ArrowRight, Coins, DatabaseZap, Gem, History, Wallet } from "lucide-react";
 
 import { resetLocalDemoState } from "@/app/local/actions";
 import { PaystackCheckoutButton } from "@/components/payments/paystack-checkout-button";
 import { getAuthContext } from "@/lib/auth";
+import { MAX_WALLET_COINS } from "@/lib/payments-config";
 import { getWalletPageData } from "@/lib/supabase/queries";
 
 export default async function WalletPage() {
   const [{ user }, walletSummary] = await Promise.all([getAuthContext(), getWalletPageData()]);
+  const primaryBundle = walletSummary.bundles[0];
+  const walletCapReached = walletSummary.balance >= MAX_WALLET_COINS;
+  const canBuyPrimaryBundle = primaryBundle
+    ? walletSummary.balance + primaryBundle.coins <= MAX_WALLET_COINS
+    : false;
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
@@ -24,11 +30,15 @@ export default async function WalletPage() {
           </div>
           <p className="mt-6 max-w-md text-sm leading-6 text-text-secondary">
             {walletSummary.isConfigured
-                ? user
+              ? user
                 ? "Your wallet is now reading from Supabase, and users can top up coins through Paystack card payments."
                 : "Sign in to see your real wallet balance and transaction history."
               : "Connect Supabase to activate live wallet balances and transaction history."}
           </p>
+          <div className="vant-card mt-5 inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
+            <Coins className="h-4 w-4" />
+            Wallet limit: {MAX_WALLET_COINS} coins
+          </div>
           {!walletSummary.isConfigured ? (
             <div className="vant-card mt-5 inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
               <DatabaseZap className="h-4 w-4" />
@@ -43,14 +53,11 @@ export default async function WalletPage() {
             <h1 className="text-2xl font-semibold text-text-main">Buy coins with Paystack</h1>
           </div>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
-            The main top-up pack gives users 50 coins for NGN 3,125 through Paystack. Each locked card deducts its own admin-set coin price from the wallet until the user needs another card payment top-up.
+            The main top-up pack gives users 50 coins for NGN 3,125 through Paystack. Each locked card deducts its own admin-set coin price from the wallet until the user needs another card payment top-up, and no wallet can hold more than {MAX_WALLET_COINS} coins at once.
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {walletSummary.bundles.map((bundle) => (
-              <article
-                key={bundle.id}
-                className="vant-card vant-card-hover rounded-[28px] p-5"
-              >
+              <article key={bundle.id} className="vant-card vant-card-hover rounded-[28px] p-5">
                 <div className="flex items-center gap-2">
                   <Coins className="h-5 w-5 text-primary" />
                   <p className="text-3xl font-semibold text-text-main">{bundle.coins}</p>
@@ -60,17 +67,26 @@ export default async function WalletPage() {
                   <Gem className="h-3.5 w-3.5" />+{bundle.diamondsBonus ?? 0} diamonds visual bonus
                 </div>
                 <div className="mt-6 space-y-4">
-                  <div className="rounded-2xl border border-fuchsia-300/12 bg-fuchsia-400/8 px-4 py-3">
-                    <p className="text-xs uppercase tracking-[0.18em] text-fuchsia-100/80">Paystack</p>
-                    <p className="mt-2 text-lg font-medium text-fuchsia-100">{bundle.paystackPriceLabel}</p>
+                  <div className="rounded-2xl border border-primary/12 bg-primary/8 px-4 py-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-primary/80">Paystack</p>
+                    <p className="mt-2 text-lg font-medium text-text-main">{bundle.paystackPriceLabel}</p>
                     <p className="mt-1 text-xs text-text-secondary">Card payments through Paystack</p>
                   </div>
                   <PaystackCheckoutButton
                     flow="wallet"
                     bundleId={bundle.id}
                     label="Pay with card"
+                    disabled={!canBuyPrimaryBundle}
+                    disabledLabel={walletCapReached ? "Wallet full" : "Spend coins first"}
                     className="vant-btn w-full text-sm"
                   />
+                  {!canBuyPrimaryBundle ? (
+                    <p className="text-xs leading-5 text-text-secondary">
+                      {walletCapReached
+                        ? `This wallet is already at the ${MAX_WALLET_COINS} coin limit.`
+                        : `This top-up would go above ${MAX_WALLET_COINS} coins. Unlock a few cards first, then top up again.`}
+                    </p>
+                  ) : null}
                 </div>
               </article>
             ))}
@@ -137,7 +153,6 @@ export default async function WalletPage() {
           ))}
         </div>
       </section>
-
     </main>
   );
 }

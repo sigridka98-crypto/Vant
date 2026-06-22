@@ -8,6 +8,8 @@ type PaystackCheckoutButtonProps =
     bundleId: string;
     className: string;
     label: string;
+    disabled?: boolean;
+    disabledLabel?: string;
   };
 
 export function PaystackCheckoutButton(props: PaystackCheckoutButtonProps) {
@@ -52,10 +54,10 @@ export function PaystackCheckoutButton(props: PaystackCheckoutButtonProps) {
       <button
         type="button"
         onClick={handleClick}
-        disabled={isLoading}
+        disabled={isLoading || props.disabled}
         className={props.className}
       >
-        {isLoading ? "Opening Paystack..." : props.label}
+        {isLoading ? "Opening Paystack..." : props.disabled ? (props.disabledLabel ?? props.label) : props.label}
       </button>
       {error ? <p className="mt-3 text-sm text-rose-100">{error}</p> : null}
     </div>

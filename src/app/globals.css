@@ -1,27 +1,29 @@
-@config "../../tailwind.config.ts";
+﻿@config "../../tailwind.config.ts";
 @import "tailwindcss";
 
 :root {
-  --color-primary: #00e6a8;
-  --color-primary-dark: #00bfa6;
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #ffffff;
+  --color-primary: #213a5a;
+  --color-primary-dark: #365a84;
+  --color-bg-primary: #fffdf8;
+  --color-bg-secondary: #f8f2e8;
   --color-bg-soft: #ffffff;
-  --color-text-main: #081120;
-  --color-text-secondary: #3f4d61;
-  --color-text-muted: #657285;
-  --color-border-soft: rgba(8, 17, 32, 0.08);
+  --color-text-main: #162033;
+  --color-text-secondary: #536074;
+  --color-text-muted: #7b8698;
+  --color-border-soft: rgba(22, 32, 51, 0.1);
   --background: var(--color-bg-primary);
   --foreground: var(--color-text-main);
 }
 
 html[data-theme="dark"] {
-  --color-bg-primary: #020617;
-  --color-bg-secondary: #0b1220;
-  --color-bg-soft: #111827;
+  --color-primary: #c48a57;
+  --color-primary-dark: #8da88d;
+  --color-bg-primary: #09111f;
+  --color-bg-secondary: #111b2d;
+  --color-bg-soft: #131f34;
   --color-text-main: #ffffff;
-  --color-text-secondary: #9ca3af;
-  --color-text-muted: #6b7280;
+  --color-text-secondary: #b6c1d1;
+  --color-text-muted: #7f8ba0;
   --color-border-soft: rgba(255, 255, 255, 0.08);
 }
 
@@ -47,16 +49,19 @@ html {
 
 body {
   min-height: 100vh;
-  background: #ffffff;
+  background:
+    radial-gradient(circle at top left, rgba(196, 138, 87, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(141, 168, 141, 0.08), transparent 20%),
+    linear-gradient(180deg, #fffdf8 0%, #fbf7f1 48%, #f5efe5 100%);
   color: var(--foreground);
   font-feature-settings: "ss01" on, "cv01" on;
 }
 
 html[data-theme="dark"] body {
   background:
-    radial-gradient(circle at top left, rgba(0, 230, 168, 0.1), transparent 24%),
-    radial-gradient(circle at top right, rgba(0, 191, 166, 0.08), transparent 22%),
-    linear-gradient(180deg, #020617 0%, #07101d 35%, #0b1220 100%);
+    radial-gradient(circle at top left, rgba(196, 138, 87, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(141, 168, 141, 0.09), transparent 22%),
+    linear-gradient(180deg, #09111f 0%, #0d1627 35%, #111b2d 100%);
 }
 
 a {
@@ -78,7 +83,7 @@ select {
 
 @layer base {
   ::selection {
-    background: rgba(0, 230, 168, 0.24);
+    background: rgba(196, 138, 87, 0.22);
     color: var(--color-text-main);
   }
 
@@ -86,10 +91,10 @@ select {
   textarea:focus,
   select:focus {
     outline: none;
-    border-color: rgba(0, 230, 168, 0.55);
+    border-color: rgba(54, 90, 132, 0.38);
     box-shadow:
-      0 0 0 1px rgba(0, 230, 168, 0.34),
-      0 0 0 6px rgba(0, 230, 168, 0.08);
+      0 0 0 1px rgba(54, 90, 132, 0.26),
+      0 0 0 6px rgba(196, 138, 87, 0.08);
   }
 }
 
@@ -97,7 +102,7 @@ select {
   .vant-card {
     @apply rounded-2xl border shadow-lg backdrop-blur;
     border-color: var(--color-border-soft);
-    background: var(--color-bg-soft);
+    background: color-mix(in srgb, var(--color-bg-soft) 92%, transparent);
   }
 
   .vant-card-hover {
@@ -107,31 +112,39 @@ select {
   .vant-card-hover:hover {
     filter: brightness(1.03);
     box-shadow:
-      0 18px 40px rgba(2, 6, 23, 0.12),
-      0 0 0 1px rgba(0, 230, 168, 0.1);
+      0 20px 44px rgba(22, 32, 51, 0.1),
+      0 0 0 1px rgba(33, 58, 90, 0.08);
   }
 
   .vant-glass {
     @apply border backdrop-blur;
     border-color: var(--color-border-soft);
     background: var(--color-bg-soft);
-    box-shadow: 0 18px 55px rgba(2, 6, 23, 0.12);
+    box-shadow: 0 18px 55px rgba(22, 32, 51, 0.1);
   }
 
   .vant-btn {
-    @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium text-slate-950 shadow-lg transition duration-200;
+    @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium shadow-lg transition duration-200;
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     box-shadow:
-      0 0 0 1px rgba(0, 230, 168, 0.16),
-      0 16px 40px rgba(0, 230, 168, 0.18);
+      0 0 0 1px rgba(33, 58, 90, 0.18),
+      0 16px 40px rgba(33, 58, 90, 0.16);
+    color: #fefcf8;
   }
 
   .vant-btn:hover {
     filter: brightness(1.05);
     box-shadow:
-      0 0 0 1px rgba(0, 230, 168, 0.24),
-      0 20px 44px rgba(0, 230, 168, 0.24),
-      0 0 24px rgba(0, 230, 168, 0.18);
+      0 0 0 1px rgba(33, 58, 90, 0.24),
+      0 20px 44px rgba(33, 58, 90, 0.2),
+      0 0 24px rgba(196, 138, 87, 0.12);
+  }
+
+  .vant-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    filter: none;
+    box-shadow: none;
   }
 
   .vant-btn-secondary {
@@ -144,8 +157,8 @@ select {
   .vant-btn-secondary:hover {
     filter: brightness(1.06);
     box-shadow:
-      0 16px 34px rgba(2, 6, 23, 0.3),
-      0 0 20px rgba(0, 230, 168, 0.08);
+      0 16px 34px rgba(22, 32, 51, 0.14),
+      0 0 20px rgba(196, 138, 87, 0.06);
   }
 
   .vant-input {
@@ -161,8 +174,8 @@ select {
 }
 
 html[data-theme="light"] .site-shell-header {
-  background: #ffffff;
-  border-color: rgba(8, 17, 32, 0.08);
+  background: rgba(255, 253, 248, 0.88);
+  border-color: rgba(22, 32, 51, 0.08);
 }
 
 html[data-theme="light"] .dashboard-shell,
@@ -170,7 +183,7 @@ html[data-theme="light"] .dashboard-main,
 html[data-theme="light"] .dashboard-sidebar,
 html[data-theme="light"] .dashboard-empty,
 html[data-theme="light"] .dashboard-alert-hero {
-  background: #ffffff !important;
+  background: #fffdf8 !important;
 }
 
 html[data-theme="light"] .dashboard-shell,
@@ -178,13 +191,15 @@ html[data-theme="light"] .dashboard-sidebar,
 html[data-theme="light"] .dashboard-main,
 html[data-theme="light"] .dashboard-empty,
 html[data-theme="light"] .dashboard-alert-hero {
-  border-color: rgba(8, 17, 32, 0.08) !important;
-  box-shadow: 0 18px 55px rgba(2, 6, 23, 0.08) !important;
+  border-color: rgba(22, 32, 51, 0.08) !important;
+  box-shadow: 0 18px 55px rgba(22, 32, 51, 0.08) !important;
 }
 
 html[data-theme="light"] .dashboard-sidebar,
 html[data-theme="light"] .dashboard-main {
-  background-image: none !important;
+  background-image:
+    radial-gradient(circle at top right, rgba(196, 138, 87, 0.08), transparent 18%),
+    linear-gradient(180deg, #fffdf8 0%, #fbf7f1 100%) !important;
 }
 
 html[data-theme="light"] .dashboard-shell .text-white,

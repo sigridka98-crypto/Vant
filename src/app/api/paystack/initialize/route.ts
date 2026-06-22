@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 
 import { getAuthContext } from "@/lib/auth";
 import { isPaystackConfigured } from "@/lib/env";
+import { MAX_WALLET_COINS } from "@/lib/payments-config";
 import {
   createPaystackReference,
   getBundleById,
   initializePaystackTransaction
 } from "@/lib/paystack";
 import { createPendingPayment } from "@/lib/supabase/live-access";
+import { createSupabaseServiceClient } from "@/lib/supabase/server";
 
 type InitializeRequestBody =
   { flow: "wallet"; bundleId: string };
@@ -48,6 +50,24 @@ export async function POST(request: Request) {
       if (!bundle) {
         return NextResponse.json(
           { ok: false, message: "Unknown coin bundle selected." },
+          { status: 400 }
+        );
+      }
+
+      const serviceSupabase = createSupabaseServiceClient();
+      const { data: wallet } = await serviceSupabase
+        .from("wallets")
+        .select("credit_balance")
+        .eq("user_id", auth.user.id)
+        .maybeSingle();
+      const currentBalance = wallet?.credit_balance ?? 0;
+
+      if (currentBalance + bundle.coins > MAX_WALLET_COINS) {
+        return NextResponse.json(
+          {
+            ok: false,
+            message: `You can only hold up to ${MAX_WALLET_COINS} coins at a time. Spend some coins before topping up again.`
+          },
           { status: 400 }
         );
       }
