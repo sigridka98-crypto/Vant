@@ -85,9 +85,14 @@ export async function SiteHeader() {
               </button>
             </form>
           ) : (
-            <Link href="/login" className="vant-btn-secondary px-4 py-2 text-sm">
-              Sign in
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link href="/dashboard" className="vant-btn px-4 py-2 text-sm">
+                Open app
+              </Link>
+              <Link href="/login" className="vant-btn-secondary px-4 py-2 text-sm">
+                Sign in
+              </Link>
+            </div>
           )}
         </div>
       </div>

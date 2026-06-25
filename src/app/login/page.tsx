@@ -1,4 +1,5 @@
-﻿import { redirect } from "next/navigation";
+﻿import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { signIn, signUp } from "@/app/login/actions";
 import { getAuthContext } from "@/lib/auth";
@@ -21,10 +22,18 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <section className="vant-glass grid w-full gap-8 rounded-[36px] p-8 md:grid-cols-2 md:p-10">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Authentication</p>
-          <h1 className="mt-4 text-4xl font-semibold text-text-main">Sign in or create your account</h1>
+          <h1 className="mt-4 text-4xl font-semibold text-text-main">Sign in, create an account, or continue as guest</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-text-secondary">
-            Access your update dashboard, wallet, alerts, and saved cards with your email and password.
+            You can open the app right away as a guest, then sign in later whenever you want wallet history, saved cards, and personal access features.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/dashboard" className="vant-btn">
+              Continue as guest
+            </Link>
+            <Link href="/" className="vant-btn-secondary">
+              Back home
+            </Link>
+          </div>
         </div>
 
         <div className="space-y-5">
