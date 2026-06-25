@@ -1,7 +1,14 @@
-import { cache } from "react";
+﻿import { cache } from "react";
 
-import { isSupabaseConfigured } from "@/lib/env";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  getBootstrapAdminEmails,
+  isSupabaseConfigured,
+  isSupabaseServiceConfigured
+} from "@/lib/env";
+import {
+  createSupabaseServerClient,
+  createSupabaseServiceClient
+} from "@/lib/supabase/server";
 import type { Profile } from "@/types";
 
 type AuthContext = {
@@ -9,6 +16,25 @@ type AuthContext = {
   user: { id: string; email: string | null } | null;
   profile: Profile | null;
 };
+
+async function syncBootstrapAdminRole(userId: string, email: string | null) {
+  if (!email || !isSupabaseServiceConfigured()) {
+    return;
+  }
+
+  const bootstrapAdminEmails = getBootstrapAdminEmails();
+
+  if (!bootstrapAdminEmails.includes(email.toLowerCase())) {
+    return;
+  }
+
+  const serviceSupabase = createSupabaseServiceClient();
+  await serviceSupabase
+    .from("profiles")
+    .update({ role: "admin" })
+    .eq("id", userId)
+    .neq("role", "admin");
+}
 
 export const getAuthContext = cache(async (): Promise<AuthContext> => {
   if (!isSupabaseConfigured()) {
@@ -31,6 +57,8 @@ export const getAuthContext = cache(async (): Promise<AuthContext> => {
       profile: null
     };
   }
+
+  await syncBootstrapAdminRole(user.id, user.email ?? null);
 
   const { data: profile } = await supabase
     .from("profiles")
