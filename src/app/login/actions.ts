@@ -1,6 +1,7 @@
 ﻿"use server";
 
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 import { getBootstrapAdminEmails, isSupabaseServiceConfigured } from "@/lib/env";
 import {
@@ -110,6 +111,10 @@ export async function signIn(formData: FormData) {
       );
     }
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
     redirect(
       `/login?error=${encodeURIComponent(
         normalizeAuthError(error, "Unable to sign in right now. Please try again.")
@@ -184,6 +189,10 @@ export async function signUp(formData: FormData) {
       );
     }
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
     redirect(
       `/login?error=${encodeURIComponent(
         normalizeAuthError(error, "Unable to create your account right now. Please try again.")
