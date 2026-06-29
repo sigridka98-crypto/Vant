@@ -33,7 +33,7 @@ function normalizeAuthError(error: unknown, fallback: string) {
 
 async function confirmUserEmailIfNeeded(email: string) {
   if (!isSupabaseServiceConfigured()) {
-    return { ok: false, message: "" };
+    return { ok: false, message: "SUPABASE_SERVICE_ROLE_KEY is not configured on the deployed app yet." };
   }
 
   const serviceSupabase = createSupabaseServiceClient();
@@ -131,44 +131,37 @@ export async function signUp(formData: FormData) {
   const fullName = String(formData.get("fullName") ?? "").trim();
 
   try {
-    if (isSupabaseServiceConfigured()) {
-      const serviceSupabase = createSupabaseServiceClient();
-
-      const { error } = await serviceSupabase.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: {
-          full_name: fullName
-        }
-      });
-
-      if (error) {
-        redirect(
-          `/login?error=${encodeURIComponent(
-            normalizeAuthError(error, "Unable to create your account right now. Please try again.")
-          )}`
-        );
-      }
-
-      redirect("/login?message=Account created successfully. You can sign in now.");
+    if (!isSupabaseServiceConfigured()) {
+      redirect(
+        `/login?error=${encodeURIComponent(
+          "SUPABASE_SERVICE_ROLE_KEY is missing in Cloudflare. Add it there before account creation can work."
+        )}`
+      );
     }
 
-    const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.signUp({
+    const serviceSupabase = createSupabaseServiceClient();
+
+    const { data, error } = await serviceSupabase.auth.admin.createUser({
       email,
       password,
-      options: {
-        data: {
-          full_name: fullName
-        }
+      email_confirm: true,
+      user_metadata: {
+        full_name: fullName
       }
     });
 
     if (error) {
       redirect(
         `/login?error=${encodeURIComponent(
-          normalizeAuthError(error, "Unable to create your account right now. Please try again.")
+          `Signup failed at admin.createUser: ${normalizeAuthError(error, "unknown auth error")}`
+        )}`
+      );
+    }
+
+    if (!data.user) {
+      redirect(
+        `/login?error=${encodeURIComponent(
+          "Signup failed because Supabase did not return the new user record."
         )}`
       );
     }
@@ -179,7 +172,7 @@ export async function signUp(formData: FormData) {
 
     redirect(
       `/login?error=${encodeURIComponent(
-        normalizeAuthError(error, "Unable to create your account right now. Please try again.")
+        `Signup exception: ${normalizeAuthError(error, "unknown server error")}`
       )}`
     );
   }
