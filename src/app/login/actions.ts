@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
-import { getBootstrapAdminEmails, isSupabaseServiceConfigured } from "@/lib/env";
+import { isSupabaseServiceConfigured } from "@/lib/env";
 import {
   createSupabaseServerClient,
   createSupabaseServiceClient
@@ -133,8 +133,6 @@ export async function signUp(formData: FormData) {
   try {
     if (isSupabaseServiceConfigured()) {
       const serviceSupabase = createSupabaseServiceClient();
-      const adminEmails = getBootstrapAdminEmails();
-      const shouldBeAdmin = adminEmails.includes(email.toLowerCase());
 
       const { error } = await serviceSupabase.auth.admin.createUser({
         email,
@@ -151,20 +149,6 @@ export async function signUp(formData: FormData) {
             normalizeAuthError(error, "Unable to create your account right now. Please try again.")
           )}`
         );
-      }
-
-      if (shouldBeAdmin) {
-        const { data: usersData } = await serviceSupabase.auth.admin.listUsers();
-        const createdUser = usersData.users.find(
-          (item) => item.email?.toLowerCase() === email.toLowerCase()
-        );
-
-        if (createdUser) {
-          await serviceSupabase
-            .from("profiles")
-            .update({ role: "admin" })
-            .eq("id", createdUser.id);
-        }
       }
 
       redirect("/login?message=Account created successfully. You can sign in now.");
