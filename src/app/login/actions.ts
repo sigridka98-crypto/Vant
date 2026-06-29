@@ -17,14 +17,36 @@ function normalizeAuthError(error: unknown, fallback: string) {
 
   if (error instanceof Error) {
     const message = error.message?.trim();
-    return message && message !== "{}" ? message : fallback;
+    if (message && message !== "{}") {
+      return message;
+    }
+
+    const details = JSON.stringify(
+      {
+        name: error.name,
+        cause: error.cause ?? null
+      },
+      null,
+      0
+    );
+
+    return details && details !== "{}" ? details : fallback;
   }
 
   if (error && typeof error === "object") {
     const candidate = Reflect.get(error, "message");
     if (typeof candidate === "string") {
       const message = candidate.trim();
-      return message && message !== "{}" ? message : fallback;
+      if (message && message !== "{}") {
+        return message;
+      }
+    }
+
+    try {
+      const details = JSON.stringify(error);
+      return details && details !== "{}" ? details : fallback;
+    } catch {
+      return fallback;
     }
   }
 
@@ -131,39 +153,47 @@ export async function signUp(formData: FormData) {
   const fullName = String(formData.get("fullName") ?? "").trim();
 
   try {
-    if (!isSupabaseServiceConfigured()) {
-      redirect(
-        `/login?error=${encodeURIComponent(
-          "SUPABASE_SERVICE_ROLE_KEY is missing in Cloudflare. Add it there before account creation can work."
-        )}`
-      );
+    let adminCreateErrorMessage = "";
+
+    if (isSupabaseServiceConfigured()) {
+      const serviceSupabase = createSupabaseServiceClient();
+
+      const { data, error } = await serviceSupabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          full_name: fullName
+        }
+      });
+
+      if (!error && data.user) {
+        redirect("/login?message=Account created successfully. You can sign in now.");
+      }
+
+      if (error) {
+        adminCreateErrorMessage = normalizeAuthError(error, "unknown auth error");
+      }
     }
 
-    const serviceSupabase = createSupabaseServiceClient();
-
-    const { data, error } = await serviceSupabase.auth.admin.createUser({
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.auth.signUp({
       email,
       password,
-      email_confirm: true,
-      user_metadata: {
-        full_name: fullName
+      options: {
+        data: {
+          full_name: fullName
+        }
       }
     });
 
     if (error) {
-      redirect(
-        `/login?error=${encodeURIComponent(
-          `Signup failed at admin.createUser: ${normalizeAuthError(error, "unknown auth error")}`
-        )}`
-      );
-    }
+      const signupErrorMessage = normalizeAuthError(error, "unknown signup error");
+      const combinedMessage = adminCreateErrorMessage
+        ? `admin.createUser failed: ${adminCreateErrorMessage}. fallback signUp failed: ${signupErrorMessage}`
+        : signupErrorMessage;
 
-    if (!data.user) {
-      redirect(
-        `/login?error=${encodeURIComponent(
-          "Signup failed because Supabase did not return the new user record."
-        )}`
-      );
+      redirect(`/login?error=${encodeURIComponent(combinedMessage)}`);
     }
   } catch (error) {
     if (isRedirectError(error)) {
@@ -172,7 +202,7 @@ export async function signUp(formData: FormData) {
 
     redirect(
       `/login?error=${encodeURIComponent(
-        `Signup exception: ${normalizeAuthError(error, "unknown server error")}`
+        normalizeAuthError(error, "Unable to create your account right now. Please try again.")
       )}`
     );
   }
