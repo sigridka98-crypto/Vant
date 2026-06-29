@@ -151,32 +151,9 @@ export async function signUp(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "").trim();
   const fullName = String(formData.get("fullName") ?? "").trim();
+  const supabase = await createSupabaseServerClient();
 
   try {
-    let adminCreateErrorMessage = "";
-
-    if (isSupabaseServiceConfigured()) {
-      const serviceSupabase = createSupabaseServiceClient();
-
-      const { data, error } = await serviceSupabase.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: {
-          full_name: fullName
-        }
-      });
-
-      if (!error && data.user) {
-        redirect("/login?message=Account created successfully. You can sign in now.");
-      }
-
-      if (error) {
-        adminCreateErrorMessage = normalizeAuthError(error, "unknown auth error");
-      }
-    }
-
-    const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -188,12 +165,11 @@ export async function signUp(formData: FormData) {
     });
 
     if (error) {
-      const signupErrorMessage = normalizeAuthError(error, "unknown signup error");
-      const combinedMessage = adminCreateErrorMessage
-        ? `admin.createUser failed: ${adminCreateErrorMessage}. fallback signUp failed: ${signupErrorMessage}`
-        : signupErrorMessage;
-
-      redirect(`/login?error=${encodeURIComponent(combinedMessage)}`);
+      redirect(
+        `/login?error=${encodeURIComponent(
+          normalizeAuthError(error, "Unable to create your account right now. Please try again.")
+        )}`
+      );
     }
   } catch (error) {
     if (isRedirectError(error)) {
