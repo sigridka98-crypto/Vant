@@ -1,6 +1,6 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Coins, DatabaseZap, Gem, PencilLine, Plus, Rocket, Trash2 } from "lucide-react";
+import { Coins, DatabaseZap, Gem, PencilLine, Plus, Rocket, ShieldCheck, Trash2 } from "lucide-react";
 
 import { createCard, deleteCard, togglePublishCard } from "@/app/admin/actions";
 import { localAdminSignIn, localAdminSignOut } from "@/app/admin/local-actions";
@@ -98,11 +98,29 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
       <section className="vant-glass rounded-[36px] p-8 md:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin panel</p>
-        <h1 className="mt-4 text-4xl font-semibold text-text-main">Admin-managed content for every update lesson</h1>
-        <p className="mt-5 max-w-3xl text-base leading-7 text-text-secondary">
-          This admin route is now role-aware and ready for card CRUD. Create empty templates first, then fill each card with its update structure before publishing.
-        </p>
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin control panel</p>
+            <h1 className="mt-4 text-4xl font-semibold text-text-main">You are in the GetUpdated admin page</h1>
+            <p className="mt-5 max-w-3xl text-base leading-7 text-text-secondary">
+              This is the protected workspace for creating, editing, pricing, and publishing update card templates before users see them in the app.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <span className="vant-card inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
+              <ShieldCheck className="h-4 w-4" />
+              {isConfigured ? "Supabase admin session active" : "Local admin mode active"}
+            </span>
+            {profile?.role === "admin" ? (
+              <span className="vant-card inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
+                <Gem className="h-4 w-4" />
+                Signed in as admin
+              </span>
+            ) : null}
+          </div>
+        </div>
+
         {!isConfigured ? (
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="vant-card inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm text-primary">
@@ -132,7 +150,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
       <section className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
         <div className="vant-card rounded-[30px] p-6">
-          <h2 className="text-2xl font-semibold text-text-main">What this panel will control</h2>
+          <h2 className="text-2xl font-semibold text-text-main">What this admin page controls</h2>
           <div className="mt-6 space-y-4">
             {adminTasks.map((task) => (
               <div key={task} className="vant-card rounded-2xl bg-bg-secondary/70 px-4 py-4 text-sm leading-6 text-text-secondary">
@@ -218,18 +236,46 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             <h2 className="mt-2 text-3xl font-semibold text-text-main">Manage all created update cards</h2>
           </div>
 
-          {!cardData.cards.length ? (
-            <div className="vant-card rounded-[30px] border-dashed p-6">
-              <p className="text-lg font-medium text-text-main">
-                {cardData.isConfigured ? "No templates created yet." : "Connect Supabase to store templates."}
-              </p>
-              <p className="mt-3 text-sm leading-6 text-text-secondary">
-                Use the form to create your first empty update card draft. It can stay hidden until you finish the content and publish it.
-              </p>
-            </div>
-          ) : (
-            <AdminLibraryBrowser cards={cardData.cards} />
-          )}
+          <AdminLibraryBrowser
+            cards={cardData.cards.map((card) => ({
+              id: card.id,
+              slug: card.slug,
+              title: card.title,
+              category: card.category,
+              isPublished: card.isPublished,
+              isFree: card.isFree,
+              creditCost: card.creditCost,
+              readiness: buildCardReadiness(card),
+              alerts: {
+                isNewAlert: card.isNewAlert,
+                isTrendingAlert: card.isTrendingAlert,
+                isMostReported: card.isMostReported
+              }
+            }))}
+            renderActions={(card) => (
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`/admin/cards/${card.id}/edit`}
+                  className="vant-btn-secondary inline-flex items-center gap-2 text-sm"
+                >
+                  <PencilLine className="h-4 w-4" />
+                  Edit
+                </Link>
+                <form action={togglePublishCard.bind(null, card.id, !card.isPublished)}>
+                  <button type="submit" className="vant-btn-secondary inline-flex items-center gap-2 text-sm">
+                    <Rocket className="h-4 w-4" />
+                    {card.isPublished ? "Unpublish" : "Publish"}
+                  </button>
+                </form>
+                <form action={deleteCard.bind(null, card.id)}>
+                  <button type="submit" className="vant-btn-secondary inline-flex items-center gap-2 text-sm text-rose-100">
+                    <Trash2 className="h-4 w-4" />
+                    Delete
+                  </button>
+                </form>
+              </div>
+            )}
+          />
         </div>
       </section>
     </main>
