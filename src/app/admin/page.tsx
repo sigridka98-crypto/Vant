@@ -1,6 +1,6 @@
 ﻿import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Coins, DatabaseZap, Gem, PencilLine, Plus, Rocket, ShieldCheck, Trash2 } from "lucide-react";
+import { Coins, DatabaseZap, Gem, Plus, ShieldCheck } from "lucide-react";
 
 import { createCard, deleteCard, togglePublishCard } from "@/app/admin/actions";
 import { localAdminSignIn, localAdminSignOut } from "@/app/admin/local-actions";
@@ -236,48 +236,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             <h2 className="mt-2 text-3xl font-semibold text-text-main">Manage all created update cards</h2>
           </div>
 
-          <AdminLibraryBrowser
-            cards={cardData.cards.map((card) => ({
-              id: card.id,
-              slug: card.slug,
-              title: card.title,
-              category: card.category,
-              isPublished: card.isPublished,
-              isFree: card.isFree,
-              creditCost: card.creditCost,
-              readiness: buildCardReadiness(card),
-              alerts: {
-                isNewAlert: card.isNewAlert,
-                isTrendingAlert: card.isTrendingAlert,
-                isMostReported: card.isMostReported
-              }
-            }))}
-            renderActions={(card) => (
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  href={`/admin/cards/${card.id}/edit`}
-                  className="vant-btn-secondary inline-flex items-center gap-2 text-sm"
-                >
-                  <PencilLine className="h-4 w-4" />
-                  Edit
-                </Link>
-                <form action={togglePublishCard.bind(null, card.id, !card.isPublished)}>
-                  <button type="submit" className="vant-btn-secondary inline-flex items-center gap-2 text-sm">
-                    <Rocket className="h-4 w-4" />
-                    {card.isPublished ? "Unpublish" : "Publish"}
-                  </button>
-                </form>
-                <form action={deleteCard.bind(null, card.id)}>
-                  <button type="submit" className="vant-btn-secondary inline-flex items-center gap-2 text-sm text-rose-100">
-                    <Trash2 className="h-4 w-4" />
-                    Delete
-                  </button>
-                </form>
-              </div>
-            )}
-          />
+          <AdminLibraryBrowser cards={cardData.cards} />
         </div>
       </section>
     </main>
   );
 }
+
