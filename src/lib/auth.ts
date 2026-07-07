@@ -19,21 +19,36 @@ type AuthContext = {
 
 async function syncBootstrapAdminRole(userId: string, email: string | null) {
   if (!email || !isSupabaseServiceConfigured()) {
-    return;
+    return false;
   }
 
   const bootstrapAdminEmails = getBootstrapAdminEmails();
+  const normalizedEmail = email.toLowerCase();
 
-  if (!bootstrapAdminEmails.includes(email.toLowerCase())) {
-    return;
+  if (!bootstrapAdminEmails.includes(normalizedEmail)) {
+    return false;
   }
 
   const serviceSupabase = createSupabaseServiceClient();
+  const fallbackName = email.split("@")[0] ?? "Admin";
+
+  await serviceSupabase.from("profiles").upsert(
+    {
+      id: userId,
+      full_name: fallbackName,
+      role: "admin"
+    },
+    {
+      onConflict: "id"
+    }
+  );
+
   await serviceSupabase
     .from("profiles")
     .update({ role: "admin" })
-    .eq("id", userId)
-    .neq("role", "admin");
+    .eq("id", userId);
+
+  return true;
 }
 
 export const getAuthContext = cache(async (): Promise<AuthContext> => {
@@ -58,7 +73,7 @@ export const getAuthContext = cache(async (): Promise<AuthContext> => {
     };
   }
 
-  await syncBootstrapAdminRole(user.id, user.email ?? null);
+  const isBootstrapAdmin = await syncBootstrapAdminRole(user.id, user.email ?? null);
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -66,18 +81,26 @@ export const getAuthContext = cache(async (): Promise<AuthContext> => {
     .eq("id", user.id)
     .maybeSingle();
 
+  const effectiveProfile: Profile | null = profile
+    ? {
+        id: profile.id,
+        fullName: profile.full_name,
+        role: isBootstrapAdmin ? "admin" : profile.role
+      }
+    : isBootstrapAdmin
+      ? {
+          id: user.id,
+          fullName: user.email?.split("@")[0] || "Admin",
+          role: "admin"
+        }
+      : null;
+
   return {
     isConfigured: true,
     user: {
       id: user.id,
       email: user.email ?? null
     },
-    profile: profile
-      ? {
-          id: profile.id,
-          fullName: profile.full_name,
-          role: profile.role
-        }
-      : null
+    profile: effectiveProfile
   };
 });
