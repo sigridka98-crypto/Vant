@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Coins, DatabaseZap, Gem, Plus, ShieldCheck } from "lucide-react";
 
@@ -148,6 +148,50 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         </section>
       ) : null}
 
+      <section className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className="space-y-6">
+          <div className="vant-card rounded-[30px] bg-primary/10 p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin tools unlocked</p>
+            <h2 className="mt-3 text-3xl font-semibold text-text-main">Create and manage update templates from here</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
+              This section is the actual control area. Use the form below to create a new template, then use the library panel to edit, publish, draft, or delete existing ones.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a href="#admin-create" className="vant-btn text-sm">
+                Open create form
+              </a>
+              <a href="#admin-library" className="vant-btn-secondary px-4 py-2 text-sm">
+                Open template library
+              </a>
+            </div>
+          </div>
+
+          <div id="admin-create" className="space-y-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Create template</p>
+                <h2 className="mt-2 text-3xl font-semibold text-text-main">Start with an empty draft or fill it immediately</h2>
+              </div>
+              <div className="vant-card hidden rounded-2xl px-4 py-2 text-sm text-primary md:inline-flex">
+                <Plus className="mr-2 h-4 w-4" />
+                New update card
+              </div>
+            </div>
+
+            <CardForm mode="create" action={createCard} />
+          </div>
+        </div>
+
+        <div id="admin-library" className="space-y-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Template library</p>
+            <h2 className="mt-2 text-3xl font-semibold text-text-main">Manage all created update cards</h2>
+          </div>
+
+          <AdminLibraryBrowser cards={cardData.cards} />
+        </div>
+      </section>
+
       <section className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
         <div className="vant-card rounded-[30px] p-6">
           <h2 className="text-2xl font-semibold text-text-main">What this admin page controls</h2>
@@ -213,33 +257,6 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           ) : null}
         </div>
       </section>
-
-      <section className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
-        <div className="space-y-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Create template</p>
-              <h2 className="mt-2 text-3xl font-semibold text-text-main">Start with an empty draft or fill it immediately</h2>
-            </div>
-            <div className="vant-card hidden rounded-2xl px-4 py-2 text-sm text-primary md:inline-flex">
-              <Plus className="mr-2 h-4 w-4" />
-              New update card
-            </div>
-          </div>
-
-          <CardForm mode="create" action={createCard} />
-        </div>
-
-        <div className="space-y-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Template library</p>
-            <h2 className="mt-2 text-3xl font-semibold text-text-main">Manage all created update cards</h2>
-          </div>
-
-          <AdminLibraryBrowser cards={cardData.cards} />
-        </div>
-      </section>
     </main>
   );
 }
-
