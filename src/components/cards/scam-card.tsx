@@ -30,6 +30,7 @@ export function ScamCard({ card }: ScamCardProps) {
       : accessState === "locked"
         ? "Unlock premium"
         : "Continue learning";
+  const totalSubLessons = card.steps.length;
 
   return (
     <article className="vant-card vant-card-hover group relative overflow-hidden rounded-[30px] p-6">
@@ -98,6 +99,11 @@ export function ScamCard({ card }: ScamCardProps) {
         <p className="mt-4 flex-1 text-sm leading-6 text-text-secondary">
           {card.description || "This template is published, but the admin still needs to add the lesson summary."}
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="rounded-full border border-white/10 bg-bg-secondary/70 px-3 py-1 text-xs font-semibold text-text-main">
+            {totalSubLessons} sub-lessons
+          </span>
+        </div>
         {card.alertSummary ? (
           <div className="mt-4 rounded-2xl border border-cyan-300/15 bg-cyan-400/10 px-4 py-3 text-sm text-cyan-50">
             {card.alertSummary}
@@ -117,7 +123,7 @@ export function ScamCard({ card }: ScamCardProps) {
               {accessState === "free"
                 ? "Free access card"
                 : isLocked
-                  ? "Diamond unlock required"
+                  ? "Coin unlock required"
                   : "Premium access granted"}
             </span>
           </div>

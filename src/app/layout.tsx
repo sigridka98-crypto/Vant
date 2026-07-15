@@ -9,12 +9,12 @@ const themeInitScript = `
   (() => {
     try {
       const savedTheme = localStorage.getItem("vant-theme");
-      const theme = savedTheme === "dark" ? "dark" : "light";
+      const theme = savedTheme === "light" ? "light" : "dark";
       document.documentElement.dataset.theme = theme;
       document.documentElement.style.colorScheme = theme;
     } catch {
-      document.documentElement.dataset.theme = "light";
-      document.documentElement.style.colorScheme = "light";
+      document.documentElement.dataset.theme = "dark";
+      document.documentElement.style.colorScheme = "dark";
     }
   })();
 `;
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="light">
+    <html lang="en" data-theme="dark">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>

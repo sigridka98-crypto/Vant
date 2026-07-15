@@ -1,30 +1,42 @@
-﻿@config "../../tailwind.config.ts";
+@config "../../tailwind.config.ts";
 @import "tailwindcss";
 
 :root {
-  --color-primary: #213a5a;
-  --color-primary-dark: #365a84;
-  --color-bg-primary: #fffdf8;
-  --color-bg-secondary: #f8f2e8;
-  --color-bg-soft: #ffffff;
-  --color-text-main: #162033;
-  --color-text-secondary: #536074;
-  --color-text-muted: #7b8698;
-  --color-border-soft: rgba(22, 32, 51, 0.1);
+  --color-primary: #1f8f63;
+  --color-primary-dark: #146c4a;
+  --color-bg-primary: #06110c;
+  --color-bg-secondary: #0b1812;
+  --color-bg-soft: #102119;
+  --color-text-main: #f5fbf7;
+  --color-text-secondary: #a9beb2;
+  --color-text-muted: #759184;
+  --color-border-soft: rgba(171, 209, 188, 0.14);
   --background: var(--color-bg-primary);
   --foreground: var(--color-text-main);
 }
 
+html[data-theme="light"] {
+  --color-primary: #1f8f63;
+  --color-primary-dark: #146c4a;
+  --color-bg-primary: #f4fbf6;
+  --color-bg-secondary: #e7f2ea;
+  --color-bg-soft: #ffffff;
+  --color-text-main: #102117;
+  --color-text-secondary: #446252;
+  --color-text-muted: #6f8a7a;
+  --color-border-soft: rgba(16, 33, 23, 0.1);
+}
+
 html[data-theme="dark"] {
-  --color-primary: #c48a57;
-  --color-primary-dark: #8da88d;
-  --color-bg-primary: #09111f;
-  --color-bg-secondary: #111b2d;
-  --color-bg-soft: #131f34;
-  --color-text-main: #ffffff;
-  --color-text-secondary: #b6c1d1;
-  --color-text-muted: #7f8ba0;
-  --color-border-soft: rgba(255, 255, 255, 0.08);
+  --color-primary: #37c585;
+  --color-primary-dark: #1f8f63;
+  --color-bg-primary: #06110c;
+  --color-bg-secondary: #0b1812;
+  --color-bg-soft: #102119;
+  --color-text-main: #f5fbf7;
+  --color-text-secondary: #a9beb2;
+  --color-text-muted: #759184;
+  --color-border-soft: rgba(171, 209, 188, 0.14);
 }
 
 @theme inline {
@@ -50,18 +62,25 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(196, 138, 87, 0.08), transparent 24%),
-    radial-gradient(circle at top right, rgba(141, 168, 141, 0.08), transparent 20%),
-    linear-gradient(180deg, #fffdf8 0%, #fbf7f1 48%, #f5efe5 100%);
+    radial-gradient(circle at top left, rgba(55, 197, 133, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(18, 87, 59, 0.22), transparent 22%),
+    linear-gradient(180deg, #06110c 0%, #08150f 42%, #0b1812 100%);
   color: var(--foreground);
   font-feature-settings: "ss01" on, "cv01" on;
 }
 
+html[data-theme="light"] body {
+  background:
+    radial-gradient(circle at top left, rgba(31, 143, 99, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(55, 197, 133, 0.08), transparent 20%),
+    linear-gradient(180deg, #f4fbf6 0%, #eef7f1 45%, #e7f2ea 100%);
+}
+
 html[data-theme="dark"] body {
   background:
-    radial-gradient(circle at top left, rgba(196, 138, 87, 0.12), transparent 24%),
-    radial-gradient(circle at top right, rgba(141, 168, 141, 0.09), transparent 22%),
-    linear-gradient(180deg, #09111f 0%, #0d1627 35%, #111b2d 100%);
+    radial-gradient(circle at top left, rgba(55, 197, 133, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(18, 87, 59, 0.22), transparent 22%),
+    linear-gradient(180deg, #06110c 0%, #08150f 42%, #0b1812 100%);
 }
 
 a {
@@ -83,7 +102,7 @@ select {
 
 @layer base {
   ::selection {
-    background: rgba(196, 138, 87, 0.22);
+    background: rgba(55, 197, 133, 0.22);
     color: var(--color-text-main);
   }
 
@@ -91,10 +110,10 @@ select {
   textarea:focus,
   select:focus {
     outline: none;
-    border-color: rgba(54, 90, 132, 0.38);
+    border-color: rgba(55, 197, 133, 0.42);
     box-shadow:
-      0 0 0 1px rgba(54, 90, 132, 0.26),
-      0 0 0 6px rgba(196, 138, 87, 0.08);
+      0 0 0 1px rgba(55, 197, 133, 0.28),
+      0 0 0 6px rgba(55, 197, 133, 0.1);
   }
 }
 
@@ -102,7 +121,7 @@ select {
   .vant-card {
     @apply rounded-2xl border shadow-lg backdrop-blur;
     border-color: var(--color-border-soft);
-    background: color-mix(in srgb, var(--color-bg-soft) 92%, transparent);
+    background: color-mix(in srgb, var(--color-bg-soft) 94%, transparent);
   }
 
   .vant-card-hover {
@@ -112,32 +131,32 @@ select {
   .vant-card-hover:hover {
     filter: brightness(1.03);
     box-shadow:
-      0 20px 44px rgba(22, 32, 51, 0.1),
-      0 0 0 1px rgba(33, 58, 90, 0.08);
+      0 20px 44px rgba(0, 0, 0, 0.24),
+      0 0 0 1px rgba(55, 197, 133, 0.1);
   }
 
   .vant-glass {
     @apply border backdrop-blur;
     border-color: var(--color-border-soft);
-    background: var(--color-bg-soft);
-    box-shadow: 0 18px 55px rgba(22, 32, 51, 0.1);
+    background: color-mix(in srgb, var(--color-bg-soft) 92%, transparent);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
   }
 
   .vant-btn {
     @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium shadow-lg transition duration-200;
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     box-shadow:
-      0 0 0 1px rgba(33, 58, 90, 0.18),
-      0 16px 40px rgba(33, 58, 90, 0.16);
-    color: #fefcf8;
+      0 0 0 1px rgba(55, 197, 133, 0.2),
+      0 16px 40px rgba(10, 74, 49, 0.34);
+    color: #f4fff7;
   }
 
   .vant-btn:hover {
     filter: brightness(1.05);
     box-shadow:
-      0 0 0 1px rgba(33, 58, 90, 0.24),
-      0 20px 44px rgba(33, 58, 90, 0.2),
-      0 0 24px rgba(196, 138, 87, 0.12);
+      0 0 0 1px rgba(55, 197, 133, 0.28),
+      0 20px 44px rgba(10, 74, 49, 0.42),
+      0 0 24px rgba(55, 197, 133, 0.14);
   }
 
   .vant-btn:disabled {
@@ -150,21 +169,21 @@ select {
   .vant-btn-secondary {
     @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium shadow-lg transition duration-200 backdrop-blur;
     color: var(--color-text-main);
-    background: var(--color-bg-soft);
+    background: color-mix(in srgb, var(--color-bg-soft) 96%, transparent);
     border: 1px solid var(--color-border-soft);
   }
 
   .vant-btn-secondary:hover {
     filter: brightness(1.06);
     box-shadow:
-      0 16px 34px rgba(22, 32, 51, 0.14),
-      0 0 20px rgba(196, 138, 87, 0.06);
+      0 16px 34px rgba(0, 0, 0, 0.24),
+      0 0 20px rgba(55, 197, 133, 0.08);
   }
 
   .vant-input {
     @apply w-full rounded-2xl border bg-transparent px-4 py-3 shadow-lg backdrop-blur;
     border-color: var(--color-border-soft);
-    background-color: var(--color-bg-soft);
+    background-color: color-mix(in srgb, var(--color-bg-soft) 97%, transparent);
     color: var(--color-text-main);
   }
 
@@ -173,9 +192,14 @@ select {
   }
 }
 
+.site-shell-header {
+  background: color-mix(in srgb, var(--color-bg-primary) 82%, transparent);
+  border-color: var(--color-border-soft);
+}
+
 html[data-theme="light"] .site-shell-header {
-  background: rgba(255, 253, 248, 0.88);
-  border-color: rgba(22, 32, 51, 0.08);
+  background: rgba(244, 251, 246, 0.9);
+  border-color: rgba(16, 33, 23, 0.08);
 }
 
 html[data-theme="light"] .dashboard-shell,
@@ -183,7 +207,7 @@ html[data-theme="light"] .dashboard-main,
 html[data-theme="light"] .dashboard-sidebar,
 html[data-theme="light"] .dashboard-empty,
 html[data-theme="light"] .dashboard-alert-hero {
-  background: #fffdf8 !important;
+  background: #f4fbf6 !important;
 }
 
 html[data-theme="light"] .dashboard-shell,
@@ -191,15 +215,15 @@ html[data-theme="light"] .dashboard-sidebar,
 html[data-theme="light"] .dashboard-main,
 html[data-theme="light"] .dashboard-empty,
 html[data-theme="light"] .dashboard-alert-hero {
-  border-color: rgba(22, 32, 51, 0.08) !important;
-  box-shadow: 0 18px 55px rgba(22, 32, 51, 0.08) !important;
+  border-color: rgba(16, 33, 23, 0.08) !important;
+  box-shadow: 0 18px 55px rgba(16, 33, 23, 0.08) !important;
 }
 
 html[data-theme="light"] .dashboard-sidebar,
 html[data-theme="light"] .dashboard-main {
   background-image:
-    radial-gradient(circle at top right, rgba(196, 138, 87, 0.08), transparent 18%),
-    linear-gradient(180deg, #fffdf8 0%, #fbf7f1 100%) !important;
+    radial-gradient(circle at top right, rgba(31, 143, 99, 0.07), transparent 18%),
+    linear-gradient(180deg, #f4fbf6 0%, #eef7f1 100%) !important;
 }
 
 html[data-theme="light"] .dashboard-shell .text-white,

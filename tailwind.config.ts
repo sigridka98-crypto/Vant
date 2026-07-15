@@ -4,23 +4,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#00E6A8",
-        "primary-dark": "#00BFA6",
-        "bg-primary": "#020617",
-        "bg-secondary": "#0B1220",
-        "bg-soft": "#111827",
-        "text-main": "#FFFFFF",
-        "text-secondary": "#9CA3AF",
-        "text-muted": "#6B7280",
-        "border-soft": "rgba(255,255,255,0.08)"
+        primary: "#37C585",
+        "primary-dark": "#1F8F63",
+        "bg-primary": "#06110C",
+        "bg-secondary": "#0B1812",
+        "bg-soft": "#102119",
+        "text-main": "#F5FBF7",
+        "text-secondary": "#A9BEB2",
+        "text-muted": "#759184",
+        "border-soft": "rgba(171,209,188,0.14)"
       },
       borderRadius: {
         "2xl": "1rem"
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(0,230,168,0.16), 0 16px 40px rgba(0,230,168,0.18)",
-        "glow-soft": "0 10px 30px rgba(0,230,168,0.12)",
-        glass: "0 18px 55px rgba(2, 6, 23, 0.35)"
+        glow: "0 0 0 1px rgba(55,197,133,0.2), 0 16px 40px rgba(10,74,49,0.34)",
+        "glow-soft": "0 10px 30px rgba(55,197,133,0.14)",
+        glass: "0 18px 55px rgba(0, 0, 0, 0.28)"
       }
     }
   }
