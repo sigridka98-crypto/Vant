@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import {
   ArrowRight,
   BookOpen,
@@ -72,7 +72,7 @@ function PhoneMockupLeft() {
             {["Prize Update", "Lottery Update", "Fake Job Offer", "Phishing Email", "Social Media Update"].map((item) => (
               <div key={item} className="flex items-center justify-between rounded-xl border border-[#ece3d7] bg-[#fffaf3] px-3 py-2 dark:border-white/8 dark:bg-white/5">
                 <span>{item}</span>
-                <span className="text-[#8da88d] dark:text-emerald-300">✓</span>
+                <span className="text-[#8da88d] dark:text-emerald-300">?</span>
               </div>
             ))}
           </div>
@@ -180,16 +180,16 @@ export default async function HomePage() {
 
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/login"
-              className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-            >
-              Log In
-            </Link>
-            <Link
               href="/dashboard"
               className="rounded-2xl bg-gradient-to-r from-[#213a5a] to-[#365a84] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
             >
-              Get Started
+              Open App
+            </Link>
+            <Link
+              href="/wallet"
+              className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+            >
+              Buy Coins
             </Link>
           </div>
         </div>
@@ -339,3 +339,4 @@ export default async function HomePage() {
     </main>
   );
 }
+

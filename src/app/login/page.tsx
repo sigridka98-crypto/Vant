@@ -1,7 +1,7 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { signIn, signUp } from "@/app/login/actions";
+import { signIn } from "@/app/login/actions";
 import { getAuthContext } from "@/lib/auth";
 
 type LoginPageProps = {
@@ -13,22 +13,22 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const errorMessage = params.error?.trim();
   const successMessage = params.message?.trim();
 
-  if (auth.user) {
-    redirect("/dashboard");
+  if (auth.user && auth.profile?.role === "admin") {
+    redirect("/admin");
   }
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-88px)] w-full max-w-6xl items-center px-6 py-10">
+    <main className="mx-auto flex min-h-[calc(100vh-88px)] w-full max-w-5xl items-center px-6 py-10">
       <section className="vant-glass grid w-full gap-8 rounded-[36px] p-8 md:grid-cols-2 md:p-10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Authentication</p>
-          <h1 className="mt-4 text-4xl font-semibold text-text-main">Sign in, create an account, or continue as guest</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin access</p>
+          <h1 className="mt-4 text-4xl font-semibold text-text-main">Only admins sign in here</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-text-secondary">
-            You can open the app right away as a guest, then sign in later whenever you want wallet history, saved cards, and personal access features.
+            Regular users do not need an account to open GetUpdated right now. This page is only for admins who manage templates, pricing, and publishing.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/dashboard" className="vant-btn">
-              Continue as guest
+              Open app
             </Link>
             <Link href="/" className="vant-btn-secondary">
               Back home
@@ -51,46 +51,27 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <form action={signIn} className="vant-card rounded-[28px] p-6">
             <div className="space-y-4">
               <label className="block">
-                <span className="mb-2 block text-sm text-text-secondary">Email</span>
-                <input name="email" type="email" className="vant-input" placeholder="you@example.com" required />
+                <span className="mb-2 block text-sm text-text-secondary">Admin email or phone number</span>
+                <input
+                  name="identifier"
+                  type="text"
+                  className="vant-input"
+                  placeholder="admin@example.com or +2348012345678"
+                  required
+                />
               </label>
               <label className="block">
                 <span className="mb-2 block text-sm text-text-secondary">Password</span>
-                <input name="password" type="password" className="vant-input" placeholder="Enter your password" required />
+                <input name="password" type="password" className="vant-input" placeholder="Enter admin password" required />
               </label>
             </div>
 
             <button type="submit" className="vant-btn mt-6 w-full">
-              Sign in
+              Open admin panel
             </button>
-          </form>
-
-          <form action={signUp} className="vant-card rounded-[28px] p-6">
-            <div className="space-y-4">
-              <label className="block">
-                <span className="mb-2 block text-sm text-text-secondary">Full name</span>
-                <input name="fullName" type="text" className="vant-input" placeholder="Your name" required />
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-sm text-text-secondary">Email</span>
-                <input name="email" type="email" className="vant-input" placeholder="you@example.com" required />
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-sm text-text-secondary">Password</span>
-                <input
-                  name="password"
-                  type="password"
-                  className="vant-input"
-                  placeholder="At least 6 characters"
-                  minLength={6}
-                  required
-                />
-              </label>
-            </div>
-
-            <button type="submit" className="vant-btn-secondary mt-6 w-full">
-              Create account
-            </button>
+            <p className="mt-3 text-xs leading-6 text-text-secondary">
+              If you are not an admin, go back and open the app directly. User browsing does not require login.
+            </p>
           </form>
         </div>
       </section>

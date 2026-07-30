@@ -1,13 +1,9 @@
-﻿"use server";
+"use server";
 
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
-import { isSupabaseServiceConfigured } from "@/lib/env";
-import {
-  createSupabaseServerClient,
-  createSupabaseServiceClient
-} from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function normalizeAuthError(error: unknown, fallback: string) {
   if (typeof error === "string") {
@@ -53,77 +49,25 @@ function normalizeAuthError(error: unknown, fallback: string) {
   return fallback;
 }
 
-async function confirmUserEmailIfNeeded(email: string) {
-  if (!isSupabaseServiceConfigured()) {
-    return { ok: false, message: "SUPABASE_SERVICE_ROLE_KEY is not configured on the deployed app yet." };
-  }
+function normalizeAuthIdentifier(value: string) {
+  return value.trim();
+}
 
-  const serviceSupabase = createSupabaseServiceClient();
-  const { data, error } = await serviceSupabase.auth.admin.listUsers();
-
-  if (error) {
-    return {
-      ok: false,
-      message: normalizeAuthError(error, "Unable to inspect this account right now.")
-    };
-  }
-
-  const existingUser = data.users.find(
-    (item) => item.email?.toLowerCase() === email.toLowerCase()
-  );
-
-  if (!existingUser) {
-    return {
-      ok: false,
-      message: "We could not find an account with that email address."
-    };
-  }
-
-  const { error: updateError } = await serviceSupabase.auth.admin.updateUserById(
-    existingUser.id,
-    {
-      email_confirm: true
-    }
-  );
-
-  if (updateError) {
-    return {
-      ok: false,
-      message: normalizeAuthError(updateError, "Unable to confirm this account yet.")
-    };
-  }
-
-  return { ok: true, message: "" };
+function isPhoneIdentifier(value: string) {
+  return /^\+?[0-9()\-\s]{7,20}$/.test(value.trim());
 }
 
 export async function signIn(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim();
+  const identifier = normalizeAuthIdentifier(String(formData.get("identifier") ?? ""));
   const password = String(formData.get("password") ?? "").trim();
   const supabase = await createSupabaseServerClient();
 
   try {
-    let { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+    const credentials = isPhoneIdentifier(identifier)
+      ? { phone: identifier, password }
+      : { email: identifier, password };
 
-    if (error && normalizeAuthError(error, "").toLowerCase().includes("email not confirmed")) {
-      const confirmResult = await confirmUserEmailIfNeeded(email);
-
-      if (!confirmResult.ok) {
-        redirect(
-          `/login?error=${encodeURIComponent(
-            confirmResult.message || "This account still needs email confirmation before it can sign in."
-          )}`
-        );
-      }
-
-      const retry = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      error = retry.error;
-    }
+    const { error } = await supabase.auth.signInWithPassword(credentials);
 
     if (error) {
       redirect(
@@ -131,6 +75,25 @@ export async function signIn(formData: FormData) {
           normalizeAuthError(error, "Unable to sign in right now. Please try again.")
         )}`
       );
+    }
+
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      redirect("/login?error=Unable to confirm this admin session right now.");
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile?.role !== "admin") {
+      await supabase.auth.signOut();
+      redirect("/login?error=Only admins can sign in here. Users can open the app directly without logging in.");
     }
   } catch (error) {
     if (isRedirectError(error)) {
@@ -144,46 +107,7 @@ export async function signIn(formData: FormData) {
     );
   }
 
-  redirect("/dashboard");
-}
-
-export async function signUp(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim();
-  const password = String(formData.get("password") ?? "").trim();
-  const fullName = String(formData.get("fullName") ?? "").trim();
-  const supabase = await createSupabaseServerClient();
-
-  try {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName
-        }
-      }
-    });
-
-    if (error) {
-      redirect(
-        `/login?error=${encodeURIComponent(
-          normalizeAuthError(error, "Unable to create your account right now. Please try again.")
-        )}`
-      );
-    }
-  } catch (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    }
-
-    redirect(
-      `/login?error=${encodeURIComponent(
-        normalizeAuthError(error, "Unable to create your account right now. Please try again.")
-      )}`
-    );
-  }
-
-  redirect("/login?message=Account created successfully. You can sign in now.");
+  redirect("/admin");
 }
 
 export async function signOut() {
