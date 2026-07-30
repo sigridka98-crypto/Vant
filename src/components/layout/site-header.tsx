@@ -99,7 +99,7 @@ export async function SiteHeader() {
                 Open app
               </Link>
               <Link href="/login" className="vant-btn-secondary px-4 py-2 text-sm">
-                Admin login
+                Sign in
               </Link>
             </div>
           )}
@@ -108,5 +108,6 @@ export async function SiteHeader() {
     </header>
   );
 }
+
 
 

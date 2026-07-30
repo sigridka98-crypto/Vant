@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
+import { getBootstrapAdminEmails } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function normalizeAuthError(error: unknown, fallback: string) {
@@ -57,9 +58,39 @@ function isPhoneIdentifier(value: string) {
   return /^\+?[0-9()\-\s]{7,20}$/.test(value.trim());
 }
 
+function getNextPath(formData: FormData) {
+  const next = String(formData.get("next") ?? "").trim();
+  return next.startsWith("/") ? next : "/dashboard";
+}
+
+async function resolvePostAuthRedirect(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, fallback: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return fallback;
+  }
+
+  const adminEmails = getBootstrapAdminEmails();
+  const isBootstrapAdmin = user.email ? adminEmails.includes(user.email.toLowerCase()) : false;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (isBootstrapAdmin || profile?.role === "admin") {
+    return "/admin";
+  }
+
+  return fallback;
+}
+
 export async function signIn(formData: FormData) {
   const identifier = normalizeAuthIdentifier(String(formData.get("identifier") ?? ""));
   const password = String(formData.get("password") ?? "").trim();
+  const next = getNextPath(formData);
   const supabase = await createSupabaseServerClient();
 
   try {
@@ -73,27 +104,8 @@ export async function signIn(formData: FormData) {
       redirect(
         `/login?error=${encodeURIComponent(
           normalizeAuthError(error, "Unable to sign in right now. Please try again.")
-        )}`
+        )}&next=${encodeURIComponent(next)}`
       );
-    }
-
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      redirect("/login?error=Unable to confirm this admin session right now.");
-    }
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    if (profile?.role !== "admin") {
-      await supabase.auth.signOut();
-      redirect("/login?error=Only admins can sign in here. Users can open the app directly without logging in.");
     }
   } catch (error) {
     if (isRedirectError(error)) {
@@ -103,11 +115,63 @@ export async function signIn(formData: FormData) {
     redirect(
       `/login?error=${encodeURIComponent(
         normalizeAuthError(error, "Unable to sign in right now. Please try again.")
-      )}`
+      )}&next=${encodeURIComponent(next)}`
     );
   }
 
-  redirect("/admin");
+  redirect(await resolvePostAuthRedirect(supabase, next));
+}
+
+export async function signUp(formData: FormData) {
+  const identifier = normalizeAuthIdentifier(String(formData.get("identifier") ?? ""));
+  const password = String(formData.get("password") ?? "").trim();
+  const fullName = String(formData.get("fullName") ?? "").trim();
+  const next = getNextPath(formData);
+  const supabase = await createSupabaseServerClient();
+
+  try {
+    const credentials = isPhoneIdentifier(identifier)
+      ? {
+          phone: identifier,
+          password,
+          options: {
+            data: {
+              full_name: fullName
+            }
+          }
+        }
+      : {
+          email: identifier,
+          password,
+          options: {
+            data: {
+              full_name: fullName
+            }
+          }
+        };
+
+    const { error } = await supabase.auth.signUp(credentials);
+
+    if (error) {
+      redirect(
+        `/login?error=${encodeURIComponent(
+          normalizeAuthError(error, "Unable to create your account right now. Please try again.")
+        )}&next=${encodeURIComponent(next)}`
+      );
+    }
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    redirect(
+      `/login?error=${encodeURIComponent(
+        normalizeAuthError(error, "Unable to create your account right now. Please try again.")
+      )}&next=${encodeURIComponent(next)}`
+    );
+  }
+
+  redirect(await resolvePostAuthRedirect(supabase, next));
 }
 
 export async function signOut() {
