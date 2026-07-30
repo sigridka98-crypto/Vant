@@ -2,29 +2,29 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #00E09B;
-  --color-primary-hover: #00BFA6;
-  --color-primary-dark: #00BFA6;
-  --color-bg-primary: #0F172A;
-  --color-bg-secondary: #101B31;
-  --color-bg-soft: #111C33;
-  --color-bg-input: #0D1628;
-  --color-bg-hover: #16243B;
-  --color-bg-active: #1D2D46;
+  --color-primary: #1EF2C3;
+  --color-primary-hover: #0BC5A4;
+  --color-primary-dark: #0BC5A4;
+  --color-bg-primary: #061220;
+  --color-bg-secondary: #0A1830;
+  --color-bg-soft: #0F203C;
+  --color-bg-input: #0B1930;
+  --color-bg-hover: #133054;
+  --color-bg-active: #173960;
   --color-text-main: #FFFFFF;
-  --color-text-secondary: #CBD5E1;
-  --color-text-muted: #64748B;
-  --color-text-disabled: #475569;
-  --color-border-soft: #22314A;
-  --color-border-strong: #334155;
-  --background: radial-gradient(circle at top left, rgb(0 224 155 / 0.08), transparent 24%), radial-gradient(circle at top right, rgb(0 191 166 / 0.07), transparent 20%), var(--color-bg-primary);
+  --color-text-secondary: #E7F3FF;
+  --color-text-muted: #AFC4DE;
+  --color-text-disabled: #7391B3;
+  --color-border-soft: #1F3B60;
+  --color-border-strong: #2C537F;
+  --background: radial-gradient(circle at top left, rgb(30 242 195 / 0.10), transparent 24%), radial-gradient(circle at top right, rgb(11 197 164 / 0.09), transparent 20%), var(--color-bg-primary);
   --foreground: var(--color-text-main);
 }
 
 html[data-theme="light"] {
-  --color-primary: #00E09B;
-  --color-primary-hover: #00BFA6;
-  --color-primary-dark: #00BFA6;
+  --color-primary: #1EF2C3;
+  --color-primary-hover: #0BC5A4;
+  --color-primary-dark: #0BC5A4;
   --color-bg-primary: #f5f7f6;
   --color-bg-secondary: #eef2ef;
   --color-bg-soft: #ffffff;
@@ -33,28 +33,28 @@ html[data-theme="light"] {
   --color-bg-active: #dde2e8;
   --color-text-main: #18181b;
   --color-text-secondary: #52525b;
-  --color-text-muted: #64748B;
+  --color-text-muted: #AFC4DE;
   --color-text-disabled: #a1a1aa;
   --color-border-soft: #d4d4d8;
   --color-border-strong: #c4c8d0;
 }
 
 html[data-theme="dark"] {
-  --color-primary: #00E09B;
-  --color-primary-hover: #00BFA6;
-  --color-primary-dark: #00BFA6;
-  --color-bg-primary: #0F172A;
-  --color-bg-secondary: #101B31;
-  --color-bg-soft: #111C33;
-  --color-bg-input: #0D1628;
-  --color-bg-hover: #16243B;
-  --color-bg-active: #1D2D46;
+  --color-primary: #1EF2C3;
+  --color-primary-hover: #0BC5A4;
+  --color-primary-dark: #0BC5A4;
+  --color-bg-primary: #061220;
+  --color-bg-secondary: #0A1830;
+  --color-bg-soft: #0F203C;
+  --color-bg-input: #0B1930;
+  --color-bg-hover: #133054;
+  --color-bg-active: #173960;
   --color-text-main: #FFFFFF;
-  --color-text-secondary: #CBD5E1;
-  --color-text-muted: #64748B;
-  --color-text-disabled: #475569;
-  --color-border-soft: #22314A;
-  --color-border-strong: #334155;
+  --color-text-secondary: #E7F3FF;
+  --color-text-muted: #AFC4DE;
+  --color-text-disabled: #7391B3;
+  --color-border-soft: #1F3B60;
+  --color-border-strong: #2C537F;
 }
 
 @theme inline {
@@ -79,7 +79,7 @@ html {
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top left, rgb(0 224 155 / 0.08), transparent 24%), radial-gradient(circle at top right, rgb(0 191 166 / 0.07), transparent 20%), var(--color-bg-primary);
+  background: radial-gradient(circle at top left, rgb(30 242 195 / 0.10), transparent 24%), radial-gradient(circle at top right, rgb(11 197 164 / 0.09), transparent 20%), var(--color-bg-primary);
   color: var(--foreground);
   font-feature-settings: "ss01" on, "cv01" on;
 }
@@ -103,7 +103,7 @@ select {
 
 @layer base {
   ::selection {
-    background: rgb(0 224 155 / 0.2);
+    background: rgb(30 242 195 / 0.22);
     color: var(--color-text-main);
   }
 
@@ -111,10 +111,10 @@ select {
   textarea:focus,
   select:focus {
     outline: none;
-    border-color: rgb(0 224 155);
+    border-color: rgb(30 242 195);
     box-shadow:
-      0 0 0 1px rgb(0 224 155),
-      0 0 0 6px rgb(0 224 155 / 0.12);
+      0 0 0 1px rgb(30 242 195),
+      0 0 0 6px rgb(30 242 195 / 0.16);
   }
 }
 
@@ -144,13 +144,13 @@ select {
 
   .vant-btn {
     @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium shadow-lg transition duration-200;
-    background: #00E09B;
-    color: #071A17;
+    background: #1EF2C3;
+    color: #041311;
     box-shadow: 0 10px 22px rgb(0 0 0 / 0.2);
   }
 
   .vant-btn:hover {
-    background: #00BFA6;
+    background: #0BC5A4;
     box-shadow: 0 10px 22px rgb(0 0 0 / 0.2);
   }
 
@@ -240,7 +240,7 @@ aside {
 }
 
 .text-primary {
-  color: rgb(52 211 153) !important;
+  color: rgb(30 242 195) !important;
 }
 
 .border-white\/10,
@@ -326,27 +326,27 @@ aside {
 
 .bg-cyan-400\/15,
 .bg-blue-500\/10 {
-  background: rgb(96 165 250 / 0.1) !important;
+  background: rgb(30 242 195 / 0.1) !important;
 }
 
 .text-cyan-100,
 .text-blue-400 {
-  color: rgb(96 165 250) !important;
+  color: rgb(200 255 240) !important;
 }
 
 .bg-fuchsia-400\/15,
 .bg-emerald-500\/10 {
-  background: rgb(16 185 129 / 0.1) !important;
+  background: rgb(30 242 195 / 0.1) !important;
 }
 
 .text-fuchsia-100,
 .text-emerald-400 {
-  color: rgb(52 211 153) !important;
+  color: rgb(30 242 195) !important;
 }
 
 .bg-emerald-400\/15,
 .bg-green-500\/10 {
-  background: rgb(74 222 128 / 0.1) !important;
+  background: rgb(11 197 164 / 0.12) !important;
 }
 
 .text-emerald-200,
@@ -392,4 +392,6 @@ aside {
 .shadow-glow-soft {
   box-shadow: 0 10px 22px rgb(0 0 0 / 0.2) !important;
 }
+
+
 

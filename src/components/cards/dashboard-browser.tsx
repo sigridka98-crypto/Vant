@@ -108,7 +108,7 @@ function EmptyResults({
   hasAnyCards: boolean;
 }) {
   return (
-    <section className="dashboard-empty rounded-[32px] border border-dashed border-[#22314A] bg-[#0D1628] p-8">
+    <section className="dashboard-empty rounded-[32px] border border-dashed border-[#1F3B60] bg-[#0B1930] p-8">
       <div>
         <p className="text-lg font-medium text-[#FFFFFF]">
           {hasAnyCards
@@ -117,7 +117,7 @@ function EmptyResults({
               ? "No update cards have been published yet."
               : "No locally published update cards yet."}
         </p>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-[#CBD5E1]">
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[#E7F3FF]">
           {hasAnyCards
             ? "Try another update type, category, or access filter."
             : "When the admin creates and publishes the first update card, it will appear here automatically."}
@@ -217,36 +217,36 @@ export function DashboardBrowser({
       value: `${balance}`,
       meta: "Ready for new premium lessons",
       icon: Coins,
-      accent: "border-[#00E09B]/20 bg-[#00E09B]/10"
+      accent: "border-[#1EF2C3]/20 bg-[#1EF2C3]/10"
     },
     {
       label: "Free Templates Used",
       value: `${freeTemplatesUsed}/5`,
       meta: `${statusCounts.free} free lessons published`,
       icon: FolderKanban,
-      accent: "border-[#22314A] bg-[#0D1628]"
+      accent: "border-[#1F3B60] bg-[#0B1930]"
     },
     {
       label: "Updates Learned",
       value: `${accessibleCards}`,
       meta: "Cards currently open in your library",
       icon: GraduationCap,
-      accent: "border-[#22314A] bg-[#0D1628]"
+      accent: "border-[#1F3B60] bg-[#0B1930]"
     },
     {
       label: "Wallet Balance",
       value: `${balance} coins`,
       meta: premiumLockedCount ? `Average premium card: ${premiumCreditAverage} credits` : "Top up when you are ready",
       icon: Wallet2,
-      accent: "border-[#22314A] bg-[#0D1628]"
+      accent: "border-[#1F3B60] bg-[#0B1930]"
     }
   ];
 
   return (
     <section className="dashboard-shell vant-glass overflow-hidden rounded-[34px] bg-bg-primary shadow-lg shadow-black/20">
       <div className="grid min-h-[calc(100vh-150px)] lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="dashboard-sidebar border-b border-[#22314A] bg-[#101B31] p-6 lg:border-b-0 lg:border-r">
-          <div className="vant-card rounded-[28px] border border-[#00E09B]/20 bg-[#00E09B]/10 p-5 shadow-lg shadow-black/20">
+        <aside className="dashboard-sidebar border-b border-[#1F3B60] bg-[#0A1830] p-6 lg:border-b-0 lg:border-r">
+          <div className="vant-card rounded-[28px] border border-[#1EF2C3]/20 bg-[#1EF2C3]/10 p-5 shadow-lg shadow-black/20">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">GetUpdated Workspace</p>
             <h2 className="mt-3 text-2xl font-semibold text-text-main">Stay one step ahead of online updates</h2>
             <p className="mt-3 text-sm leading-6 text-text-secondary">
@@ -263,20 +263,20 @@ export function DashboardBrowser({
                   key={item.label}
                   href={item.href}
                   className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition ${
-                    pathname === item.href ? "border-[#334155] bg-[#1D2D46] text-[#FFFFFF]"
-                      : "border border-transparent text-[#CBD5E1] hover:border-[#22314A] hover:bg-[#16243B] hover:text-white"
+                    pathname === item.href ? "border-[#2C537F] bg-[#173960] text-[#FFFFFF]"
+                      : "border border-transparent text-[#E7F3FF] hover:border-[#1F3B60] hover:bg-[#133054] hover:text-white"
                   }`}
                 >
-                  <Icon className={`h-4 w-4 ${pathname === item.href ? "text-[#00E09B]" : "text-[#64748B]"}`} />
+                  <Icon className={`h-4 w-4 ${pathname === item.href ? "text-[#1EF2C3]" : "text-[#AFC4DE]"}`} />
                   {item.label}
                 </Link>
               );
             })}
           </nav>
 
-          <div className="vant-card mt-8 rounded-[28px] border border-[#22314A] bg-[#111C33] p-5">
+          <div className="vant-card mt-8 rounded-[28px] border border-[#1F3B60] bg-[#0F203C] p-5">
             <div className="flex items-center gap-3">
-              <span className="vant-glass rounded-2xl border border-[#00E09B]/20 bg-[#00E09B]/10 p-3 text-[#00E09B]">
+              <span className="vant-glass rounded-2xl border border-[#1EF2C3]/20 bg-[#1EF2C3]/10 p-3 text-[#1EF2C3]">
                 <Gem className="h-5 w-5" />
               </span>
               <div>
@@ -287,8 +287,8 @@ export function DashboardBrowser({
           </div>
         </aside>
 
-        <div className="dashboard-main bg-[#0f1115]">
-          <header className="border-b border-[#22314A] px-5 py-5 md:px-8">
+        <div className="dashboard-main bg-[#061220]">
+          <header className="border-b border-[#1F3B60] px-5 py-5 md:px-8">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Dashboard</p>
@@ -308,7 +308,7 @@ export function DashboardBrowser({
                   <span className="relative inline-flex">
                     <Bell className="h-5 w-5" />
                     {unseenAlertCount ? (
-                      <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#00E09B] px-1 text-[10px] font-semibold text-[#071A17]">
+                      <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#1EF2C3] px-1 text-[10px] font-semibold text-[#041311]">
                         {Math.min(unseenAlertCount, 9)}
                       </span>
                     ) : null}
@@ -324,8 +324,8 @@ export function DashboardBrowser({
                     </span>
                   </span>
                 </Link>
-                <div className="vant-card flex items-center gap-3 rounded-[22px] border border-[#22314A] bg-[#111C33] px-3 py-2 shadow-lg shadow-black/20">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#00E09B]/10 text-sm font-semibold text-[#7FF2D2]">
+                <div className="vant-card flex items-center gap-3 rounded-[22px] border border-[#1F3B60] bg-[#0F203C] px-3 py-2 shadow-lg shadow-black/20">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#1EF2C3]/10 text-sm font-semibold text-[#C8FFF0]">
                     {initialsForName(userName)}
                   </div>
                   <div>
@@ -340,11 +340,11 @@ export function DashboardBrowser({
           <div className="grid gap-6 p-5 md:p-8 2xl:grid-cols-[minmax(0,1fr)_320px]">
             <div className="space-y-6">
               {alertCards.length ? (
-                <section className="dashboard-alert-hero relative overflow-hidden rounded-[32px] border border-[#22314A] bg-[#101B31] p-6 shadow-lg shadow-black/20">
-                  <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-[#00E09B]/10 blur-3xl" />
+                <section className="dashboard-alert-hero relative overflow-hidden rounded-[32px] border border-[#1F3B60] bg-[#0A1830] p-6 shadow-lg shadow-black/20">
+                  <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-[#1EF2C3]/10 blur-3xl" />
                   <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div className="max-w-3xl">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7FF2D2]/80">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#C8FFF0]/80">
                         Active Update Alerts
                       </p>
                       <h2 className="mt-3 text-3xl font-semibold text-text-main">
@@ -353,7 +353,7 @@ export function DashboardBrowser({
                       <p className="mt-3 text-sm leading-6 text-text-secondary">
                         New update alerts, trending patterns, and the most reported topics are pushed to the top here so users can stay current quickly.
                       </p>
-                      <p className="mt-3 text-sm font-medium text-[#7FF2D2]">
+                      <p className="mt-3 text-sm font-medium text-[#C8FFF0]">
                         {unseenAlertCount
                           ? `${unseenAlertCount} unseen update${unseenAlertCount === 1 ? "" : "s"} waiting for review.`
                           : "You are caught up on the current update queue."}
@@ -371,7 +371,7 @@ export function DashboardBrowser({
                       <Link
                         key={card.id}
                         href={`/cards/${card.slug}`}
-                        className="vant-card vant-card-hover rounded-[26px] border border-[#22314A] bg-[#111C33] p-5"
+                        className="vant-card vant-card-hover rounded-[26px] border border-[#1F3B60] bg-[#0F203C] p-5"
                       >
                         <div className="flex flex-wrap gap-2">
                           {card.isMostReported ? (
@@ -385,7 +385,7 @@ export function DashboardBrowser({
                             </span>
                           ) : null}
                           {card.isNewAlert ? (
-                            <span className="rounded-full border border-[#00E09B]/20 bg-[#00E09B]/10 px-3 py-1 text-xs font-semibold text-[#00E09B]">
+                            <span className="rounded-full border border-[#1EF2C3]/20 bg-[#1EF2C3]/10 px-3 py-1 text-xs font-semibold text-[#1EF2C3]">
                               New Update Alert
                             </span>
                           ) : null}
@@ -415,7 +415,7 @@ export function DashboardBrowser({
                           <p className="text-sm text-text-secondary">{item.label}</p>
                           <p className="mt-4 text-3xl font-semibold text-text-main">{item.value}</p>
                         </div>
-                        <span className="vant-glass rounded-2xl border border-[#22314A] bg-[#101B31] p-3 text-[#00E09B]">
+                        <span className="vant-glass rounded-2xl border border-[#1F3B60] bg-[#0A1830] p-3 text-[#1EF2C3]">
                           <Icon className="h-5 w-5" />
                         </span>
                       </div>
@@ -425,7 +425,7 @@ export function DashboardBrowser({
                 })}
               </section>
 
-              <section className="vant-card rounded-[30px] border border-[#22314A] bg-[#111C33] p-5 shadow-lg shadow-black/20 md:p-6">
+              <section className="vant-card rounded-[30px] border border-[#1F3B60] bg-[#0F203C] p-5 shadow-lg shadow-black/20 md:p-6">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Update Library</p>
@@ -471,8 +471,8 @@ export function DashboardBrowser({
                         onClick={() => setScamFocus(option.id)}
                         className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                           active
-                            ? "border-[#00E09B]/20 bg-[#00E09B]/10 text-[#FFFFFF]"
-                            : "border-[#22314A] bg-[#0D1628] text-[#CBD5E1] hover:bg-[#16243B] hover:text-[#FFFFFF]"
+                            ? "border-[#1EF2C3]/20 bg-[#1EF2C3]/10 text-[#FFFFFF]"
+                            : "border-[#1F3B60] bg-[#0B1930] text-[#E7F3FF] hover:bg-[#133054] hover:text-[#FFFFFF]"
                         }`}
                       >
                         <ShieldAlert className="h-4 w-4" />
@@ -488,8 +488,8 @@ export function DashboardBrowser({
                     onClick={() => setCategory("all")}
                     className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                       category === "all"
-                        ? "border-[#00E09B]/20 bg-[#00E09B]/10 text-[#FFFFFF]"
-                        : "border-[#22314A] bg-[#0D1628] text-[#CBD5E1] hover:bg-[#16243B] hover:text-[#FFFFFF]"
+                        ? "border-[#1EF2C3]/20 bg-[#1EF2C3]/10 text-[#FFFFFF]"
+                        : "border-[#1F3B60] bg-[#0B1930] text-[#E7F3FF] hover:bg-[#133054] hover:text-[#FFFFFF]"
                     }`}
                   >
                     <FolderKanban className="h-4 w-4" />
@@ -502,8 +502,8 @@ export function DashboardBrowser({
                       onClick={() => setCategory(item)}
                       className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                         category === item
-                          ? "border-[#00E09B]/20 bg-[#00E09B]/10 text-[#FFFFFF]"
-                          : "border-[#22314A] bg-[#0D1628] text-[#CBD5E1] hover:bg-[#16243B] hover:text-[#FFFFFF]"
+                          ? "border-[#1EF2C3]/20 bg-[#1EF2C3]/10 text-[#FFFFFF]"
+                          : "border-[#1F3B60] bg-[#0B1930] text-[#E7F3FF] hover:bg-[#133054] hover:text-[#FFFFFF]"
                       }`}
                     >
                       <FolderKanban className="h-4 w-4" />
@@ -529,13 +529,13 @@ export function DashboardBrowser({
                         onClick={() => setAccessFilter(chip.id as AccessFilter)}
                         className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                           active
-                            ? "border-[#00E09B]/20 bg-[#00E09B]/10 text-[#FFFFFF]"
-                            : "border-[#22314A] bg-[#0D1628] text-[#CBD5E1] hover:bg-[#16243B] hover:text-[#FFFFFF]"
+                            ? "border-[#1EF2C3]/20 bg-[#1EF2C3]/10 text-[#FFFFFF]"
+                            : "border-[#1F3B60] bg-[#0B1930] text-[#E7F3FF] hover:bg-[#133054] hover:text-[#FFFFFF]"
                         }`}
                       >
                         <Icon className="h-4 w-4" />
                         {chip.label}
-                        <span className="rounded-full border border-[#334155] bg-[#101B31] px-2 py-0.5 text-xs text-text-secondary">
+                        <span className="rounded-full border border-[#2C537F] bg-[#0A1830] px-2 py-0.5 text-xs text-text-secondary">
                           {chip.count}
                         </span>
                       </button>
@@ -556,7 +556,7 @@ export function DashboardBrowser({
                 </div>
               </section>
 
-              <section className="vant-card rounded-[32px] border border-[#22314A] bg-[#101B31] p-6 shadow-lg shadow-black/20">
+              <section className="vant-card rounded-[32px] border border-[#1F3B60] bg-[#0A1830] p-6 shadow-lg shadow-black/20">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Coin Top-Up</p>
@@ -573,7 +573,7 @@ export function DashboardBrowser({
             </div>
 
             <aside className="space-y-6">
-              <section className="vant-card rounded-[30px] border border-[#22314A] bg-[#111C33] p-6 shadow-lg shadow-black/20">
+              <section className="vant-card rounded-[30px] border border-[#1F3B60] bg-[#0F203C] p-6 shadow-lg shadow-black/20">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-text-main">Update alerts</p>
@@ -590,11 +590,11 @@ export function DashboardBrowser({
                       <Link
                         key={card.id}
                         href={`/cards/${card.slug}`}
-                        className="vant-card vant-card-hover block rounded-[22px] border border-[#22314A] bg-[#0D1628] p-4"
+                        className="vant-card vant-card-hover block rounded-[22px] border border-[#1F3B60] bg-[#0B1930] p-4"
                       >
                         <div className="flex flex-wrap gap-2">
                           {card.isNewAlert ? (
-                            <span className="rounded-full border border-[#00E09B]/20 bg-[#00E09B]/10 px-3 py-1 text-xs font-semibold text-[#00E09B]">
+                            <span className="rounded-full border border-[#1EF2C3]/20 bg-[#1EF2C3]/10 px-3 py-1 text-xs font-semibold text-[#1EF2C3]">
                               New Update Alert
                             </span>
                           ) : null}
@@ -631,7 +631,7 @@ export function DashboardBrowser({
                 {alertCards.length ? (
                   <Link
                     href="/alerts"
-                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:text-[#00E09B]"
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:text-[#1EF2C3]"
                   >
                     Browse every active alert
                     <ArrowRight className="h-4 w-4" />
@@ -639,9 +639,9 @@ export function DashboardBrowser({
                 ) : null}
               </section>
 
-              <section className="vant-card rounded-[30px] border border-[#22314A] bg-[#111C33] p-6 shadow-lg shadow-black/20">
+              <section className="vant-card rounded-[30px] border border-[#1F3B60] bg-[#0F203C] p-6 shadow-lg shadow-black/20">
                 <div className="flex items-center gap-3">
-                  <span className="vant-glass rounded-2xl border border-[#00E09B]/20 bg-[#00E09B]/10 p-3 text-[#00E09B]">
+                  <span className="vant-glass rounded-2xl border border-[#1EF2C3]/20 bg-[#1EF2C3]/10 p-3 text-[#1EF2C3]">
                     <Flame className="h-5 w-5" />
                   </span>
                   <div>
@@ -655,14 +655,14 @@ export function DashboardBrowser({
                     <span
                       key={index}
                       className={`h-2 flex-1 rounded-full ${
-                        index < learningStreak ? "bg-[#00E09B]" : "bg-[#1D2D46]"
+                        index < learningStreak ? "bg-[#1EF2C3]" : "bg-[#173960]"
                       }`}
                     />
                   ))}
                 </div>
               </section>
 
-              <section className="vant-card rounded-[30px] border border-[#22314A] bg-[#111C33] p-6 shadow-lg shadow-black/20">
+              <section className="vant-card rounded-[30px] border border-[#1F3B60] bg-[#0F203C] p-6 shadow-lg shadow-black/20">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-text-main">Recent activity</p>
@@ -698,9 +698,9 @@ export function DashboardBrowser({
                 </div>
               </section>
 
-              <section className="vant-card rounded-[30px] border border-[#22314A] bg-[#101B31] p-6 shadow-lg shadow-black/20">
+              <section className="vant-card rounded-[30px] border border-[#1F3B60] bg-[#0A1830] p-6 shadow-lg shadow-black/20">
                 <p className="text-sm font-semibold text-text-main">Premium update cards waiting</p>
-                <p className="mt-3 text-4xl font-semibold text-[#00E09B]">{premiumLockedCount}</p>
+                <p className="mt-3 text-4xl font-semibold text-[#1EF2C3]">{premiumLockedCount}</p>
                 <p className="mt-3 text-sm leading-6 text-text-secondary">
                   Locked cards reveal full update breakdowns, red flags, and protection steps once credits are used.
                 </p>
@@ -712,6 +712,7 @@ export function DashboardBrowser({
     </section>
   );
 }
+
 
 
 
