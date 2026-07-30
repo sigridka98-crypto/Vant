@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { KeyRound, Mail, ShieldCheck, User2, Wallet2 } from "lucide-react";
 
 import { signOut } from "@/app/login/actions";
-import { ThemeToggleCard } from "@/components/layout/theme-toggle-card";
 import { updatePassword, updateProfile } from "@/app/settings/actions";
 import { getAuthContext } from "@/lib/auth";
 import { getWalletPageData } from "@/lib/supabase/queries";
@@ -35,13 +34,13 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
       </section>
 
       {params.error ? (
-        <section className="vant-card rounded-[28px] border-rose-300/20 bg-rose-400/10 px-5 py-4 text-sm text-rose-100">
+        <section className="vant-card rounded-[28px] border border-red-500/20 bg-red-500/10 px-5 py-4 text-sm text-red-400">
           {params.error}
         </section>
       ) : null}
 
       {params.message ? (
-        <section className="vant-card rounded-[28px] border-emerald-300/20 bg-emerald-400/10 px-5 py-4 text-sm text-emerald-100">
+        <section className="vant-card rounded-[28px] border border-[#1EF2C3]/20 bg-[#1EF2C3]/10 px-5 py-4 text-sm text-[#C8FFF0]">
           {params.message}
         </section>
       ) : null}
@@ -99,7 +98,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
           <section className="vant-card rounded-[32px] p-8">
             <div className="flex items-center gap-3">
-              <span className="vant-glass rounded-2xl p-3 text-fuchsia-100">
+              <span className="vant-glass rounded-2xl p-3 text-primary">
                 <KeyRound className="h-5 w-5" />
               </span>
               <div>
@@ -141,8 +140,6 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
         </div>
 
         <div className="space-y-6">
-          <ThemeToggleCard />
-
           <section className="vant-card rounded-[32px] bg-primary/10 p-8">
             <div className="flex items-center gap-3">
               <span className="vant-glass rounded-2xl p-3 text-primary">
@@ -172,7 +169,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
 
           <section className="vant-card rounded-[32px] p-8">
             <div className="flex items-center gap-3">
-              <span className="vant-glass rounded-2xl p-3 text-cyan-100">
+              <span className="vant-glass rounded-2xl p-3 text-primary">
                 <Wallet2 className="h-5 w-5" />
               </span>
               <div>
@@ -191,14 +188,14 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
             </div>
           </section>
 
-          <section className="vant-card rounded-[32px] border-rose-300/15 bg-rose-400/5 p-8">
+          <section className="vant-card rounded-[32px] border border-red-500/20 bg-red-500/10 p-8">
             <p className="text-sm font-semibold text-text-main">Session actions</p>
             <p className="mt-3 text-sm leading-6 text-text-secondary">
               If you are using a shared device, sign out after updating your settings.
             </p>
 
             <form action={signOut} className="mt-6">
-              <button type="submit" className="vant-btn-secondary text-sm text-rose-100">
+              <button type="submit" className="vant-btn-secondary text-sm text-[#FFFFFF]">
                 Sign out of this account
               </button>
             </form>
