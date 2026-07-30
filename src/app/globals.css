@@ -2,29 +2,29 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #10b981;
-  --color-primary-hover: #34d399;
-  --color-primary-dark: #10b981;
-  --color-bg-primary: #0f1115;
-  --color-bg-secondary: #15171c;
-  --color-bg-soft: #1c1f26;
-  --color-bg-input: #181a20;
-  --color-bg-hover: #23262e;
-  --color-bg-active: #262a33;
-  --color-text-main: #f4f4f5;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
-  --color-text-disabled: #52525b;
-  --color-border-soft: #2a2e37;
-  --color-border-strong: #343843;
-  --background: var(--color-bg-primary);
+  --color-primary: #00E09B;
+  --color-primary-hover: #00BFA6;
+  --color-primary-dark: #00BFA6;
+  --color-bg-primary: #0F172A;
+  --color-bg-secondary: #101B31;
+  --color-bg-soft: #111C33;
+  --color-bg-input: #0D1628;
+  --color-bg-hover: #16243B;
+  --color-bg-active: #1D2D46;
+  --color-text-main: #FFFFFF;
+  --color-text-secondary: #CBD5E1;
+  --color-text-muted: #64748B;
+  --color-text-disabled: #475569;
+  --color-border-soft: #22314A;
+  --color-border-strong: #334155;
+  --background: radial-gradient(circle at top left, rgb(0 224 155 / 0.08), transparent 24%), radial-gradient(circle at top right, rgb(0 191 166 / 0.07), transparent 20%), var(--color-bg-primary);
   --foreground: var(--color-text-main);
 }
 
 html[data-theme="light"] {
-  --color-primary: #10b981;
-  --color-primary-hover: #34d399;
-  --color-primary-dark: #10b981;
+  --color-primary: #00E09B;
+  --color-primary-hover: #00BFA6;
+  --color-primary-dark: #00BFA6;
   --color-bg-primary: #f5f7f6;
   --color-bg-secondary: #eef2ef;
   --color-bg-soft: #ffffff;
@@ -33,28 +33,28 @@ html[data-theme="light"] {
   --color-bg-active: #dde2e8;
   --color-text-main: #18181b;
   --color-text-secondary: #52525b;
-  --color-text-muted: #71717a;
+  --color-text-muted: #64748B;
   --color-text-disabled: #a1a1aa;
   --color-border-soft: #d4d4d8;
   --color-border-strong: #c4c8d0;
 }
 
 html[data-theme="dark"] {
-  --color-primary: #10b981;
-  --color-primary-hover: #34d399;
-  --color-primary-dark: #10b981;
-  --color-bg-primary: #0f1115;
-  --color-bg-secondary: #15171c;
-  --color-bg-soft: #1c1f26;
-  --color-bg-input: #181a20;
-  --color-bg-hover: #23262e;
-  --color-bg-active: #262a33;
-  --color-text-main: #f4f4f5;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
-  --color-text-disabled: #52525b;
-  --color-border-soft: #2a2e37;
-  --color-border-strong: #343843;
+  --color-primary: #00E09B;
+  --color-primary-hover: #00BFA6;
+  --color-primary-dark: #00BFA6;
+  --color-bg-primary: #0F172A;
+  --color-bg-secondary: #101B31;
+  --color-bg-soft: #111C33;
+  --color-bg-input: #0D1628;
+  --color-bg-hover: #16243B;
+  --color-bg-active: #1D2D46;
+  --color-text-main: #FFFFFF;
+  --color-text-secondary: #CBD5E1;
+  --color-text-muted: #64748B;
+  --color-text-disabled: #475569;
+  --color-border-soft: #22314A;
+  --color-border-strong: #334155;
 }
 
 @theme inline {
@@ -79,7 +79,7 @@ html {
 
 body {
   min-height: 100vh;
-  background: var(--color-bg-primary);
+  background: radial-gradient(circle at top left, rgb(0 224 155 / 0.08), transparent 24%), radial-gradient(circle at top right, rgb(0 191 166 / 0.07), transparent 20%), var(--color-bg-primary);
   color: var(--foreground);
   font-feature-settings: "ss01" on, "cv01" on;
 }
@@ -103,7 +103,7 @@ select {
 
 @layer base {
   ::selection {
-    background: rgb(16 185 129 / 0.2);
+    background: rgb(0 224 155 / 0.2);
     color: var(--color-text-main);
   }
 
@@ -111,10 +111,10 @@ select {
   textarea:focus,
   select:focus {
     outline: none;
-    border-color: rgb(16 185 129);
+    border-color: rgb(0 224 155);
     box-shadow:
-      0 0 0 1px rgb(16 185 129),
-      0 0 0 6px rgb(16 185 129 / 0.12);
+      0 0 0 1px rgb(0 224 155),
+      0 0 0 6px rgb(0 224 155 / 0.12);
   }
 }
 
@@ -144,13 +144,13 @@ select {
 
   .vant-btn {
     @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 font-medium shadow-lg transition duration-200;
-    background: rgb(16 185 129);
-    color: #07110d;
+    background: #00E09B;
+    color: #071A17;
     box-shadow: 0 10px 22px rgb(0 0 0 / 0.2);
   }
 
   .vant-btn:hover {
-    background: rgb(52 211 153);
+    background: #00BFA6;
     box-shadow: 0 10px 22px rgb(0 0 0 / 0.2);
   }
 
@@ -392,3 +392,4 @@ aside {
 .shadow-glow-soft {
   box-shadow: 0 10px 22px rgb(0 0 0 / 0.2) !important;
 }
+
