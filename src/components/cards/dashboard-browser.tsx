@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -108,7 +108,7 @@ function EmptyResults({
   hasAnyCards: boolean;
 }) {
   return (
-    <section className="dashboard-empty grid gap-6 rounded-[32px] border border-dashed border-white/10 bg-white/4 p-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <section className="dashboard-empty rounded-[32px] border border-dashed border-white/10 bg-white/4 p-8">
       <div>
         <p className="text-lg font-medium text-white">
           {hasAnyCards
@@ -122,15 +122,6 @@ function EmptyResults({
             ? "Try another update type, category, or access filter."
             : "When the admin creates and publishes the first update card, it will appear here automatically."}
         </p>
-      </div>
-
-      <div className="rounded-[28px] border border-cyan-300/15 bg-cyan-400/10 p-5">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-100">Quick test path</p>
-        <div className="mt-4 space-y-3 text-sm leading-6 text-cyan-50/90">
-          <p>1. Go to the admin panel and create a new update card draft.</p>
-          <p>2. Publish the card when you are ready to surface it publicly.</p>
-          <p>3. Return here and test wallet top-ups and premium unlocks.</p>
-        </div>
       </div>
     </section>
   );
@@ -721,5 +712,6 @@ export function DashboardBrowser({
     </section>
   );
 }
+
 
 
