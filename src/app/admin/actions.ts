@@ -48,6 +48,34 @@ function linesToSteps(value: string, stepType: "how_it_works" | "red_flags" | "p
     }));
 }
 
+const MAX_TEMPLATE_WORDS = 1_000_000;
+
+function countWords(value: string) {
+  return value
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+function validateTemplateWordLimit(input: {
+  description: string;
+  safe_example: string;
+  quick_memory_rule: string;
+  steps: Array<{ step_type: "how_it_works" | "red_flags" | "protection"; content: string }>;
+}) {
+  const totalWords = [
+    input.description,
+    input.safe_example,
+    input.quick_memory_rule,
+    ...input.steps.map((step) => step.content)
+  ].reduce((total, value) => total + countWords(value), 0);
+
+  if (totalWords > MAX_TEMPLATE_WORDS) {
+    return "Keep the full lesson card template under 1,000,000 words.";
+  }
+
+  return null;
+}
 function hasAlertFlags(input: {
   is_new_alert: boolean;
   is_trending_alert: boolean;
@@ -158,6 +186,17 @@ export async function createCard(formData: FormData) {
     ...linesToSteps(textValue(formData, "protection"), "protection")
   ];
 
+  const templateWordLimitError = validateTemplateWordLimit({
+    description: payload.description,
+    safe_example: payload.safe_example,
+    quick_memory_rule: payload.quick_memory_rule,
+    steps
+  });
+
+  if (templateWordLimitError) {
+    redirect(`/admin?error=${encodeURIComponent(templateWordLimitError)}`);
+  }
+
   if (payload.is_published) {
     const errors = validateCardForPublish({
       ...payload,
@@ -263,6 +302,17 @@ export async function updateCard(formData: FormData) {
     ...linesToSteps(textValue(formData, "redFlags"), "red_flags"),
     ...linesToSteps(textValue(formData, "protection"), "protection")
   ];
+
+  const templateWordLimitError = validateTemplateWordLimit({
+    description: payload.description,
+    safe_example: payload.safe_example,
+    quick_memory_rule: payload.quick_memory_rule,
+    steps
+  });
+
+  if (templateWordLimitError) {
+    redirect(`/admin/cards/${id}/edit?error=${encodeURIComponent(templateWordLimitError)}`);
+  }
 
   if (payload.is_published) {
     const errors = validateCardForPublish({
@@ -690,3 +740,7 @@ async function ensureUniqueLocalSlug(
     slug = `${baseSlug}-${counter}`;
   }
 }
+
+
+
+

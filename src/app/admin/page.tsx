@@ -13,9 +13,9 @@ import { getLocalAdminAccess } from "@/lib/local-user-state";
 import { getAdminCardOverview, getAdminCards } from "@/lib/supabase/queries";
 
 const adminTasks = [
-  "Create update cards with the exact 7-field structure",
-  "Edit title, description, safe example, and quick memory rule",
-  "Manage red flags, update steps, and protection steps as ordered lists",
+  "Create one complete lesson card template in a single writing flow",
+  "Keep the lesson summary, safe example, and quick memory rule in the same main card",
+  "Write core sub-lessons, red flag sub-lessons, and protection sub-lessons inside that same card",
   "Set free or premium access, credit cost, and category",
   "Publish cards and mark updates as minor or major"
 ];
@@ -103,7 +103,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin control panel</p>
             <h1 className="mt-4 text-4xl font-semibold text-text-main">You are in the GetUpdated admin page</h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-text-secondary">
-              This is the protected workspace for creating, editing, pricing, and publishing update card templates before users see them in the app.
+              This is the protected workspace for creating, editing, pricing, and publishing complete update lesson card templates before users see them in the app.
             </p>
           </div>
 
@@ -154,7 +154,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">Admin tools unlocked</p>
             <h2 className="mt-3 text-3xl font-semibold text-text-main">Create and manage update templates from here</h2>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-text-secondary">
-              This section is the actual control area. Use the form below to create a new template, then use the library panel to edit, publish, draft, or delete existing ones.
+              This section is the actual control area. Use the form below to write one full lesson card template, then use the library panel to edit, publish, draft, or delete existing ones.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <a href="#admin-create" className="vant-btn text-sm">
@@ -170,7 +170,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-text-secondary">Create template</p>
-                <h2 className="mt-2 text-3xl font-semibold text-text-main">Start with an empty draft or fill it immediately</h2>
+                <h2 className="mt-2 text-3xl font-semibold text-text-main">Start one full lesson card and fill everything inside it</h2>
               </div>
               <div className="vant-card hidden rounded-2xl px-4 py-2 text-sm text-primary md:inline-flex">
                 <Plus className="mr-2 h-4 w-4" />
@@ -260,3 +260,4 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     </main>
   );
 }
+
