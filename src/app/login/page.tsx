@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { signIn, signUp } from "@/app/login/actions";
+import { requestPasswordReset, signIn, signUp } from "@/app/login/actions";
 import { getAuthContext } from "@/lib/auth";
 
 type LoginPageProps = {
@@ -68,9 +68,18 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               </label>
             </div>
 
-            <button type="submit" className="vant-btn mt-6 w-full">
-              Sign in
-            </button>
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <button type="submit" className="vant-btn w-full">
+                Sign in
+              </button>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+              <Link href="/reset-password" className="text-primary transition hover:opacity-90">
+                Forgot password?
+              </Link>
+              <span className="text-text-secondary">Reset links work for email sign-in accounts.</span>
+            </div>
           </form>
 
           <form action={signUp} className="vant-card rounded-[28px] p-6">
@@ -109,6 +118,20 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <p className="mt-3 text-xs leading-6 text-text-secondary">
               The admin email is still reserved for admin access. Any other email can create a normal user profile.
             </p>
+          </form>
+
+          <form action={requestPasswordReset} className="vant-card rounded-[28px] p-6">
+            <p className="text-sm font-semibold text-text-main">Need a reset link?</p>
+            <p className="mt-2 text-sm leading-6 text-text-secondary">
+              Enter your email address and we will send you a secure password reset link.
+            </p>
+            <label className="mt-4 block">
+              <span className="mb-2 block text-sm text-text-secondary">Email address</span>
+              <input name="identifier" type="email" className="vant-input" placeholder="you@example.com" required />
+            </label>
+            <button type="submit" className="vant-btn-secondary mt-5 w-full">
+              Send reset link
+            </button>
           </form>
         </div>
       </section>

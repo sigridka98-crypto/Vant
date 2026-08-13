@@ -63,6 +63,11 @@ function getNextPath(formData: FormData) {
   return next.startsWith("/") ? next : "/dashboard";
 }
 
+function getAppUrl() {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  return appUrl ? appUrl.replace(/\/$/, "") : "";
+}
+
 async function resolvePostAuthRedirect(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, fallback: string) {
   const {
     data: { user }
@@ -172,6 +177,50 @@ export async function signUp(formData: FormData) {
   }
 
   redirect(await resolvePostAuthRedirect(supabase, next));
+}
+
+export async function requestPasswordReset(formData: FormData) {
+  const identifier = normalizeAuthIdentifier(String(formData.get("identifier") ?? ""));
+  const supabase = await createSupabaseServerClient();
+  const appUrl = getAppUrl();
+
+  if (!identifier) {
+    redirect("/reset-password?error=Enter your email address to receive a password reset link.");
+  }
+
+  if (isPhoneIdentifier(identifier)) {
+    redirect("/reset-password?error=Password reset links are currently available for email sign-in only.");
+  }
+
+  if (!appUrl) {
+    redirect("/reset-password?error=NEXT_PUBLIC_APP_URL is missing, so password reset links cannot be created yet.");
+  }
+
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(identifier, {
+      redirectTo: `${appUrl}/reset-password`
+    });
+
+    if (error) {
+      redirect(
+        `/reset-password?error=${encodeURIComponent(
+          normalizeAuthError(error, "Unable to send a password reset link right now.")
+        )}`
+      );
+    }
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    redirect(
+      `/reset-password?error=${encodeURIComponent(
+        normalizeAuthError(error, "Unable to send a password reset link right now.")
+      )}`
+    );
+  }
+
+  redirect("/reset-password?message=If that email exists, we sent a password reset link. Open it from your inbox to choose a new password.");
 }
 
 export async function signOut() {
