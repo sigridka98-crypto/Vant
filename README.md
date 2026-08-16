@@ -1,6 +1,6 @@
 # GetUpdated
 
-Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Supabase and Paystack.
+Next.js + Tailwind CSS app for the GetUpdated learning platform, powered by Supabase and prepaid purchase codes.
 
 ## Stack
 
@@ -8,7 +8,7 @@ Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Sup
 - Tailwind CSS
 - TypeScript
 - Supabase client helpers
-- Paystack coin top-up flow
+- Single-use purchase-code coin flow
 - Cloudflare Workers deployment support
 
 ## Routes included
@@ -18,14 +18,14 @@ Next.js + Tailwind CSS app for a scam-awareness learning platform powered by Sup
 - `/dashboard`
 - `/cards/[slug]`
 - `/wallet`
-- `/subscription`
 - `/admin`
+- `/admin/codes`
 
 ## Local setup
 
 1. Install dependencies
 2. Copy `.env.example` to `.env.local`
-3. Fill in your Supabase and Paystack keys
+3. Fill in your Supabase keys
 4. Run `npm run dev`
 
 ## Cloudflare deployment

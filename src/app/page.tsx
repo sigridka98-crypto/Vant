@@ -311,7 +311,7 @@ export default async function HomePage() {
             <div className="rounded-2xl border border-[#1F3B60] bg-[#0B1930] px-5 py-4">
               <p className="text-sm font-medium text-[#FFFFFF]">Top-up model</p>
               <p className="mt-2 text-lg leading-7 text-[#E7F3FF]">
-                One Paystack card payment adds coins that users spend across locked update cards.
+                One approved purchase code adds 100 coins that users spend across locked update cards.
               </p>
             </div>
           </div>

@@ -74,7 +74,7 @@ create table if not exists public.user_card_unlocks (
 create table if not exists public.payments (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
-  provider text not null default 'paystack',
+  provider text not null default 'manual',
   reference text not null unique,
   amount integer not null check (amount >= 0),
   credits_awarded integer check (credits_awarded is null or credits_awarded >= 0),
@@ -98,7 +98,7 @@ create table if not exists public.credit_transactions (
 create table if not exists public.subscriptions (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
-  provider text not null default 'paystack',
+  provider text not null default 'manual',
   provider_customer_code text,
   provider_subscription_code text,
   status text not null default 'inactive' check (status in ('active', 'inactive', 'cancelled', 'past_due')),

@@ -9,9 +9,8 @@ import {
   getLocalTransactions,
   getLocalUnlocks
 } from "@/lib/local-user-state";
-import { creditBundles, topUpPack } from "@/lib/payments-config";
 import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
-import type { CardUpdateLog, CreditBundle, CreditTransaction, ScamCard } from "@/types";
+import type { CardUpdateLog, CreditTransaction, ScamCard } from "@/types";
 
 function mapCardRecord(record: {
   id: string;
@@ -356,9 +355,7 @@ export const getWalletPageData = cache(async () => {
       isConfigured: false,
       balance: await getLocalBalance(),
       transactions: await getLocalTransactions(),
-      bankTransferRequests: [] as Array<any>,
-      bundles: creditBundles,
-      pack: topUpPack
+      bankTransferRequests: [] as Array<any>
     };
   }
 
@@ -372,9 +369,7 @@ export const getWalletPageData = cache(async () => {
       isConfigured: true,
       balance: 0,
       transactions: [] as CreditTransaction[],
-      bankTransferRequests: [] as Array<any>,
-      bundles: creditBundles,
-      pack: topUpPack
+      bankTransferRequests: [] as Array<any>
     };
   }
 
@@ -391,8 +386,6 @@ export const getWalletPageData = cache(async () => {
   return {
     isConfigured: true,
     balance: wallet?.credit_balance ?? 0,
-    bundles: creditBundles,
-    pack: topUpPack,
     transactions: (transactions ?? []).map((transaction) => ({
       id: transaction.id,
       label: transaction.note || transaction.type.replaceAll("_", " "),

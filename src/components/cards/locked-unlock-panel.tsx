@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Coins, Gem, LockKeyhole, RefreshCw } from "lucide-react";
 
 import { unlockCardAccess } from "@/app/cards/actions";
-import { PaystackCheckoutButton } from "@/components/payments/paystack-checkout-button";
 import { formatCredits } from "@/lib/utils";
 
 type LockedUnlockPanelProps = {
@@ -68,11 +67,11 @@ export function LockedUnlockPanel({
             <div className="vant-card rounded-[28px] bg-bg-secondary/70 p-5">
               <div className="flex items-center gap-2 text-cyan-100">
                 <Coins className="h-5 w-5" />
-                <p className="font-medium">50 coin top-up pack</p>
+                <p className="font-medium">100 coin purchase code</p>
               </div>
-              <p className="mt-4 text-3xl font-semibold text-text-main">NGN 3,125</p>
+              <p className="mt-4 text-3xl font-semibold text-text-main">Single use</p>
               <p className="mt-2 text-sm leading-6 text-text-secondary">
-                Buy 50 coins, then unlock admin-priced cards one by one until your wallet runs low.
+                Redeem a code supplied by an approved sales partner after your wallet reaches zero.
               </p>
             </div>
           </div>
@@ -88,15 +87,9 @@ export function LockedUnlockPanel({
                 Unlock now with {formatCredits(creditCost)}
               </button>
             </form>
-            <PaystackCheckoutButton
-              flow="wallet"
-              bundleId="bundle-50"
-              label="Buy 50 coins with Paystack"
-              className="vant-btn"
-            />
-            <Link href="/wallet" className="vant-btn-secondary inline-flex items-center gap-2">
+            <Link href="/wallet" className="vant-btn inline-flex items-center gap-2">
               <Coins className="h-4 w-4" />
-              View wallet balance
+              Redeem purchase code
             </Link>
           </div>
         </div>

@@ -60,29 +60,9 @@ export type WalletSummary = {
   balance: number;
 };
 
-export type CreditBundle = {
-  id: string;
-  coins: number;
-  priceLabel: string;
-  amountKobo: number;
-  paystackAmountKobo?: number;
-  paystackPriceLabel?: string;
-  diamondsBonus?: number;
-};
-
 export type CreditTransaction = {
   id: string;
   label: string;
   amount: string;
   date: string;
-};
-
-export type CoinTopUpPack = {
-  id: string;
-  name: string;
-  priceLabel: string;
-  amountKobo: number;
-  billingLabel: string;
-  description: string;
-  features: string[];
 };

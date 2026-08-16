@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Coins, DatabaseZap, Gem, Plus, ShieldCheck } from "lucide-react";
+import { Coins, DatabaseZap, Gem, KeyRound, Plus, ShieldCheck } from "lucide-react";
 
 import { createCard, deleteCard, togglePublishCard } from "@/app/admin/actions";
 import { localAdminSignIn, localAdminSignOut } from "@/app/admin/local-actions";
@@ -160,9 +160,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <a href="#admin-create" className="vant-btn text-sm">
                 Open create form
               </a>
-              <a href="#admin-library" className="vant-btn-secondary px-4 py-2 text-sm">
-                Open template library
-              </a>
+            <a href="#admin-library" className="vant-btn-secondary px-4 py-2 text-sm">
+              Open template library
+            </a>
+            <Link href="/admin/codes" className="vant-btn-secondary inline-flex items-center gap-2 px-4 py-2 text-sm">
+              <KeyRound className="h-4 w-4" />
+              Manage purchase codes
+            </Link>
             </div>
           </div>
 
